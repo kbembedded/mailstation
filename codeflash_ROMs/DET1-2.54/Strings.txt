@@ -1,0 +1,1043 @@
+0432a         The software update process is ready to start, please wait...
+04370                        Please connect the adaptor and try again.
+043b1  Please check that the parallel cable is properly connected and try again.
+043fc                             Software is updating, please wait...
+0443d                       New software is downloading, please wait...
+0447f                              Continuing download, please wait...
+044c0           Calculating the checksum of updated software, please wait...
+04507                     The checksum of updated software  is 
+04541                               Download error, please try again.
+056c7 Current TEST
+056d4 DTMF TEST
+056de Battery TEST
+056eb E-mail TEST
+056f7 Printer TEST
+05704 ROM TEST
+0570d RAM TEST
+05716 FLASH TEST
+05721 APO/RTC TEST
+0572e LCD TEST
+05737 EL TEST
+0573f LCM TEST
+05748 Key Board TEST
+05757 F/A TESTER
+05762 RUN-IN TEST
+0576e QA EVALUATION
+0577c POWER OFF
+05786 APO/RTC
+0578e 1
+05790 50
+05793 100
+05797 200
+0579b 500
+0579f 1000
+057a4 2000
+057a9 5000
+057ae FAST TEST
+057b8 DTMF
+057bd EMI
+057c1 NORMAL RUN
+057cc MTBF RUN
+057d5 MODEM TEST
+057e0 FSK TEST
+057e9 Name:
+057ef No.:
+057f4 Time:
+05848 O: On Line
+05853 F: Off Line
+0585f BACK: Return
+0586e Idle
+05875 Run
+0587b Off
+05885 High
+0588a Low
+0588e Down
+05895 All
+0589b Main Board AUTO Test Main Menu
+058bc DIAGNOSTIC MAIN MENU   Version: 
+058df LCM TEST MENU
+058ef F/A TESTER MAIN MENU
+05906 RUN-IN TEST MENU
+05919 RUN-IN TEST NG ITEM LIST
+05934 FAST  TEST
+05947 L: LOOPS
+05950 COUNT
+05956 OK
+05959 NG
+05968 R: Run
+0596f P: Pause
+05978 BACK: Return
+05985 L: Loops
+0598e S: Show log
+0599a C: Clear
+059eb O: OK
+059f3 N: NG
+059fb APO/RTC TESTING
+05a0d Current TESTING --->
+05a24 Battery TESTING
+05a38 IDLE Mode
+05a42 RUN Mode
+05a4d Please input your selection
+05a6b Press enter to continue
+05a85 Dialing...
+05c4c Press any key to return
+05c66 No Log!
+05fd8 ]:
+06013 P: Stop
+0613f Q: Quit
+06149 Test over!
+06156 CID
+071b7 Battery
+075e2 SN: 
+08026  !"#$%&345)*+,-./012>?@BGF6789:;<=C
+0804b D
+0804e AEI
+080ec Main
+080f1 Back
+080f6 Print
+080fc F1
+080ff F2
+08102 F3
+08105 F4
+08108 F5
+0810b @
+0810d Size
+08112 Spelling
+0811b `
+0811d 1
+0811f 2
+08121 3
+08123 4
+08125 5
+08127 6
+08129 7
+0812b 8
+0812d 9
+0812f 0
+08131 -
+08133 =
+08135 <-
+08138 PgUp
+0813d TAB
+08141 Q
+08143 W
+08145 E
+08147 R
+08149 T
+0814b Y
+0814d U
+0814f I
+08151 O
+08153 P
+08155 [
+08157 ]
+08159 |
+0815b PgDn
+08160 CAPS
+08165 A
+08167 S
+08169 D
+0816b F
+0816d G
+0816f H
+08171 J
+08173 K
+08175 L
+08177 ;
+08179 '
+0817b ENTER
+08181 Shift
+08187 Z
+08189 X
+0818b C
+0818d V
+0818f B
+08191 N
+08193 M
+08195 ,
+08197 .
+08199 /
+0819b Shift
+081a1 up
+081a4 Fn
+081a7  
+081a9 left
+081ae right
+081b4 down
+081b9 E-mail
+081c0 On/Off
+08384 CRAM  TESTING
+08393 CROM  TESTING
+083a2 CRom Checksum:
+086aa FFLASH TESTING
+08cf8 LLCD TEST
+091f4 EMI TEST
+091fd MODEM PORT
+09208 PRINTER PORT
+09215 LCD PORT
+0921e Waiting...
+09229 Connect Failed
+09238 Time Out
+09241 NORMAL RUN TEST
+09251 MTBF RUN TEST
+0925f RUN IDLE
+09268 RUN MODEM OFF
+09276 RUN MODEM ON
+092f8 1. PRINTER
+09303 2. LCD
+0930a 3. MODEM
+09313 4. MODEM-PTR-LCD
+0932a Please check peripheral installation.
+09352 Put the paper into printer
+097af ATX0DT
+097b6 ATDT
+097bf Dial:
+097c7 T: DTMF
+097d1 D: DTMF9
+097db W123456789*0#123456789*0#123456789*0#1234
+09a58 ZZQA TEST MENU
+09bbe [PRINTER TESTING
+09bd0 [Maybe have some error!
+0a0f6 Please Wait...
+0a138 Email TESTING
+0a1b0 Dialling :
+0a1bd 123456789*0#
+0a1cc DTMF TESTING
+0a1db The Modem Reset Error!
+0a1f4 The Modem Reset OK!
+0a437 Don't press any key!
+0a44e Please put down equipment.
+0a46b Skip: [S]
+0a477 Please plug in
+0a488 Press [enter].
+0a4a1 1.Flash
+0a4a9 2.Key
+0a4af 3.Printer Port
+0a4be 4.RAM
+0a4c4 5.ROM
+0a4d0 FALSE
+0a4d6 PASS
+0a4db SKIP
+0a4e2 Error!
+0a6f2 @
+0a6f7 `1234567890-=
+0a705 \
+0a708 QWERTYUIOP[];'
+0a718 ASDFGHJKL,./
+0a728 ZXCVBNM
+0a732  
+0a742 @
+0a747 ~!@#$%^&*()_+
+0a755 |
+0a758 qwertyuiop{}:"
+0a768 asdfghjkl<>?
+0a778 zxcvbnm
+0a782  
+0a789 Modem  Reset  .....
+0a7a9 38400
+0a7af 19200
+0a7b5 9600
+0a7ba 7200
+0a7bf 4800
+0a7c4 2400
+0aca9   -  Reset
+0acb4   -  EMI Test
+0acc2   -  Loop Test
+0acd1   -  TAS Test
+0acdf   -  Edit Number
+0acf0   -  Baud Rate
+0ad00 mModem  Test
+0ad82 mF1- Reset
+0ad8e mF2- EMI Test
+0ad9d mF3- Loop Test
+0adad mF4- TAS Baud Rate : 
+0adc4 mF5- Number : 
+0add4 mBack- Exit
+0aedd n> Dialling
+0aeea n> Connect Ok
+0aef9 n> Disconnect
+0af08 oSend
+0af0f oReceive
+0af19 o> Sending
+0af24 &o>> Checksum Error  !!!
+0af3d ?o>> Overtime  !!!
+0af50 Ro> User Break
+0af5f ao> Hang Up
+0b530 V34
+0b534 AT&F0+MS=11,1,300,14400E0M1Q0S6=7S11=95S91=10S95=0DT
+0b569 AT&F0E0M1Q0S6=7S11=95S91=10S95=0DT
+0b58e ++++
+0b80d Edit Number : 
+0d0d4 Jan
+0d0d8 Feb
+0d0dc Mar
+0d0e0 Apr
+0d0e4 May
+0d0e8 Jun
+0d0ec Jul
+0d0f0 Aug
+0d0f4 Sep
+0d0f8 Oct
+0d0fc Nov
+0d100 Dec
+0d7e2 (Group)
+0dc51       First Name: 
+0dc64        Last Name: 
+0dc77   E-mail Address: 
+0dc8a       Home Phone: 
+0dc9d     Office Phone: 
+0dcb0     Mobile Phone: 
+0dcc3       Fax Number: 
+0dcd6            Pager: 
+0dce9           Others: 
+0dec8 E-mail printed for : 
+0dede      
+0ebb6      Date: 
+0ebc2 /
+0ebc4 /
+0ebc6 0
+0ebc8      From: 
+0ebd4        To: 
+0ebe0   Subject: 
+0ebec   Date printed: 
+0ebfd  
+0ebff  
+199f7 -1000000000000000
+19a09 -100000
+19a11 -32768
+19a18 -8000
+19a3c .
+19a3e &
+19a54 .
+19a56 &
+19a6c .
+19a6e &
+19a84 .
+19a86 &
+1b00a V34
+1b00e AT&F0E0M1Q0L1S6=7S11=95S91=10S95=0M1
+1b033 AT&F0E0M1Q0L3S6=7S11=95S91=10S95=0M1
+1b058 AT&F0E0M0Q0S6=7S11=95S91=10S95=0M0
+1b07b AT&F0E0M1Q0S6=7S11=95S91=10S95=0M1
+1b09e +MS=11,1,300,14400
+1b0b9 AT
+1b0bc DT
+1b0bf *70,
+1b3b3 AT
+1b3b6 DT
+208a6 000.000.000.000
+208b6 01011999
+208bf 0100
+24ff4 /
+24ff6 (MM/DD/YYYY)
+25e55 No Change
+265fe Checking...
+2660a Press <Back> key to escape
+26625 Checking...
+2671a No Suggestion.
+2e4d3 No Change
+2e4dd No Suggestion.
+2ef0d ~#@$%^&|\+=
+3c756 Check messages at every daySave message copy on Server Maximum size of mail to download K [1 - 8]Auto power down in minutesMemory : Battery : Please standby... Performing maintenance.OnOffDayWeekMonthPersonalBusinessTo &FaxWARNING! Once deleted, you will no longer be able to send or receive e-mail through this account. Delete account?EditNameE-Mail AddressFaxPrinting...Send AllToBackSend ToShow DetailCreate NewFinishTo:Date:Subject:Please enter an e-mail$address in the "To:" field.Sending E-Mail message...What do you want to$do with this message ?Save as a Dra&ftSending E-MailDisconnectingDialing...How do you want to $ send this message ?To &E-Mail&DiscardHow do you want to $ print this message ?&E-Mail Format&Letter FormatThere is a printing problem.$ Please check the printer cable$ and be sure the power is on.From:OKISP Account: ISP Password: Dial-Up No: Alt Dial-Up No: POP3 Account: E-Mail Password: POP3 Server: SMTP Server: Primary DNS: Secondary DNS: You have 5 active mailboxes.$Additional accounts can not be added.New AccountSelect Current UserOptionsPlease select an active userSaveAutomaticallyNowPerform Memory maintenance now?User Name: OptimizeselectAccountCurrent userSent MailEnterDo you want to rewrite this mail?Dialing...$Logging on...$Sending E-Mail$DisconnectingAll mail sent.There is no mail in Inbox !There is no mail in Outbox !Checking E-Mail message...Dialing...$Logging on...$Checking E-Mail$DisconnectingContain:by Authorby Dateby Subjectby UnreadStart SearchNew Year's DayWashington's BirthdayPrince Kuhio DayInternational Labor DayMemorial DayKamehameha DayIndependence DayAdmission DayLabor DayColumbus DayAloha WeekVeterans DayThanksgiving DayChristmasNo spaceCalendarDaily EventsSearchTodayAlarmPlease input the date:Calendar/SearchModifyNew DiaryCalendar/DiaryInvalid DayNo DiarySendingGroup Name: Input Group Name: Others: Pager: Fax Number: Mobile Phone: Office Phone: Home Phone: E-Mail Address: Last Name: First Name: &GroupsIn&dividualsEdit EntryAddNew GroupSaveNew EntryPrintEntriesActiveTimePlease create a new user account.No match foundThe service line is busy.  Please try again later.Set Time/DateYou have no diary today. Do you like to create a new one?Diary Today( MM / DD / YYYY )You have no diary today.Time :No data to save !No data to delete !No change, saving !No record in Address Book !No record in this Group !Please input a group name.Message has reached maximum allowed size. Send or save e-mail now.The settings of the active user can't be changed !Must input user name !A Group can not be added$to other Group addresses.No sent mail !There is a problem printing. Check printer cable and power connection, and try again.by ReceiverInvalid time !Do you want to save the changes ?Can't delete currently operated record !Do you want to save the changes ?% freePlease enter the user's name .Please enter the E-Mail address.Please enter the ISP account information.Please enter the ISP account Password.Please enter the dial-up number.Please enter the POP3 account.Please enter the E-Mail password.Please enter the POP3 server address.Please enter the SMTP server address.Please enter the DNS address.Group name has been input, $ are you sure to exit?Please select 1 to 8 for the maximum download size setting.Incorrect E-mail address format.$Do you still want to save it?Your account information has been$modified. Do you want to save it?Active account is deleted ! Memory is full. Please delete some messages and go into the setting to optimize the memory and try again.Are you sure you want $ to delete this message ?Please select 1 to 99 minutes for$the Auto Power off setting.Are you sure you want $ to delete this address ?Memory is full ! Do you want to continue sending ?Memory optimization completed.Warning!  You will not be able to send$and receive E-mail through this account,$are you sure you want to delete it?Please select an active user.You can't delete default user !Please complete application before changing your account !The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.Spelling check finished.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.M+M-MRMCACPlease input a name.RenameA group can contain only 100 entries.ISP Connect Error !Do you want to erase memory ?Improper Name format.  Please$remove "@" from "User Name" field.Dialing...$Downloading$DisconnectingDownloading messageDelete AllLowHighOffSpeaker Volume Do you have call waiting ? Battery low !StatusDialing...    Press <Back> key to escapeLogging on...Sending...  of Checking E-Mail...Receiving Message... Disconnecting...Are you sure you want$to delete the entire list ?The service line is busy, please try again.E-Mail ToFax ToInvalid E-mail address.  Please$check the "To" field and try again.No dial tone.  Please check the phone line connection and try again.Add AuthorCan't send E-Mail and fax at the same time.The sender is already in $ your address book.The sender has been added $ to your address book.The E-Mail service is busy or unavailable.  Please try again later.The phone line connection has been interrupted.  Please check and try again.Faxing... Please wait.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.The E-Mail service is busy or unavailable.  Please try again later.(24 - Hour)Received: Rejected: Reconnecting...Full ContentFull ScreenThere is a problem with the memory. Do you want to fix it?Set TimeTime : HomeOfficeMobileBy ContentsSelect type:SelectAMPMMessage has been saved.Please connect the AC adapter and try again.You do not have enough battery $power for software update.$Please try again with new batteries.AM/PMGo To Date(Date Format:MM/DD/YYYY)Find:AuthorFind:DateFind:SubjectFind:ContentFind:UnreadFind:ReceiverBatteries are low!  Please replace$batteries or plug in the AC adapter.You have reached the maximum$size of a Daily Event.Contact has been saved.User account has been saved.Daily event has been saved.Send MailUser has been deleted.Check the whole textCheck from the cursorStart Time:End    Time:Connecting to mail server...The service line is busy.  Please try again later.Please enter one fax number only.Reset System DataClear &E-Mail DataClear &Address Book DataClear &Daily Events Data&Clear All Data&No ClearMemory is full! $Some mails are not sent out.$please optimize memory and try again.Saving...Delete daily events before :Are you sure you want to $ delete these daily events ?The battery power is running low, the system will power off automatically.Settings have been saved.Enter the User Name and desired E-Mail Address below for a new account. Press the "Request" key below to submit your request. E-Mail notification will be sent when your account has been approved. The fax has been successfully sent.Your Address Book can only$store up to 1000 entries.Memory is full.$Please go to Settings$to optimize it.Duplicated Name in the address book.  Please change the name and try again.Are you sure you want to $ delete this event ?0481224everyhoursRequestNew mail has been saved.You may also call 1-800-GET-MAIL to speak with an operator.(Additional charges may apply).Deleting Application...Saving information...Are you sure you want to$delete this application?The memory for downloading application is full.$Please delete some application.Ignore dial tone when dialing ? &List Format&Complete FormatHow do you want to $ print the entire addresses ?DialNumberWhich field do you want$ to copy to ?This caller is already in address book!  Do you want to overwrite it?Are you sure you want $ to delete this call ?Calling messageIncoming Call / How to save new calls ? AllUnansweredFail to receive CID!Name:Number:Date:Time:&Home&Office&MobileConnection is OK! $Your phone can work now!AnsweredChecking...$Press <Back> key to escapeUnable to copy.  Please remove the non-numeric characters.Press any key to escape(LD)This call hasn't existed.SendReply-To: Swap First/LastThe form can't be edited while in the "Outbox".There may have some mistakes in this form.$And it can't be opened.To activate a new E-Mail account, please call:1-888-403-7050A representative will assist you with your request.&Restore Default AccountUpdateThis is for demonstration$purposes only. This content$can not be removed.Demonstration onlyThis is for demonstration$purposes only. This content$can not be modified.All Mail Sent.Mail Sent.Messages Sent.No New Mail.New E-mails: New Yahoo! Information: Saving Yahoo! information...
+40d1d  Entry
+40d24  Entries
+410ee (Group)
+414ec (Group)
+43352 NEW_GROUP_ENTRY=
+43363 NEW_GROUP_ENTRY=
+4337a NEW_ADDRESS_ENTRY=
+4338d NEW_ADDRESS_ENTRY=
+433a0 OTHER="
+433a8 OTHER="
+433b0 FIRST_NAME=
+433bc FIRST_NAME=
+433c8 LAST_NAME=
+433d3 LAST_NAME=
+433de HOME_PHONE=
+433ea HOME_PHONE=
+433f6 OFFICE_PHONE=
+43404 OFFICE_PHONE=
+43412 MOBILE_PHONE=
+43420 MOBILE_PHONE=
+4342e FAX=
+43433 FAX=
+43438 PAGER=
+4343f PAGER=
+43446 EMAIL_ADDRESS=
+43455 EMAIL_ADDRESS=
+43464  
+43466 GROUP=
+4346d GROUP=
+434ef NEW_ADDRESS_ENTRY=
+43502 NEW_GROUP_ENTRY=
+43bcc Customer
+43bd5 Customer
+43bde Customer
+43be7 Support
+43bef Support
+43bf7 Support
+43bff support@mymailstation.com
+43c19 support@mymailstation.com
+43c33 support@mymailstation.com
+44f52 Edit Entry
+49854 New Entry
+499eb New Group
+49b9c Name
+49ba3 Name
+49ba8 Home
+49bad Home
+49bb2 Office
+49bb9 Office
+49bc0 Mobile
+49d7e Address Book
+49fb4 Address Book
+49fc1 New Entry
+49fcb New Group
+49fd5 New Group
+49fdf New Group
+49fe9 New Group
+49ff3 Group
+49ff9 Group
+49fff Group
+4a005 Edit Entry
+4aedf Address Book
+4aeec Edit Entry
+4aef7 Group
+4c38a Calculator
+50018 January
+50020 February
+50029 March
+5002f April
+50035 May
+50039 June
+5003e July
+50043 August
+5004a September
+50054 October
+5005c November
+50065 December
+50bfe Calendar
+50c68 Calendar/Delete
+50c78 Calendar/Go To Date
+50cd6 Calendar
+50d47 Calendar
+50db8 Calendar/Daily Events
+50e27 Calendar/Set Time
+5709e NEW_CALENDAR_ENTRY
+570b1 {
+570b3 DATE
+570b8 =
+570ba TEXT
+570bf "
+570c1 "
+570c3 }
+570c5 START_TIME
+570d0 =
+570d2 END_TIME
+570db =
+5867e Account Request
+5868e NewAccounts@Cidco.com
+59bbe The item "
+59bc9 " can't be blank !
+5d205 The clip mail is not saved
+5d220 This is a CLIP form. You can edit it by entering from list.
+5d25e The clip mail is not saved
+5d279 This is a CLIP form. You can edit it by entering from list.
+5e38d Fwd:
+5e392 Re:
+5e399 -
+5e39b -
+5e3ae FIELD
+5e3b4 POPUP_MENU
+5e3bf CHECK_BOX
+5e3c9 TEXT
+5e3ce FORMNAME
+5e3d7 SUBJECT
+5e3df REPLY-TO
+624ef YES
+624f3 NO
+63e09 Formname=
+63e13 Formname=
+63e20 =
+63e25 =
+63e2a =
+63e2c YES
+63e30 NO
+64874 In Box
+6487b : 
+64945 o&
+64957 E-Mail
+6495e : 
+649dd Out Box
+649e5 : 
+64a5c New E-Mail
+64a67 Forward
+64a6f Reply
+64a75 Edit Mail
+64aac Search
+64f80  New E-Mail
+64f8c s
+64fda  Total E-Mail
+64fe8 s
+65084 Message 
+6508d  of 
+650e4  Saved E-Mail
+650f2 s
+651ba PC home Daily
+651c8 Smile Shi<SLS@hotmail.com>
+651e3 Smile Shi@hotmail.com
+651f9 Smile Shi@hotmail.com
+6520f Test DET
+65c8c ...
+65c90 ...
+65cad Top Menu
+65cb7 In Box
+65cc0 New
+65cc4 Out Box
+65cce Saved
+65cd4 Create
+65cdb New E-Mail
+65ce6 Address
+65cee Book
+65cf3 Extras
+65d0f Calculator
+65d1a Calendar
+65d23 Users
+65d29 Sent Mail
+65d33 Settings
+65d5e Jan
+65d62 Feb
+65d66 Mar
+65d6a Apr
+65d6e May
+65d72 Jun
+65d76 Jul
+65d7a Aug
+65d7e Sep
+65d82 Oct
+65d86 Nov
+65d8a Dec
+664e1 (
+664e3  New)
+664e9 (
+664eb  Saved)
+66569 >
+66dca Extras
+6761d Yahoo!
+67897 :
+67899  PM 
+6789e  AM 
+6a2ae /
+6a2b0 /
+6a2b2 :
+6a2b4 PM
+6a2b7 AM
+6a523 Users
+6a58f New User
+6a5fe User
+6a687 Users
+6a705 Settings
+6a786 Sent Mail
+6a824   Sent E-Mail
+6a832   Sent E-Mails
+6ae2e New User
+6b21c  : 
+6b220  PM 
+6b225  AM 
+6b3cc High
+6b3d1 Low
+6b3d5 Off
+6b68b DELETE_ACCOUNT
+6b69a =
+6b8c6 New Customer
+6b8d3 @mymailstation.com
+6b8e6 mail.mymailstation.com
+6b8fd smtp.mymailstation.com
+6b914 @mailstation.com
+6b925 198.232.147.012
+6b935 1-416-861-8562
+6babc XTND: On  V
+6bac8 XTND: Off  V
+6bad5 0
+6bad7 .
+6d1f5 SET_USER_NAME
+6d203 =
+6d205 SET_EMAIL_ADDRESS
+6d217 =
+6d219 CHANGE_EMAIL_ADDRESS
+6d22e =
+6d230 SET_EMAIL_PASSWORD
+6d243 =
+6d245 SET_EMAIL_SERVER=
+6d257 =
+6d259 SET_SMTP_SERVER
+6d269 =
+6d26b SET_ISP_ACCOUNT
+6d27b =
+6d27d SET_ISP_PASSWORD
+6d28e =
+6d290 SET_DNS_SERVER
+6d29f 000.000.000.000
+6d2af =
+6d2b1 SET_DIAL_NUMBER
+6d2c1 =
+6d2c3 SET_REPLYTO_ADDRESS
+6d2d7 =
+6ef37 (
+6ef39  New)
+6ef3f New User
+6ef48 (Press)
+6ef50 (Press New)
+726e6 Jan
+726ea Feb
+726ee Mar
+726f2 Apr
+726f6 May
+726fa Jun
+726fe Jul
+72702 Aug
+72706 Sep
+7270a Oct
+7270e Nov
+72712 Dec
+7430a ate
+7430e e
+74310 ity
+74314 i
+74316 y
+74318 iest
+7431d y
+7431f bly
+74323 ble
+74327 men
+7432b man
+7432f ves
+74333 f
+74337 e
+74339 able
+74340 al
+74345 ation
+7434d d
+74351 e
+74355 er
+7435a es
+7435f est
+74365 ist
+7436b ic
+74370 ing
+74376 ism
+7437c ities
+74384 ity
+7438a less
+74391 ly
+74396 ment
+7439d ness
+743a4 or
+743a9 r
+743ad s
+743c0 C
+743ce D D$D(D-D3D8D<DADEDIDMDRDUDXD]DaDdDic
+743f4 ed
+743f7 able
+743fc ing
+74400 al
+74403 ism
+74407 ation
+7440d or
+74410 ities
+74416 ings
+7441b isms
+74420 ers
+74424 ors
+74428 less
+7442d ments
+74433 ment
+74438 men
+7443c ists
+74441 ist
+74445 ves
+74449 ity
+7444d ally
+74452 er
+74455 es
+74458 ness
+7445d est
+74461 ly
+74464 s
+74529 E
+7452b s
+7452d s
+7452f ed
+74532 ed
+74535 ing
+74539 ing
+7453d ings
+74542 er
+74545 er
+74548 ers
+7454c est
+74550 est
+74554 able
+74559 able
+7455e less
+74563 ly
+74566 ment
+7456b or
+7456e ist
+74572 al
+74575 ally
+7457a ic
+7457d ities
+74583 ity
+74587 ism
+7458b isms
+74590 ness
+74595 ation
+7459b men
+745a1 a
+745a7 abominabstruaccordacknowacutenadjutaadv.
+745d1 aestheaftergagreemalacriall-emally
+745f5 amandaamiablanaemianemomankle
+74613 antenaantinuapheliappeteapprovarchdiarmholarticuasphalassonaatavisattn.
+7465b austriavalanbach
+7466d badinaban
+74679 barefobaselebayberbedclobeguilbendedbespribicepsbinhexbitchyblarnebloodiblurb
+746c7 bombasboon
+746d3 bough
+746d9 braidibreathbrim
+746eb bronzebuddhabundlebusingcacogrcalk
+7470f canastcaparicardiacarroucat-eycaudalcent
+74739 chaingcharcocheekychildichokedchummycircusclassicliff
+7476f closesco-worcocksucoinsucollywcomer
+74793 commoncompetcompriconcorconfesconglocons
+747bd consoncont.
+747c9 contreconvexcoppiccoronacortiscountecowhercravatcrick
+747ff crossbcrustacumin
+74811 curvilcyclotdampindawn
+74829 debby
+7482f decimededucedeflordelicidemogrdenucldeprivdesidedetergdevilmdiarchdig
+74877 dinnerdisarmdiscordisfigdisk
+74895 dispradissonditherdocketdomicidoublodragnedrill
+748c5 drywalduodeneagletec
+748dd educe
+748e3 egresseleemoelvishemeritenc.
+74901 endospennui
+7490d entrenepitomerie
+7491f essay
+74925 eucharever
+74931 excel
+74937 excuseexosphexplicextentextremface-ofakir
+74961 fare
+74967 fatuoufeedbafervidfiery
+7497f finialfishhoflaky
+74991 fleapifloorwflux
+749a3 foolprforedoforgatfortnifoxholfree-rfriar
+749cd fructofundamfwd
+749df gamut
+749e5 gasworgenerigeomorgibletglary
+74a03 glue-sgodspegossipgrandlgraveygreg
+74a27 group
+74a2d guise
+74a33 h
+74a39 half-chandbihappy
+74a4b harneshaymowhearinhectolhemisphermithigh-chindi
+74a7b hodgephometohootenhost
+74a93 how-tohump
+74a9f hydro-hypnosideal
+74ab1 ill-foimbue
+74abd imparaimpervimpresinadeqincentinconcincubuindicaindo-eineradinferninfotainitiainrushinspecinsuppinter
+74b23 interginterointerwintrudinvisiironstirrevoits
+74b53 jared
+74b59 jewelfjosh
+74b65 jump-skarat
+74b71 kickstkinshaknockolace
+74b89 lamelllanterlatin
+74b9b layerilectorlegrooleukemlickinligninlinoculithualobulalone
+74bd7 lord
+74bdd low-spluminomacadamaenadmaim
+74bfb malevomanagimansarmarkermaskinmath
+74c1f mc
+74c25 medicimeltabmerchametalwmezuzamicrowmilepomin.
+74c55 minor
+74c5b mischomislikmistrimodestmonatomonophmoonwamortonmountimufflemum
+74c9d mutatiname
+74ca9 nato
+74caf necktineo-imneuromnicaraninetinoisy
+74cd3 nonfrenoodlenotarynuggetoat
+74cf1 obstacoctavooffingomit
+74d09 opaqueoptimiorificoswaldoutgroova
+74d2d overemoverseown-lapageanpalmy
+74d4b papas
+74d51 parasoparslepassivpatrimpebblepeltinpenthoperferperorapertnephalarphlegmphototpied
+74da5 pink
+74dab pixie
+74db1 platefpleonapocketpolitypontooportfopostlupovertpreceppreempprep
+74df3 pressbprickiprobatproffeprometproporprotoppshaw
+74e23 puddinpunitipussycquaff
+74e3b query
+74e41 quirkyradicerainsqrarenerawnesreaganrecallrecolorectilredounrefortregrinrelax
+74e8f remit
+74e95 repainreprieresentrespitretirerevelereykjaright-ripsawrockliroot
+74ed7 roundaruefuls-b-s
+74ee9 sagittsalutesanitisatyr
+74f01 scaly
+74f07 schlemscorecscrollseaplasecuraselenaself-eself-mself-ssemidesentenserif
+74f4f sexed
+74f55 shapershelveshoeboshout
+74f6d sickensignposine
+74f7f sixteeskylarslendeslummysmote
+74f9d snowcasoft-fsome
+74faf sorry
+74fb5 spacewspectespiky
+74fc7 spokessprintstablistandpstatorstenogstickustoic
+74ff7 straddstrengstrumpsubculsubsetsuchlisultrysuperbsupertsupremsus
+75039 swat
+7503f swish
+75045 symphosystoltailpitangertarsieteacheteenybteleprtempt
+7507b tenth
+75081 terry
+75087 thalidtheorithesauthoraxthreshthurs.time-htiradetogo
+750bd too
+750c3 torportoweritraductransetransntravestribe
+750ed tripodtruckmtumbletuskertypescultramunadorunawaruncataunconcunctiounderdunderqundesiundraiunenviunfavoungentunidiruniverunmaskunpatrunquieunromaunsleeunsweauntwisunwreaupsiloursifovacillvalutavaselivenereverilyvesselvictorvine
+751d1 viscusvoguisvp
+751e3 waken
+751e9 wardrowashrawaterhwean
+75201 weepinwell-lwestwawhichewhitecwide-rwind-pwipe
+75231 wive
+75237 woodroworkmawreak
+75249 xenon
+7524f yell
+75255 zaftigzookeezzzzzz
+
+A lot of ascii jibberish starts at 7c000
+
+84000 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+8404d Sun
+84051 Mon
+84055 Tue
+84059 Wed
+8405d Thu
+84061 Fri
+84065 Sat
+84069 Jan
+8406d Feb
+84071 Mar
+84075 Apr
+84079 May
+8407d Jun
+84081 Jul
+84085 Aug
+84089 Sep
+8408d Oct
+84091 Nov
+84095 Dec
+84099 Date:
+840a3 From:
+840ad Subject:
+840b7 To:
+840c1 Reply-To:
+840cb Cc:
+840d5 Bcc:
+840e1 content-type:
+840f1 text
+840f8 text/plain
+84105 text/html
+84111 message/rfc822
+84122 message/partial
+85fb3 EDT
+85fcf +6
+861eb id.
+861ef id.
+861f3 id.
+861f7 .00000@FPE
+86202 .00000@FPE
+8620d .00000@FPE
+8792c Confirmation Mail
+b7026 *70 
+b702b  FAIL
+b7031  FAIL
+b71f7 This message exceeds the maximum message size allowed by the MailStation. You may wish to contact the sender to resend a smaller message.
+b7d6e Formname=
+b7d78 SECURE
+b8edb OCtrl+S
+b8ee3 - Save & Exit
+b8ef1 Back
+b8ef6 - Exit
+b8efd Arrow
+b8f03 - Move Cursor
+b8f11 0-9,A-F
+b8f19 - Input
+b8f21 -O7OKOMOXOZOPgUp/PgDn
+b8f37 Scroll 1 Page(256B)
+b8f4b G
+b8f4d Go Address
+b8f58 H
+b8f5a Help
+b98ab Go address:
+bc8f6  Call
+bc8fc  Calls
+bc92d Calls Log
+bc961 Calls Log
+be68b Call 
+be691  of 
+be696 Not Exist
+bee0c Unavailable
+bf0f3 Private Name
+bf100 Private
+bf108 Unavailable Number
+bf11b Unavailable Name
+bf12c Private Number
+bf13b Unavailable
+bf147 Private
+bf14f Unavailable
+bf15b Private Number
+bf16a Unavailable Number
+bf17d Unavailable
+c01b6 BITMAP_RECT
+c01c2 BITMAP_DEPTH
+c01cf BITMAP_COLOR_TABLE
+c01e2 BITMAP_STORE
+c01ef BITMAP_STORE_ICON
+c1261 OK
+c1264 OK
+c1267 SET_ACTIVE_USER
+c1c71 content-type:
+c1dfc text/plain
+c1e10 x-clipmail/text
+c1e24 x-clipmail/x-bitmap
+c1e38 x-clipmail/x-form
+c1e4c x-clipmail/x-binary
+c1e60 SET_ACTIVE_USER=
+c1e76 SET_DATE=
+c1e8c SET_TIME=
+c1ea2 GLOBAL_COLOR_TABLE=
+c1eb8 SECURITY_KEY=
+c1ece DET_VERS_REQUIRE=
+c1ee4 EXPIRE_DATE=
+c1efa DELETE_ACCOUNT=
+c1f10 SET_USER_NAME=
+c1f26 SET_EMAIL_ADDRESS=
+c1f3c SET_EMAIL_PASSWORD=
+c1f52 SET_EMAIL_SERVER=
+c1f68 SET_SMTP_SERVER=
+c1f7e SET_ISP_ACCOUNT=
+c1f94 SET_ISP_PASSWORD=
+c1faa SET_DNS_SERVER=
+c1fc0 SET_DIAL_NUMBER=
+c1fd6 SET_REPLYTO_ADDRESS=
+c1fec CHANGE_EMAIL_ADDRESS=
+c2002 NEW_ADDRESS_ENTRY=
+c2018 NEW_GROUP_ENTRY=
+c202e NEW_CALENDAR_ENTRY=
+c2044 BITMAP_STORE_ICON=
+c205a BITMAP_STORE=
+c2070 BITMAP_RECT=
+c2086 BITMAP_DEPTH=
+c209c BITMAP_COLOR_TABLE=
+c6c5e  Jan
+c6c63  Feb
+c6c68  Mar
+c6c6d  Apr
+c6c72  May
+c6c77 June
+c6c7c July
+c6c81  Aug
+c6c86  Sep
+c6c8b  Oct
+c6c90  Nov
+c6c95  Dec
+c702e From: 
+c7035 To: 
+cb5b9 Scanning memory data...
+cb5d1 Fixing memory data...
+cd6f1 LIST 
+cd95f USER 
+cda19 PASS 
+cdd16 RETR 
+ce430 +ok
+ce495 >
+ce4e6 content-transfer-encoding:
+ce501 base64
+ce508 quoted-printable
+ce5d0 boundary=
+ce662 boundary=
+ce820 boundary=
+cec01 content-type: multipart/
+ced85 subject:
+ced8e reply-to:
+ced98 from:
+ced9e date:
+ceda4 mime-version: 1.0
+cedb6 mime-version:
+cf9ae UIDL 
+cfb47 DELE 
+cfd7b TOP 
+cfe2a dele 
+cfee3 content-type:
+d0a0f HELO 
+d0d37 MAIL FROM:
+d0f6f RCPT TO:<
+d0f79 >
+d1207 DATA
+d14c2 .
+d1707 QUIT
+d1aa8 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+d1ae9 SunMonTueWedThuFriSatJanFebMarAprMayJunJulAugSepOctNovDec0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'()+_,-./:=?
+d1b6d =_Boundary
+d1b78 0123456789ABCDEF
+d41f2 G@=?iso-8859-1?B?
+d44ff --
+d4502 --
+d4505 --
+d4afa --
+d4aff Content-Type: 
+d4b0e text
+d4b13 text/plain; charset=
+d4b28 /
+d4f61 :
+d4fdd Content-Type: text/plain; charset=
+d5074 9s#r!
+d507f 9s#r!
+d50d3 9s#r!
+d5342 To: 
+d5347 Cc: 
+d534c Bcc: 
+d54b4     boundary="
+d54ca --
+d5866 Message-ID: <
+d5878 Reply-To: 
+d5883 Reply-To: 
+d5891 Message-ID: <
+d5905 boundary="
+d5915 --
+d5962 X-ClipMail-Security_Key: 
+d5cf0 From: 
+d5cf7 Subject: 
+d5d6e Date: 
+e305b KICK:  Kick from ack
+e4584 KICK:  Kick from sock
+e6ad1 content-type:
+e6adf content-type: multipart/
+e6c64 RETR 
+e6ecc x-clipmail-version:
+e705e subject:
+e7067 reply-to:
+e7071 from:
+e7077 date:
+e707d mime-version: 1.0
+e708f mime-version:
+e7449 x-clipmail-application:
+e74be message-id: id.
+e74ce message-id: <id.
+e75d5 date: 
+e760a x-clipmail-security_key: 
+ea65f You are welcome!
+ea678 Sorry, see you later!
+ea89b Chap Challenge is wrong
+ea8b3 in random value len
+ea8c7 Chap Challenge is wrong
+ea8df in server name
+ea8ee CHAP Server is: 
+f6641 PAP is OK!
+f664c PAP is BAD!

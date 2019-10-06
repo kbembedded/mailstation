@@ -1,0 +1,665 @@
+
+002A Eventually checks to see if flash is to be reprogrammed and jumps to reprogramming routine
+
+; Translated bank jumps
+0039  C38618    JP      #1886		; Keyboard handler/interrupt
+
+003C  110100    LD      DE,#0001	; Bank 1 (04000)
+003F  C3AE19    JP      #19AE
+0042  110200    LD      DE,#0002	; Bank 2 (08000)
+0045  C3AE19    JP      #19AE
+0048  110300    LD      DE,#0003	; Bank 3 (0C000)
+004B  C3AE19    JP      #19AE
+004E  110500    LD      DE,#0005	; Bank 5 (14000)
+0051  C3AE19    JP      #19AE
+0054  110600    LD      DE,#0006	; Bank 6 (18000)
+0057  C3AE19    JP      #19AE
+005A  110700    LD      DE,#0007	; Bank 7 (1C000)
+005D  C3AE19    JP      #19AE
+0060  110800    LD      DE,#0008	; Bank 8 (20000)
+0063  C3AE19    JP      #19AE
+
+0066  00        NOP     		; NMI
+0067  C38618    JP      #1886		; Keyboard handler
+
+006A  110900    LD      DE,#0009	; Bank 9 (24000)
+006D  C3AE19    JP      #19AE
+0070  110A00    LD      DE,#000A	; Bank 10 (28000)
+0073  C3AE19    JP      #19AE
+0076  110B00    LD      DE,#000B	; Bank 11 (2C000)
+0079  C3AE19    JP      #19AE
+007C  110C00    LD      DE,#000C	; Bank 12 (30000)
+007F  C3AE19    JP      #19AE
+0082  110D00    LD      DE,#000D	; Bank 13 (34000)
+0085  C3AE19    JP      #19AE
+0088  110E00    LD      DE,#000E	; Bank 14 (38000)
+008B  C3AE19    JP      #19AE
+008E  111000    LD      DE,#0010	; Bank 16 (40000)
+0091  C3AE19    JP      #19AE
+0094  111100    LD      DE,#0011	; Bank 17 (44000)
+0097  C3AE19    JP      #19AE
+009A  111200    LD      DE,#0012	; Bank 18 (48000)
+009D  C3AE19    JP      #19AE
+00A0  111300    LD      DE,#0013	; Bank 19 (4C000)
+00A3  C3AE19    JP      #19AE
+00A6  111400    LD      DE,#0014	; Bank 20 (50000)
+00A9  C3AE19    JP      #19AE
+00AC  111500    LD      DE,#0015	; Bank 21 (54000)
+00AF  C3AE19    JP      #19AE
+00B2  111600    LD      DE,#0016	; Bank 22 (58000)
+00B5  C3AE19    JP      #19AE
+00B8  111700    LD      DE,#0017	; Bank 23 (5C000)
+00BB  C3AE19    JP      #19AE
+00BE  111800    LD      DE,#0018	; Bank 24 (60000)
+00C1  C3AE19    JP      #19AE
+00C4  111900    LD      DE,#0019	; Bank 25 (64000)
+00C7  C3AE19    JP      #19AE
+00CA  111A00    LD      DE,#001A	; Bank 26 (68000)
+00CD  C3AE19    JP      #19AE
+00D0  111B00    LD      DE,#001B	; Bank 27 (6C000)
+00D3  C3AE19    JP      #19AE
+00D6  111C00    LD      DE,#001C	; Bank 28 (70000)
+00D9  C3AE19    JP      #19AE
+00DC  112E00    LD      DE,#002E	; Bank 46 (B8000)
+00DF  C3AE19    JP      #19AE
+00E2  112F00    LD      DE,#002F	; Bank 47 (BC000)
+00E5  C3AE19    JP      #19AE
+00E8  113000    LD      DE,#0030	; Bank 48 (C0000)
+00EB  C3AE19    JP      #19AE
+00EE  113100    LD      DE,#0031	; Bank 49 (C4000)
+00F1  C3AE19    JP      #19AE
+00F4  113200    LD      DE,#0032	; Bank 50 (C8000)
+00F7  C3AE19    JP      #19AE
+00FA  113300    LD      DE,#0033	; Bank 51 (CC000)
+00FD  C3AE19    JP      #19AE
+
+...
+
+; More translated addresses
+05B4  218850    LD      HL,#5088
+05B7  C34800    JP      #0048	; D088
+05BA  C3E80D    JP      #0DE8	; strcat(dest, src)
+05BD  C3140E    JP      #0E14	; strncat(n, dest, src)
+05C0  C34D0E    JP      #0E4D	; strchr(s1, c)
+05C3  C3720E    JP      #0E72	; strcmp(s1, s2)?
+05C6  C35C0C    JP      #0C5C	; String copy(Source, Dest)
+05C9  C3810C    JP      #0C81	; strncpy(n, src, dest)
+05CC  C3B40C    JP      #0CB4	; strlen(src)
+05CF  C3D30C    JP      #0CD3	; a=1
+05D2  C3EB0C    JP      #0CEB	; a=0
+05D5  C3020D    JP      #0D02	; string compare case insensitive?
+05D8  C32B0D    JP      #0D2B	; Uses above
+05DB  C38614    JP      #1486
+05DE  C36E17    JP      #176E
+05E1  C3F912    JP      #12F9
+05E4  C33414    JP      #1434
+05E7  C36612    JP      #1266
+05EA  C38915    JP      #1589
+05ED  C35219    JP      #1952	; Calls value on stack + more junk
+05F0  C3821A    JP      #1A82		; setbank8000(bank) = out (8), 1 out (7), *bank return HL = in(7)
+05F3  C3961A    JP      #1A96		; bank8000() out (8), 1 returns in (7)
+05F6  C3631A    JP      #1A63		; Set P6=0, P5=stacked var, Return original P5 value in L
+05F9  C3771A    JP      #1A77		; bank4000-0() out (6), 0  returns in (5)
+05FC  C3A11A    JP      #1AA1		; setbank4000-3(bank) = out (6), 3 out (5), *bank returns HL = in(5)
+05FF  C3B51A    JP      #1AB5		; bank4000-3() out (6), 3 return in (5)
+0602  21A745    LD      HL,#45A7
+0605  C35400    JP      #0054		; 185A7
+0608  213143    LD      HL,#4331
+060B  C35400    JP      #0054		; 18331
+060E  217345    LD      HL,#4573
+0611  C35400    JP      #0054		; 18573
+0614  217C45    LD      HL,#457C
+0617  C35400    JP      #0054		; 1857C
+061A  21A554    LD      HL,#54A5
+061D  C35400    JP      #0054		; 194A5
+0620  21BE53    LD      HL,#53BE
+0623  C35400    JP      #0054		; 193BE
+0626  21FA54    LD      HL,#54FA
+0629  C35400    JP      #0054		; 194FA
+062C  212455    LD      HL,#5524
+062F  C35400    JP      #0054		; 19524
+0632  213055    LD      HL,#5530
+0635  C35400    JP      #0054		; 19530
+0638  213C55    LD      HL,#553C
+063B  C35400    JP      #0054		; 1953C
+063E  211156    LD      HL,#5611
+0641  C35400    JP      #0054		; 19611
+0644  21A956    LD      HL,#56A9
+0647  C35400    JP      #0054		; 196A9
+064A  21FF4A    LD      HL,#4AFF
+064D  C35400    JP      #0054		; 18AFF
+0650  215A47    LD      HL,#475A
+0653  C35400    JP      #0054		; 1875A
+0656  219E4B    LD      HL,#4B9E
+0659  C35400    JP      #0054		; 18B9E
+065C  21E345    LD      HL,#45E3
+065F  C35400    JP      #0054		; 185E3
+0662  21F945    LD      HL,#45F9
+0665  C35400    JP      #0054		; 185F9
+0668  21CA4C    LD      HL,#4CCA
+066B  C35400    JP      #0054		; 18CCA
+066E  21E74C    LD      HL,#4CE7
+0671  C35400    JP      #0054		; 18CE7
+0674  210148    LD      HL,#4801
+0677  C35400    JP      #0054		; 18801
+067A  215F48    LD      HL,#485F
+067D  C35400    JP      #0054		; 1885F
+0680  214D60    LD      HL,#604D
+0683  C35400    JP      #0054		; 1A04D
+0686  21C760    LD      HL,#60C7
+0689  C35400    JP      #0054		; 1A0C7
+068C  210775    LD      HL,#7507
+068F  C38800    JP      #0088		; 3B507
+0692  217764    LD      HL,#6477	
+0695  C34E00    JP      #004E		; 16477
+0698  215C68    LD      HL,#685C
+069B  C34E00    JP      #004E		; 1685c
+069E  213F69    LD      HL,#693F
+06A1  C34E00    JP      #004E		; 1693f
+06A4  218368    LD      HL,#6883
+06A7  C34E00    JP      #004E		; 16883
+06AA  211069    LD      HL,#6910
+06AD  C34E00    JP      #004E		; 16910
+06B0  21CA6B    LD      HL,#6BCA
+06B3  C34E00    JP      #004E		; 16BCA
+06B6  21A16C    LD      HL,#6CA1
+06B9  C34E00    JP      #004E		; 16CA1
+06BC  21836B    LD      HL,#6B83
+06BF  C34E00    JP      #004E		; 16B83
+06C2  21F969    LD      HL,#69F9
+06C5  C34E00    JP      #004E		; 169F9
+06C8  215573    LD      HL,#7355
+06CB  C34E00    JP      #004E		; 17355
+06CE  219576    LD      HL,#7695
+06D1  C34E00    JP      #004E		; 17695
+06D4  218B5A    LD      HL,#5A8B
+06D7  C35400    JP      #0054		; 19A8B
+06DA  21915A    LD      HL,#5A91
+06DD  C35400    JP      #0054		; 19A91
+06E0  21975A    LD      HL,#5A97
+06E3  C35400    JP      #0054		; 19A97
+06E6  21ED5A    LD      HL,#5AED
+06E9  C35400    JP      #0054		; 19AED
+06EC  21185B    LD      HL,#5B18
+06EF  C35400    JP      #0054		; 19B18
+06F2  21A15B    LD      HL,#5BA1
+06F5  C35400    JP      #0054		; 19BA1
+06F8  214956    LD      HL,#5649
+06FB  C34E00    JP      #004E		; 15649	
+06FE  217956    LD      HL,#5679	; 
+0701  C34E00    JP      #004E		; 15679
+0704  C3B938    JP      #38B9
+0707  21BB62    LD      HL,#62BB
+070A  C34E00    JP      #004E		; 162BB
+070D  21D85B    LD      HL,#5BD8
+0710  C35400    JP      #0054		; 19BD8
+0713  21E25C    LD      HL,#5CE2
+0716  C35400    JP      #0054		; 19CE2
+0719  214D47    LD      HL,#474D
+071C  C34E00    JP      #004E		; 1474D
+071F  21CA47    LD      HL,#47CA
+0722  C34E00    JP      #004E		; 147CA
+0725  210C48    LD      HL,#480C
+0728  C34E00    JP      #004E		; 1480C
+072B  211E48    LD      HL,#481E
+072E  C34E00    JP      #004E		; 1481E
+0731  21974D    LD      HL,#4D97
+0734  C34E00    JP      #004E		; 14D97
+0737  215A4E    LD      HL,#4E5A
+073A  C34E00    JP      #004E		; 14E5A
+073D  211A4F    LD      HL,#4F1A
+0740  C34E00    JP      #004E		; 14F1A
+0743  210150    LD      HL,#5001
+0746  C34E00    JP      #004E		; 15001
+0749  214B50    LD      HL,#504B
+074C  C34E00    JP      #004E		; 1504B
+074F  21D050    LD      HL,#50D0
+0752  C34E00    JP      #004E		; 150D0
+0755  215551    LD      HL,#5155
+0758  C34E00    JP      #004E		; 15155
+075B  212B52    LD      HL,#522B
+075E  C34E00    JP      #004E		; 1522B
+0761  219452    LD      HL,#5294
+0764  C34E00    JP      #004E		; 15294
+0767  21BE51    LD      HL,#51BE
+076A  C34E00    JP      #004E		; 151BE
+076D  21B16D    LD      HL,#6DB1
+0770  C34E00    JP      #004E		; 16DB1
+0773  21E077    LD      HL,#77E0
+0776  C34E00    JP      #004E		; 177E0
+0779  21E679    LD      HL,#79E6
+077C  C34E00    JP      #004E		; 179E6
+077F  21AC7A    LD      HL,#7AAC
+0782  C34E00    JP      #004E		; 17AAC
+0785  21307B    LD      HL,#7B30
+0788  C34E00    JP      #004E		; 17B30
+078B  21127B    LD      HL,#7B12
+078E  C34800    JP      #0048		; FB12
+0791  21DA7B    LD      HL,#7BDA
+0794  C34800    JP      #0048		; FBDA
+0797  21557C    LD      HL,#7C55
+079A  C34800    JP      #0048		; FC55
+079D  218D7C    LD      HL,#7C8D
+07A0  C34800    JP      #0048		; FC8D
+07A3  21DE56    LD      HL,#56DE
+07A6  C35400    JP      #0054		; 196DE
+07A9  213057    LD      HL,#5730
+07AC  C35400    JP      #0054		; 19730
+07AF  218257    LD      HL,#5782
+07B2  C35400    JP      #0054		; 19782
+07B5  21F557    LD      HL,#57F5
+07B8  C35400    JP      #0054		; 197F5
+07BB  21A37B    LD      HL,#7BA3
+07BE  C34E00    JP      #004E		; 17BA3
+07C1  21FA7B    LD      HL,#7BFA
+07C4  C34E00    JP      #004E		; 17BFA
+07C7  216B7C    LD      HL,#7C6B
+07CA  C34E00    JP      #004E		; 17C6B
+07CD  211A7D    LD      HL,#7D1A
+07D0  C34E00    JP      #004E		; 17D1A
+07D3  21A84B    LD      HL,#4BA8
+07D6  C34E00    JP      #004E		; 14BA8
+07D9  21CF7D    LD      HL,#7DCF
+07DC  C34E00    JP      #004E		; 17DCF
+07DF  210040    LD      HL,#4000
+07E2  C38800    JP      #0088		; 38000
+07E5  214D41    LD      HL,#414D
+07E8  C38800    JP      #0088		; 3814D
+07EB  218B45    LD      HL,#458B
+07EE  C38800    JP      #0088		; 3858B
+07F1  210040    LD      HL,#4000
+07F4  C38200    JP      #0082		; 34000
+07F7  21714E    LD      HL,#4E71
+07FA  C38200    JP      #0082		; 34E71
+07FD  21EA4F    LD      HL,#4FEA
+0800  C38200    JP      #0082		; 34FEA
+0803  211E5A    LD      HL,#5A1E
+0806  C35400    JP      #0054		; 19A1E
+0809  21435A    LD      HL,#5A43
+080C  C35400    JP      #0054		; 19A43
+080F  215B5A    LD      HL,#5A5B
+0812  C35400    JP      #0054		; 19A5B
+0815  21735A    LD      HL,#5A73
+0818  C35400    JP      #0054		; 19A73
+081B  212463    LD      HL,#6324
+081E  C34E00    JP      #004E		; 16324
+0821  21C666    LD      HL,#66C6
+0824  C35400    JP      #0054		; 1A6C6
+0827  216867    LD      HL,#6768
+082A  C35400    JP      #0054		; 1A768
+082D  21D968    LD      HL,#68D9
+0830  C35400    JP      #0054		; 1A8D9
+0833  216D69    LD      HL,#696D
+0836  C35400    JP      #0054		; 1A96D
+0839  C3341A    JP      #1A34
+083C  212551    LD      HL,#5125
+083F  C34800    JP      #0048		; D125
+0842  218252    LD      HL,#5282
+0845  C34800    JP      #0048		; D282
+0848  21E053    LD      HL,#53E0
+084B  C34800    JP      #0048		; D3E0
+084E  219355    LD      HL,#5593
+0851  C34800    JP      #0048		; D593
+0854  21365D    LD      HL,#5D36
+0857  C34800    JP      #0048		; DD36
+085A  21016C    LD      HL,#6C01
+085D  C34800    JP      #0048		; EC01
+0860  C3BC13    JP      #13BC
+0863  C3F733    JP      #33F7
+0866  C36534    JP      #3465
+0869  21EC70    LD      HL,#70EC
+086C  C35400    JP      #0054		; 1B0EC
+086F  215171    LD      HL,#7151
+0872  C35400    JP      #0054		; 1B151
+0875  21836C    LD      HL,#6C83
+0878  C35400    JP      #0054		; 1AC83
+087B  21C670    LD      HL,#70C6
+087E  C35400    JP      #0054		; 1B0C6
+0881  21B66B    LD      HL,#6BB6
+0884  C35400    JP      #0054		; 1ABB6
+0887  21F04C    LD      HL,#4CF0
+088A  C3F400    JP      #00F4		; C8CF0
+088D  21BC53    LD      HL,#53BC
+0890  C3F400    JP      #00F4		; C94BC
+0893  21434F    LD      HL,#4F43
+0896  C3F400    JP      #00F4		; C8F43
+0899  219650    LD      HL,#5096
+089C  C3F400    JP      #00F4		; C9096
+089F  214B4C    LD      HL,#4C4B
+08A2  C3F400    JP      #00F4		; C8C4B
+08A5  215454    LD      HL,#5454
+08A8  C3F400    JP      #00F4		; C9454
+08AB  218957    LD      HL,#5789
+08AE  C3F400    JP      #00F4		; C9789
+08B1  219E4A    LD      HL,#4A9E
+08B4  C3F400    JP      #00F4		; C8A9E
+08B7  215E4B    LD      HL,#4B5E
+08BA  C3F400    JP      #00F4		; C8B5E
+08BD  21FE49    LD      HL,#49FE
+08C0  C3F400    JP      #00F4		; C89FE
+08C3  210843    LD      HL,#4308
+08C6  C3F400    JP      #00F4		; C8308
+08C9  21E158    LD      HL,#58E1
+08CC  C3F400    JP      #00F4		; C98E1
+08CF  211F57    LD      HL,#571F
+08D2  C3F400    JP      #00F4		; C971F
+08D5  21A45B    LD      HL,#5BA4
+08D8  C3F400    JP      #00F4		; C9BA4
+08DB  210D5D    LD      HL,#5D0D
+08DE  C3F400    JP      #00F4		; C9D0D
+08E1  214859    LD      HL,#5948
+08E4  C3F400    JP      #00F4		; C9948
+08E7  211D5B    LD      HL,#5B1D
+08EA  C3F400    JP      #00F4		; C9B1D
+08ED  21965A    LD      HL,#5A96
+08F0  C3F400    JP      #00F4		; C9A96
+08F3  21B673    LD      HL,#73B6
+08F6  C3F400    JP      #00F4		; CB3B6
+08F9  210E59    LD      HL,#590E
+08FC  C3F400    JP      #00F4		; C990E
+08FF  C3DE37    JP      #37DE
+0902  C30138    JP      #3801
+0905  C32438    JP      #3824
+0908  00        NOP     
+0909  00        NOP     
+090A  00        NOP     
+090B  212840    LD      HL,#4028
+090E  C3F400    JP      #00F4		; C8028
+0911  214B40    LD      HL,#404B
+0914  C3FA00    JP      #00FA		; CC04B
+0917  214240    LD      HL,#4042
+091A  C3FA00    JP      #00FA		; CC042
+091D  215D40    LD      HL,#405D
+0920  C3FA00    JP      #00FA		; C005D
+0923  214840    LD      HL,#4048
+0926  C3FA00    JP      #00FA		; C0048
+0929  216340    LD      HL,#4063
+092C  C3FA00    JP      #00FA		; C0063
+092F  214540    LD      HL,#4045
+0932  C3FA00    JP      #00FA		; C0045
+0935  211A4D    LD      HL,#4D1A
+0938  C34800    JP      #0048		; 0C048
+093B  212A40    LD      HL,#402A
+093E  C3FA00    JP      #00FA		; C002A
+0941  213940    LD      HL,#4039
+0944  C3FA00    JP      #00FA		; C0039
+0947  216C40    LD      HL,#406C
+094A  C3FA00    JP      #00FA		; C006C
+094D  215740    LD      HL,#4057
+0950  C3FA00    JP      #00FA		; C0057
+0953  215A40    LD      HL,#405A
+0956  C3FA00    JP      #00FA		; C005A
+0959  215140    LD      HL,#4051
+095C  C3FA00    JP      #00FA		; C0051
+095F  215440    LD      HL,#4054
+0962  C3FA00    JP      #00FA		; C0054
+0965  216509    LD      HL,#0965
+0968  C3FA00    JP      #00FA		; ????
+096B  217B40    LD      HL,#407B
+096E  C3FA00    JP      #00FA		; C007B
+0971  216F40    LD      HL,#406F
+0974  C3FA00    JP      #00FA		; C006F
+0977  213040    LD      HL,#4030
+097A  C3FA00    JP      #00FA		; C0030
+097D  21224F    LD      HL,#4F22
+0980  C34800    JP      #0048		; 0CF22
+0983  217840    LD      HL,#4078
+0986  C3FA00    JP      #00FA		; C0078
+0989  217540    LD      HL,#4075
+098C  C3FA00    JP      #00FA		; C0075
+098F  21824D    LD      HL,#4D82
+0992  C34800    JP      #0048		; CD82
+0995  213640    LD      HL,#4036
+0998  C3FA00    JP      #00FA		; C0036
+099B  213340    LD      HL,#4033
+099E  C3FA00    JP      #00FA		; C0033
+09A1  218A4F    LD      HL,#4F8A
+09A4  C34800    JP      #0048		; CF8A
+09A7  217240    LD      HL,#4072
+09AA  C3FA00    JP      #00FA		; C0072
+09AD  211B40    LD      HL,#401B
+09B0  C3FA00    JP      #00FA		; C001B
+09B3  212D40    LD      HL,#402D
+09B6  C3FA00    JP      #00FA		; C002D
+09B9  212740    LD      HL,#4027
+09BC  C3FA00    JP      #00FA		; C0027
+09BF  212140    LD      HL,#4021
+09C2  C3FA00    JP      #00FA		; C0021
+09C5  211540    LD      HL,#4015
+09C8  C3FA00    JP      #00FA		; C0015
+09CB  212440    LD      HL,#4024
+09CE  C3FA00    JP      #00FA		; C0024
+09D1  211E40    LD      HL,#401E
+09D4  C3FA00    JP      #00FA		; C001E
+09D7  211840    LD      HL,#4018
+09DA  C3FA00    JP      #00FA		; C0018
+09DD  21EA4D    LD      HL,#4DEA
+09E0  C34800    JP      #0048		; CDEA
+09E3  21524E    LD      HL,#4E52
+09E6  C34800    JP      #0048		; CE52
+09E9  21BA4E    LD      HL,#4EBA
+09EC  C34800    JP      #0048		; CEBA
+09EF  216640    LD      HL,#4066
+09F2  C3FA00    JP      #00FA		; C0066
+09F5  214E40    LD      HL,#404E
+09F8  C3FA00    JP      #00FA		; C004E
+09FB  216040    LD      HL,#4060
+09FE  C3FA00    JP      #00FA		; C0060
+0A01  216940    LD      HL,#4069
+0A04  C3FA00    JP      #00FA		; C0069
+0A07  213C40    LD      HL,#403C
+0A0A  C3FA00    JP      #00FA		; C003C
+0A0D  217E40    LD      HL,#407E
+0A10  C3FA00    JP      #00FA		; C007E
+0A13  218140    LD      HL,#4081
+0A16  C3FA00    JP      #00FA		; C0081
+
+; Enable interrupts
+0A19  FB        EI      
+0A1A  C9        RET     		
+
+; Disable interrupts
+0A1B  F3        DI      
+0A1C  C9        RET     		
+
+0A1D  21FC42    LD      HL,#42FC
+0A20  C34800    JP      #0048		; C2FC
+0A23  212843    LD      HL,#4328
+0A26  C34800    JP      #0048		; C328
+0A29  210040    LD      HL,#4000	; Initialization. Checks for flash reprog
+0A2C  C34800    JP      #0048		; C000
+0A2F  C3FB1A    JP      #1AFB		; Translate bit position given in C (0-7) to bit mask and apply it to A
+0A32  212C40    LD      HL,#402C
+0A35  C34800    JP      #0048		; C02C
+0A38  213741    LD      HL,#4137
+0A3B  C34800    JP      #0048		; C137
+0A3E  213642    LD      HL,#4236
+0A41  C34800    JP      #0048		; C236
+0A44  219442    LD      HL,#4294
+0A47  C34800    JP      #0048		; C294
+0A4A  C3951C    JP      #1C95
+0A4D  C3A71C    JP      #1CA7
+0A50  21865F    LD      HL,#5F86
+0A53  C35400    JP      #0054		; 19F86
+0A56  210F5E    LD      HL,#5E0F
+0A59  C35400    JP      #0054		; 19E0F
+0A5C  C3751C    JP      #1C75		; Delay
+0A5F  21705D    LD      HL,#5D70
+0A62  C35400    JP      #0054		; 19D70
+0A65  21965D    LD      HL,#5D96
+0A68  C35400    JP      #0054		; 19D96
+0A6B  21264D    LD      HL,#4D26
+0A6E  C35400    JP      #0054		; 18D26
+0A71  C37F1B    JP      #1B7F		; Return 1 if P2.7 set
+0A74  C3921B    JP      #1B92		; Return 1 if P9.7 set
+0A77  C3D81A    JP      #1AD8		; Set/clr P2.4 based on stacked value
+0A7A  C3A41B    JP      #1BA4		; (P9.5=0)? Return 2, (P9.6=0)? Return 1, else return 0
+
+0A7D  76        HALT    
+0A7E  C9        RET     
+
+0A7F  C3E31C    JP      #1CE3		; Set P2.7
+0A82  C3EE1C    JP      #1CEE		; Clear P2.7
+0A85  C35D24    JP      #245D		; 20x(Copy 80h bytes from HL to $4038 w/P2.3=1)
+					; Write iteration to $4038 w/P2.3=0 prior to copy
+0A88  C3AA29    JP      #29AA		; Determine font set and convert char code prior to printing
+0A8B  217343    LD      HL,#4373
+0A8E  C34E00    JP      #004E		; 14373
+0A91  21EA45    LD      HL,#45EA
+0A94  C34E00    JP      #004E		; 145EA
+0A97  C3542A    JP      #2A54
+0A9A  C35532    JP      #3255
+0A9D  C3BB32    JP      #32BB
+0AA0  C3CA32    JP      #32CA
+0AA3  C30F33    JP      #330F
+0AA6  210748    LD      HL,#4807
+0AA9  C3EE00    JP      #00EE		; C4807
+0AAC  214275    LD      HL,#7542
+0AAF  C33C00    JP      #003C		; 7542
+0AB2  218440    LD      HL,#4084
+0AB5  C3FA00    JP      #00FA		; CC084
+0AB8  00        NOP     
+0AB9  00        NOP     
+0ABA  00        NOP     
+0ABB  00        NOP     
+0ABC  00        NOP     
+0ABD  00        NOP     
+0ABE  219854    LD      HL,#5498
+0AC1  C3F400    JP      #00F4		; C9498
+0AC4  218740    LD      HL,#4087
+0AC7  C3FA00    JP      #00FA		; CC087
+0ACA  218A40    LD      HL,#408A
+0ACD  C3FA00    JP      #00FA		; CC08A
+0AD0  213240    LD      HL,#4032
+0AD3  C38200    JP      #0082		; 34032
+0AD6  C3893A    JP      #3A89
+0AD9  C3FE1B    JP      #1BFE		; Calls above routine
+0ADC  211745    LD      HL,#4517
+0ADF  C34E00    JP      #004E		; 14517
+0AE2  21AF7D    LD      HL,#7DAF
+0AE5  C3E800    JP      #00E8		; C3DAF
+0AE8  21F87D    LD      HL,#7DF8
+0AEB  C3E800    JP      #00E8		; C3DF8
+0AEE  21147E    LD      HL,#7E14
+0AF1  C3E800    JP      #00E8		; C3E14
+0AF4  21507E    LD      HL,#7E50
+0AF7  C3E800    JP      #00E8		; C3E50
+0AFA  21687E    LD      HL,#7E68
+0AFD  C3E800    JP      #00E8		; C3E68
+0B00  219040    LD      HL,#4090
+0B03  C3FA00    JP      #00FA		; CC090
+0B06  218D40    LD      HL,#408D
+0B09  C3FA00    JP      #00FA		; CC08D
+0B0C  219340    LD      HL,#4093
+0B0F  C3FA00    JP      #00FA		; CC093
+0B12  219640    LD      HL,#4096
+0B15  C3FA00    JP      #00FA		; CC096
+0B18  214975    LD      HL,#7549
+0B1B  C38800    JP      #0088		; 3B549
+0B1E  21D071    LD      HL,#71D0
+0B21  C35400    JP      #0054		; 1B1D0
+0B24  210647    LD      HL,#4706
+0B27  C34E00    JP      #004E		; 14706
+0B2A  216F7E    LD      HL,#7E6F
+0B2D  C3C400    JP      #00C4		; 67E6F
+0B30  211C45    LD      HL,#451C	; Reprog test/jump
+0B33  C34800    JP      #0048		; C51C
+0B36  214E68    LD      HL,#684E
+0B39  C3E200    JP      #00E2		; DE84E
+0B3C  210040    LD      HL,#4000
+0B3F  C36000    JP      #0060		; 20000
+0B42  21F45F    LD      HL,#5FF4
+0B45  C38200    JP      #0082		; 35FF4
+0B48  21D667    LD      HL,#67D6
+0B4B  C38800    JP      #0088		; 3A7D6
+0B4E  21A877    LD      HL,#77A8
+0B51  C38200    JP      #0082		; 377A8
+0B54  21E86F    LD      HL,#6FE8
+0B57  C34800    JP      #0048		; EFE8
+0B5A  210E50    LD      HL,#500E
+0B5D  C38200    JP      #0082		; 3500E
+0B60  21664B    LD      HL,#4B66
+0B63  C38800    JP      #0088		; 38B66
+0B66  212B40    LD      HL,#402B
+0B69  C3D600    JP      #00D6		; 7002B
+0B6C  21007A    LD      HL,#7A00
+0B6F  C38200    JP      #0082		; 37A00
+0B72  21055D    LD      HL,#5D05
+0B75  C3D600    JP      #00D6		; 71D05
+0B78  219F61    LD      HL,#619F
+0B7B  C3D600    JP      #00D6		; 7219F
+0B7E  21E360    LD      HL,#60E3
+0B81  C35400    JP      #0054		; 1A0E3
+0B84  210761    LD      HL,#6107
+0B87  C35400    JP      #0054		; 1A107
+0B8A  218E5D    LD      HL,#5D8E
+0B8D  C3C400    JP      #00C4		; 65D8E
+0B90  21D162    LD      HL,#62D1
+0B93  C3B200    JP      #00B2		; 5A2D1
+0B96  212568    LD      HL,#6825
+0B99  C3B200    JP      #00B2		; 5A825
+0B9C  21336C    LD      HL,#6C33
+0B9F  C3B200    JP      #00B2		; 5AC33
+0BA2  210040    LD      HL,#4000
+0BA5  C39400    JP      #0094		; 44000
+0BA8  21F364    LD      HL,#64F3
+0BAB  C3C400    JP      #00C4		; 664F3
+0BAE  210040    LD      HL,#4000
+0BB1  C3A000    JP      #00A0		; 4C000
+0BB4  216E40    LD      HL,#406E
+0BB7  C3A600    JP      #00A6		; 5006E
+0BBA  21E279    LD      HL,#79E2
+0BBD  C3C400    JP      #00C4		; 679E2
+0BC0  21706F    LD      HL,#6F70
+0BC3  C3B200    JP      #00B2		; 5AF70
+0BC6  21F17A    LD      HL,#7AF1
+0BC9  C3C400    JP      #00C4		; 67AF1
+0BCC  215162    LD      HL,#6251
+0BCF  C3D000    JP      #00D0		; 6E251
+0BD2  218263    LD      HL,#6382
+0BD5  C3D000    JP      #00D0		; 6E382
+0BD8  215E6A    LD      HL,#6A5E
+0BDB  C3D000    JP      #00D0		; 6EA5E
+0BDE  214D71    LD      HL,#714D
+0BE1  C3D000    JP      #00D0		; 6E14D
+0BE4  212467    LD      HL,#6724
+0BE7  C3A600    JP      #00A6		; 52724
+0BEA  210040    LD      HL,#4000
+0BED  C3E200    JP      #00E2		; DC000
+0BF0  21D16D    LD      HL,#6DD1
+0BF3  C3C400    JP      #00C4		; 66DD1
+0BF6  21F95E    LD      HL,#5EF9
+0BF9  C3CA00    JP      #00CA		; 69EF9
+0BFC  212D4D    LD      HL,#4D2D
+0BFF  C38E00    JP      #008E		; 40D2D
+0C02  21F850    LD      HL,#50F8
+0C05  C38E00    JP      #008E		; 410F8
+0C08  21F654    LD      HL,#54F6
+0C0B  C38E00    JP      #008E		; 414F6
+0C0E  21B36E    LD      HL,#6EB3
+0C11  C3A600    JP      #00A6		; 52EB3
+0C14  213240    LD      HL,#4032
+0C17  C3C400    JP      #00C4		; 64032
+0C1A  219D40    LD      HL,#409D
+0C1D  C3C400    JP      #00C4		; 6409D
+0C20  21F343    LD      HL,#43F3
+0C23  C3C400    JP      #00C4		; 643F3
+0C26  216244    LD      HL,#4462
+0C29  C3C400    JP      #00C4		; 64462
+0C2C  21F560    LD      HL,#60F5
+0C2F  C3AC00    JP      #00AC		; 560F5
+0C32  219757    LD      HL,#5797
+0C35  C3E200    JP      #00E2		; DD797
+0C38  21BA62    LD      HL,#62BA
+0C3B  C3CA00    JP      #00CA		; 6A2BA
+0C3E  211447    LD      HL,#4714
+0C41  C3D000    JP      #00D0		; 6C714
+0C44  218047    LD      HL,#4780
+0C47  C3D000    JP      #00D0		; 6C780
+0C4A  215C6F    LD      HL,#6F5C
+0C4D  C3D000    JP      #00D0		; 6EF5C
+0C50  21D661    LD      HL,#61D6
+0C53  C3D000    JP      #00D0		; 6E1D6
+0C56  212156    LD      HL,#5621
+0C59  C3D000    JP      #00D0		; 6D621
+
