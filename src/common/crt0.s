@@ -1,4 +1,4 @@
-	;; FyOS crt0.s for a Z80
+	;; FyOS crt0.s for Z80
         .module crt0
        	.globl	_main
 
@@ -22,9 +22,9 @@
 	ld	a, #0
 	ld	(_firmwareversionsafe), a	; safe for now
 	ld	a, (#0x0037)
-	cp	a, #0d2			; check major version for v2
+	cp	a, #02			; check major version for v2
 	jr	z, version2checkminor
-	cp	a, #0d3			; check major version for v3
+	cp	a, #03			; check major version for v3
 	jr	z, version3checkminor
 	jr	use_defaultversion2	; if neither major v2 or v3, who knows!  use v2.53
 version2checkminor:
@@ -35,7 +35,7 @@ version2checkminor:
 	jr	z, use_version254
 	nop				; else use v2.53 anyway for now			
 use_defaultversion2:
-	ld	a, #0d2
+	ld	a, #02
 	ld	(_firmwareversionsafe), a	; not safe firmware in use
 use_version253:
 	ld	hl, #0xdba1		; set shadow vars 
@@ -79,11 +79,11 @@ versioncheckcomplete:
 
 	.area	_HOME
 	.area	_CODE
-        .area   _GSINIT
-        .area   _GSFINAL
+	.area	_GSINIT
+	.area	_GSFINAL
 	.area	_DATA
-        .area   _BSS
-        .area   _HEAP
+	.area	_BSS
+	.area	_HEAP
 
 
 ;------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ versioncheckcomplete:
 ; _exit is run when your 'main' C function returns.
 ;------------------------------------------------------------------------------
 
-        .area   _CODE
+	.area	_CODE
 
 ;------------------------------------------------------------------------------
 
@@ -129,8 +129,8 @@ gsinit::
 	ld	hl, #s__INITIALIZER
 	ldir
 gsinit_next:
-        .area   _GSFINAL
-        ret
+	.area	_GSFINAL
+	ret
 
 
 ;------------------------------------------------------------------------------
