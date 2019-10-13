@@ -21,7 +21,9 @@ _cgafont_addr::			; Pointer to CGA font data (after it's moved at init)
 ;------------------------------------------------------------------------------
 
 	.area   _GSINIT
-	xor	a			; Reset cursor position
+	
+	; Reset cursor position
+	xor	a
 	ld	(_cursorx), a
 	ld	(_cursory), a
 	
@@ -42,14 +44,15 @@ _cgafont_addr::			; Pointer to CGA font data (after it's moved at init)
 ; The above code run during inializiation finds where the page aligns to a 
 ; 256-byte boundary inside the padding, and then shifts the font data to that
 ; location.  The new pointer to the font data is then set in '_cgafont_addr'.
+; Alignment is necessary to optimize drawing characters to the LCD.
 ;------------------------------------------------------------------------------
 	
 	.area	_DATA	
-	cgafont_dataarea:
+	cgafont_dataarea::
 	.ds	256			; padding bytes
-	cgafont_data:
+	cgafont_data::
 	.include "cgafont.inc"
-	cgafont_data_end:
+	cgafont_data_end::
 
 
 ;------------------------------------------------------------------------------
@@ -156,31 +159,31 @@ nextcharscan:
 
 
 ;------------------------------------------------------------------------------
-; UpdateCharLCD
+; UpdateCharLCD()
 ;
 ; Parameters: none
 ;
 ; Updates both halves of the LCD from the text buffer at _textmodebuffer.
 ;
 ;------------------------------------------------------------------------------
-UpdateCharLCD::
+_UpdateCharLCD::
 	push	af
 	push	bc
 	push	ix	
 	
-	in	a, (#06)	; Save current	slot4000 device
+	in	a, (#06)		; Save current	slot4000 device
 	ld	b, a
 	
-	ld	a,#02		; select left half of LCD	
+	ld	a,#02			; select left half of LCD	
 	out	(#06),a
 	ld	ix, #_textmodebuffer	; set left half of characters
 	call UpdateCharLCD_Half
-	ld	a,#04		; select left half of LCD
+	ld	a,#04			; select left half of LCD
 	out	(#06),a
-	ld	ix, #_textmodebuffer + #0d20	; set left half of characters
+	ld	ix, #_textmodebuffer + #0d20	; set right half of characters
 	call UpdateCharLCD_Half
 	
-	ld	a, b		; Restore slot4000 device
+	ld	a, b			; Restore slot4000 device
 	out	(#06), a
 	
 	pop	ix
@@ -189,16 +192,144 @@ UpdateCharLCD::
 	ret
 
 
-;------------------------------------------------------------------------------
-; scrollscreen 
+;-----------------------------------------------------------------------------
+; ClearLCD_Half
+;
+; Parameters: none
+; Destroys: af, bc, de, hl
+;
+; Clears the LCD half currently in slot4000
+;
+;-----------------------------------------------------------------------------
+ClearLCD_Half:
+	ld	b,#0x14
+ClearLCD_2:
+	ld	de,#0x4038
+	
+	ld	hl, (_p2shadow)
+	ld	a,(hl)			; start CAS, toggle bit from shadow P2 byte
+	and	#0xf7
+	ld	(hl),a
+	out	(#0x02),a
+	
+	ld	a,b			; write column-1 to LCD
+	dec	a
+	ld	(de),a
+	
+	ld	hl, (_p2shadow)
+	ld	a,(hl)			; end CAS, toggle bit from shadow P2 byte
+	or	#0x08
+	ld	(hl),a
+	out	(#0x02),a
+	
+	push	bc			; preserve our column counter	
+	ld	hl, #0x4038
+	ld	(hl), #0
+	ld	de, #0x4039
+	ld	bc, #0d127
+	ldir	
+	pop	bc			; restore column counter
+	
+	djnz	ClearLCD_2		; column--, if not zero keep going
+
+	ret
+
+
+;-----------------------------------------------------------------------------
+; ClearLCD()
 ;
 ; Parameters: none
 ;
-; Shifts text buffer (_textmodebuffer) up by one line, then clears the bottom
-; line to ascii 0.  Calls UpdateCharLCD to apply changes.
+; Clears the LCD with 0's.
+;
+;-----------------------------------------------------------------------------
+_ClearLCD::
+	push	af
+	push	bc
+	push	de
+	push	hl
+	
+	in	a, (#06)		; Save current	slot4000 device
+	push	af
+	
+	ld	a,#02			; select left half of LCD	
+	out	(#06),a
+	call	ClearLCD_Half
+	ld	a,#04			; select left half of LCD
+	out	(#06),a
+	call	ClearLCD_Half
+	
+	pop	af			; Restore slot4000 device
+	out	(#06), a
+	
+	pop	hl
+	pop	de
+	pop	bc
+	pop	af
+	ret
+
+
+;-----------------------------------------------------------------------------
+; ScrollCharLCD_Half
+;
+; Parameters: none
+; Destroys: af, bc, de, hl
+;
+; Scrolls LCD half in slot4000 up by 8 pixel rows (aka one char row).
+;
+;-----------------------------------------------------------------------------
+ScrollCharLCD_Half:	
+	ld	b, #0x14		; do 20 columns total
+ScrollCharLCD_2:
+	ld	de,#0x4038
+	
+	ld	hl, (_p2shadow)
+	ld	a,(hl)			; start CAS, toggle bit from shadow P2 byte
+	and	#0xf7
+	ld	(hl),a
+	out	(#0x02),a
+	
+	ld	a,b			; write column-1 to LCD
+	dec	a
+	ld	(de),a
+	
+	ld	hl, (_p2shadow)
+	ld	a,(hl)			; end CAS, toggle bit from shadow P2 byte
+	or	#0x08
+	ld	(hl),a
+	out	(#0x02),a
+	
+	push	bc			; preserve our column counter
+	
+	ld	hl, #0x4040		; move all rows up one except last
+	ld	de, #0x4038
+	ld	bc, #0d120
+	ldir
+	
+	ld	hl, #0x40B0		; clear last char row
+	ld	(hl), #0
+	ld	de, #0x40B1
+	ld	bc, #0d7
+	ldir
+	
+	pop	bc			; restore column counter
+	
+	djnz	ScrollCharLCD_2		; column--, if not zero keep going
+	ret
+
+
+
+;------------------------------------------------------------------------------
+; scrollscreen()
+;
+; Parameters: none
+;
+; Shifts text buffer '_textmodebuffer' up by one line, then clears the bottom
+; line to ascii 0.  It then scrolls the actual LCD, one half at a time, using 
+; the ScrollCharLCD_Half function above.
 ;
 ;------------------------------------------------------------------------------
-scrollscreen::
+_scrollscreen::
 	push	af
 	push	bc
 	push	de
@@ -208,15 +339,30 @@ scrollscreen::
 	ld	de, #_textmodebuffer
 	ld	bc, #0d600			; only 600 chars, since skipping top row
 	ldir
-	ld	a, #0				; clear bottom row
+	xor	a				; clear bottom row
 	ld	(_textmodebuffer + 0d600), a
 	ld	hl, #_textmodebuffer + #0d600
 	ld	de, #_textmodebuffer + #0d601
 	ld	bc, #0d39
 	ldir
 	
-	call UpdateCharLCD			; update!
+	;call _UpdateCharLCD			; This is slow, so we don't do it anymore
+	;jr	_scrollscreen_end
 	
+	in	a, (#06)			; Save current slot4000 device
+	push	af
+	
+	ld	a,#02				; select left half of LCD	
+	out	(#06),a
+	call	ScrollCharLCD_Half
+	ld	a,#04				; select right half of LCD
+	out	(#06),a
+	call	ScrollCharLCD_Half
+	
+	pop	af				; Restore slot4000 device
+	out	(#06), a
+
+_scrollscreen_end:	
 	pop	hl
 	pop	de
 	pop	bc
@@ -249,8 +395,13 @@ multiply_NOADD:
 	pop 	bc	
 	ret
 
-;------------------------------------------------------------------------------
 
+;------------------------------------------------------------------------------
+; putchar(char c);
+;
+; Prints c to the screen using 'printchar' below.
+;
+;------------------------------------------------------------------------------
 _putchar::			; This is the function C calls
 _putchar_rr_s::			; Do this if the character is pushed onto stack
         ld      hl,#2
@@ -297,7 +448,7 @@ printchar:
 	cp	a, #0d08		; backspace
 	jr	nz, printchar_endspecialcharchecks
 	
-	ld	a, (_cursorx)
+	ld	a, (_cursorx)		; handle backspace
 	or	a
 	jp	z, printchar_backspace_upline
 	dec	a
@@ -317,7 +468,7 @@ printchar_backspace_upline:
 	
 	
 printchar_carriagereturn:
-	ld	a, #0
+	xor	a
 	ld	(_cursorx), a
 	jp	printchar_done
 
@@ -417,7 +568,7 @@ printchar_charout:
 	jr	printchar_done
 	
 printchar_nextline:	
-	ld	a, #0
+	xor	a
 	ld	(_cursorx), a
 	ld	a, (_cursory)
 	inc	a
@@ -432,7 +583,7 @@ printchar_firstline:
 	;ld	a, #0
 	;ld	(_cursory), a
 	ld	a, #0d15
-	call	scrollscreen	
+	call	_scrollscreen	
 		
 printchar_done:
 	pop	iy
@@ -444,3 +595,40 @@ printchar_done:
 	ret
 	
 	
+
+;-----------------------------------------------------------------------------
+; LCD_CAS(unsigned char casbit);
+;
+; Sets the LCD column address select bit.  CAS has to be enabled in order for
+; you to write the column number to the LCD, then disabled before you can
+; write graphics data to it.
+; 
+; 0 = CAS enabled
+; 1 = CAS disabled
+;-----------------------------------------------------------------------------
+_LCD_CAS::
+	push	af
+	push	bc
+	push	hl
+		
+	ld	hl, #2 + #6	; get casbit parameter into a
+	add	hl, sp
+	ld	a, (hl)
+		
+	and	#1		; casbit = (casbit & 1) << 3
+	sla	a
+	sla	a
+	sla	a
+	ld	b, a
+	ld	hl, (_p2shadow)	; Get p2shadow pointer
+	ld	a, (hl)		
+	and	#0xf7		; *p2shadow = (*p2shadow & 0xF7) | casbit
+	or	b
+	ld	(hl), a		
+	out	(#02), a	; port2 = *p2shadow
+		
+	pop	hl
+	pop	bc
+	pop	af
+	ret
+		
