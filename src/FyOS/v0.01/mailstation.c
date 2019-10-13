@@ -21,7 +21,7 @@ void powerdownmode()
 //  0 = CAS enabled
 //  1 = CAS disabled
 /////////////////////////////////////////////////
-void LCD_CAS(unsigned char casbit)
+void LCD_CAS_C(unsigned char casbit)
 {
 	casbit = (casbit & 1) << 3;
 	*p2shadow = (*p2shadow & 0xF7) | casbit;
@@ -49,9 +49,9 @@ void clrscr()
 	clearagain:
 	for (colnum = 0; colnum < 20; colnum++)
 	{
-		LCD_CAS(0);
+		LCD_CAS_C(0);
 		*p4038 = colnum;
-		LCD_CAS(1);
+		LCD_CAS_C(1);
 		memset(p4038, 0, 128);
 	}
 	if (slot4000device == device_LCD_left) { slot4000device = device_LCD_right; goto clearagain; }

@@ -34,7 +34,7 @@ __sfr __at 0x08 slot8000device;
 
 // Define some functions
 void powerdownmode();
-void LCD_CAS(unsigned char casbit);
+void LCD_CAS_C(unsigned char casbit);
 void clrscr();
 //unsigned char getch();
 //unsigned char getscancode();
