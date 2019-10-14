@@ -8,9 +8,24 @@ It is compiled with an org of 0x4000 and it designed to have a binary appended t
 
 Note that it requires dataflash.bin set up to run an app from 0x0000, aka dataflash page 0, address 0. See other resources in this git for more info. FIXME: specify the location of said resources.
 
+```
 make
 cat /path/to/other.bin >> msemu_4to8_loader.bin
 dd if=msemu_4to8_loader.bin of=/path/to/msemu/dataflash.bin conv=notrunc
+```
+
+This can all be accomplished in a single line:
+
+`make bin=/path/to/other.bin df_out=/path/to/msemu/dataflash.bin`
+
+This will clean, rebuild, append the desired binary, and write it to the dataflash.
+Note that this will always write to offset 0 of the dataflash. This might not be what you want, but in most cases it will be.
+
+It is also possible to build the loader with the binary appended to it, this is useful if the resulting binary needs to be written to a custom location in dataflash.
+
+`make bin=/path/to/other.bin`
+
+This will output `msemu_4to8_loader-app.bin` with the loader and the binary appended together.
 
 
 # Bugs
