@@ -36,15 +36,10 @@ _start:
 	.dw	(caption)
 	.dw	(unknown_value)
 
+; Normally, this section would have some values needed for app setup, however
+; since we're trying to save bytes and we don't use this information anyway,
+; we don't really care.
 unknown_value:
-	.db	#0x00
-
-; These values are used to shift the interior screen location in official
-; Mailstation app frameworks
-xpos:
-	.dw	#0x0000
-ypos:
-	.dw	#0x0000
 
 caption:
 	.dw	#0x0001			; Unknown meaning
@@ -61,7 +56,7 @@ icon:
 
 getbyte:
 	push	bc		; Preserve BC, HL
-	push	hl
+	push	de
 
 	xor	a		; Put codeflash page 1 into slot8000.
 	out	(#0x08), a
@@ -71,45 +66,55 @@ getbyte:
 getbyte2:
 	call	brecvbyte	; Try to fetch a byte.
 	or	a		; If we didn't get one, try again.
-	jp	z, getbyte2
+	jr	z, getbyte2
 
-	ld	a, l		; Load received byte into A register
-
-	pop	hl		; Restore BC, HL
+	pop	de
 	pop	bc
 	ret
 
+; The first two bytes sent are the total number of bytes the loader should recv
+; before jumping in to execution. The low order byte is sent first, then the
+; high order byte. These are saved in to the BC reg which is used as a counter
+; for LDI operations later. DE is loaded with the destination address, 0x8000
 eventhandler:
+	call	getbyte		; Returns byte of data in L
+	ld	c, l
 
-	call	getbyte		; Get low byte of total bytes to download
-	ld	l, a
+	call	getbyte		; Returns byte of data in L
+	ld	b, l
 
-	call	getbyte		; Get high byte of total bytes to download
-	ld	h, a
+	ld	de, #0x8000
 
-	ld	bc, #0x8000	; Destination address
-
+; This function will repeatedly run until we have received all of the expected
+; bytes from the host. On each loop:
+; A byte is received from the parallel port
+; Said byte is pushed to the stack
+; HL is given the SP value (see inline comments for the magic of this)
+; LDI standard pattern is used to copy byte, inc DE and dec BC.
+; POP our value off the stack to keep the stack balanced.
+; Check overflow (POP has no effect), loop until LDI overflows BC
 nextcodebyte:
-	call	getbyte		; Fetch a byte of data
+	call	getbyte		; Returns byte of data in L
 
-	ld	d, a		; Preserve A
+	push	hl		; Save HL to stack
 
-	ld	a, #1		; Put ram page 1 into slot8000
+	; These three opcodes are smaller than clearing HL, loading it with SP,
+	; and then later loading A with 0x1 to switch the slot8000 device.
+	; PUSH loads high-order byte first. That means after PUSH of HL earlier,
+	; SP points to the value of L, which is the byte we read from parallel.
+	xor	a		; Clear A reg and the C flag
+	sbc	hl, hl		; Subtract HL-HL-C flag == 0
+	add	hl, sp		; HL now points to old L on the stack
+
+	; Set RAM page 1 in slot8000. Page 1 already set in P7, reused from
+	; CF page 1 set above; so we just need to set RAM to device slot
+	inc	a
 	out	(#0x08), a
-	out	(#0x07), a
 
-	ld	a, d		; Restore A
+	ldi			; LD (HL) == (SP) to (DE) == dest addr, dec BC
+	pop	hl		; Pop HL reg back off the stack, we don't care
+				; about it anymore, can be thrown away
 
-	ld	(bc), a		; Load incoming byte to ram.
-	inc	bc		; Inc ram location.
-
-	dec	hl		; Dec bytes to be received.
-
-	xor	a		; Check if hl = 0; get another byte if not
-	or	h
-	jp	nz, nextcodebyte
-	xor	a
-	or	l
-	jp	nz, nextcodebyte
+	jp	pe, nextcodebyte
 
 	jp	0x8000		; When done, jump to code!
