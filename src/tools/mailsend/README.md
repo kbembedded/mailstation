@@ -16,9 +16,3 @@ The `Loader` app is a Mailstation OS app. It always runs from `0x4000` no matter
 The `mailsend` tool is the PC side to send data directly to the `Loader` app.
 
 Currently, the sources have not been compiled in a very long time. In this folder is a Windows executable, what is probably the source code to it, and a Windows DLL (it is a 64-bit DLL) for parallel port communication. The executable has been tested and confirmed on a 64-bit Windows 7 machine.
-
-
-## TODOs
-* Create a "stage 2" loader app. This would be more full featured, better integrated in to the Mailstation OS, etc. This would overwrite the smaller app. Once this is done, the original loader app can be shrunk down even further
-* Clean up and ensure mailsend can be compiled/run under modern OSs
-* Re-create the `mailsend` app for Mailstation, this would allow one Mailstation to bootstrap another without the use of a PC in the middle (and would be a testbed for direct p2p communication).
