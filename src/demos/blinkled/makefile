@@ -1,19 +1,20 @@
 
 CC = sdcc
-CFLAGS = -mz80 --no-std-crt0 --code-loc 0x4000 --data-loc 0x4000
+CFLAGS = -mz80
+LDFLAGS = --no-std-crt0 --code-loc 0x8000 --data-loc 0x8000
 AS = sdasz80
 ASFLAGS = -lso
 
-all: clean blinkled.bin
+all: blinkled.bin
 
 %.bin: %.ihx
 	objcopy -Iihex -Obinary $< $@
 
-%.ihx: %.rel
-	$(CC) $(CFLAGS) $< -o $@
-
 %.rel: %.s
 	$(AS) $(ASFLAGS) $<
 
+%.ihx: %.rel
+	$(CC) $(CFLAGS) $(LDFLAGS) $< -o $@
+
 clean:
-	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map
+	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map *.asm
