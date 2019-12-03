@@ -9,14 +9,14 @@ ASFLAGS = -lso
 # if passing --no-std-crt0 during linking phase, if crt0.rel is used, be sure
 # it is the first COMMON_OBJS. If that is not possible, then this makefile
 # needs to be modified to adjust OBJS creation
-COMMON_OBJS = crt0-asm.rel graphicslcd.rel
-LOCAL_OBJS = drawimage.rel
+COMMON_OBJS =
+LOCAL_OBJS = crt0-asm.rel graphicslcd.rel drawimage.rel
 
 
 COMMON_DIR = $(CURDIR)/../../common/
 COMMON_OBJS := $(addprefix $(COMMON_DIR), $(COMMON_OBJS))
 
-OBJS = $(COMMON_OBJS) $(LOCAL_OBJS)
+OBJS = $(LOCAL_OBJS)
 
 all: drawimage.bin
 
