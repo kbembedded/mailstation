@@ -4,6 +4,7 @@
 ; Translated bank jumps
 0039  C38618    JP      #1886		; Keyboard handler/interrupt
 
+; Looks like these set requested bank/page of CF in to slot4000
 003C  110100    LD      DE,#0001	; Bank 1 (04000)
 003F  C3AE19    JP      #19AE
 0042  110200    LD      DE,#0002	; Bank 2 (08000)
@@ -74,6 +75,9 @@
 00FD  C3AE19    JP      #19AE
 
 ...
+
+056B;
+Often called by MS main loop, from a number of different pages, this is a key routine
 
 ; More translated addresses
 05B4  218850    LD      HL,#5088
