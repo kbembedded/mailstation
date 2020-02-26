@@ -91,6 +91,7 @@ eventhandler:
 ; Said byte is pushed to the stack
 ; HL is given the SP value (see inline comments for the magic of this)
 ; LDI standard pattern is used to copy byte, inc DE and dec BC.
+;   Using LDI is smaller than manaully copying bytes and incrementing locations
 ; POP our value off the stack to keep the stack balanced.
 ; Check overflow (POP has no effect), loop until LDI overflows BC
 nextcodebyte:

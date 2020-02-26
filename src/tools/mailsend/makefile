@@ -1,32 +1,31 @@
 
+INCLUDES = -I$(CURDIR)/../../include/
 CC = sdcc
-CFLAGS = -mz80
-LDFLAGS = --no-std-crt0 --code-loc 0x4000 --data-loc 0x4000
+CFLAGS = $(INCLUDES) -mz80
+LDFLAGS = --no-std-crt0
 AS = sdasz80
 ASFLAGS = -lso
-
-# NOTE: sdcc has a gotcha that crt0.rel MUST be first file the command line
-# if passing --no-std-crt0 during linking phase, if crt0.rel is used, be sure
-# it is the first COMMON_OBJS. If that is not possible, then this makefile
-# needs to be modified to adjust OBJS creation
-COMMON_OBJS =
-LOCAL_OBJS = loaderapp.rel
+ASFLAGS_CRT0 := $(ASFLAGS) -g
 
 
-COMMON_DIR = $(CURDIR)/../../common/
-COMMON_OBJS := $(addprefix $(COMMON_DIR), $(COMMON_OBJS))
+MSLIB_DIR = $(CURDIR)/../../mslib
 
-OBJS = $(COMMON_OBJS) $(LOCAL_OBJS)
+all: loader-stage2.bin loader-stage1.bin loader-stage0.bin
 
-all: loaderapp.bin
+$(MSLIB_DIR)/%.rel:
+	@$(MAKE) $(notdir $@) -C $(MSLIB_DIR)
 
-$(COMMON_OBJS):
-	@$(MAKE) $(notdir $@) -C $(COMMON_DIR)
-
-%.bin: %.ihx
+loader-stage2.bin: loader-stage2.ihx
 	objcopy -Iihex -Obinary $< $@
-	@echo "\nWrite the following bytes to the Mailstation App location\n"
-	@hexdump -e '8/1 "%02x " "  "  8/1 "%02x " "\n"' loaderapp.bin
+
+loader-stage1.bin: loader-stage2.bin loader-stage1.ihx
+	objcopy -Iihex -Obinary loader-stage1.ihx loader-stage1.bin
+	cat loader-stage2.bin >> loader-stage1.bin
+
+loader-stage0.bin: loader-stage0.ihx
+	objcopy -Iihex -Obinary $< $@
+	@echo "\nWrite the following bytes to the Mailstation App location"
+	@hexdump -e '8/1 "%02x " "  "  8/1 "%02x " "\n"' loader-stage0.bin
 	@echo ""
 
 %.rel: %.c
@@ -35,10 +34,20 @@ $(COMMON_OBJS):
 %.rel: %.s
 	$(AS) $(ASFLAGS) $<
 
-%.ihx: $(OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
+# crt0 sources need to be assembled with -g
+crt0%rel: crt0%s
+	$(AS) $(ASFLAGS_CRT0) $<
+
+loader-stage2.ihx: $(MSLIB_DIR)/crt0-slot4.rel $(MSLIB_DIR)/lcd.rel $(MSLIB_DIR)/graphics-textmode.rel $(MSLIB_DIR)/parport.rel $(MSLIB_DIR)/dflash_write.rel loader-stage2.rel
+	$(CC) $(CFLAGS) $(LDFLAGS) --code-loc 0x401A --data-loc 0xF000 $^ -o $@
+
+loader-stage1.ihx: crt0-loader-stage1.rel loader-stage1.rel
+	$(CC) $(CFLAGS) $(LDFLAGS) --code-loc 0x8016 --data-loc 0xF000 $^ -o $@
+
+loader-stage0.ihx: loader-stage0.rel
+	$(CC) $(CFLAGS) $(LDFLAGS) --code-loc 0x4000 --data-loc 0x4000 $< -o $@
 
 # Clean the COMMON_DIR only if there are COMMON_OBJS used here
 clean:
-	@$(if $(strip $(COMMON_OBJS)), @$(MAKE) clean -C $(COMMON_DIR),)
+	@$(MAKE) clean -C $(MSLIB_DIR)
 	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map *.asm
