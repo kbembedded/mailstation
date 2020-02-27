@@ -8,19 +8,12 @@ ASFLAGS_CRT0 := $(ASFLAGS) -g
 
 # NOTE: sdcc has a gotcha that crt0.rel MUST be first file the command line
 # if passing --no-std-crt0 during linking phase
-COMMON_OBJS =
 LOCAL_OBJS = crt0.rel getchar.rel putchar.rel fyos.rel mailstation.rel
 
-
-COMMON_DIR = $(CURDIR)/../../common/
-COMMON_OBJS := $(addprefix $(COMMON_DIR), $(COMMON_OBJS))
 
 OBJS = $(LOCAL_OBJS)
 
 all: FyOS-v001.bin $(OBJS)
-
-$(COMMON_OBJS):
-	@$(MAKE) $(notdir $@) -C $(COMMON_DIR)
 
 # crt0 sources need to be assembled with -g
 crt0%rel: crt0%s
@@ -39,5 +32,4 @@ crt0%rel: crt0%s
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $@
 
 clean:
-	@$(MAKE) clean -C $(COMMON_DIR)
 	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map *.asm
