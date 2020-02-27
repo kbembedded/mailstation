@@ -1,6 +1,7 @@
 
+INCLUDES = -I$(CURDIR)/../include/
 CC = sdcc
-CFLAGS = -mz80
+CFLAGS = $(INCLUDES) -mz80
 AS = sdasz80
 ASFLAGS = -lso
 ASFLAGS_CRT0 := $(ASFLAGS) -g
@@ -17,5 +18,8 @@ crt0%rel: crt0%s
 %.rel: %.s
 	$(AS) $(ASFLAGS) $<
 
+%.rel: %.c
+	$(CC) $(CFLAGS) -c $<
+
 clean:
-	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map
+	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map *.asm
