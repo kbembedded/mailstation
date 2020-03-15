@@ -1,24 +1,27 @@
-	; SPDX-License-Identifier: BSD-2-Clause
+; vim:syntax=z8a
+;
+; SPDX-License-Identifier: BSD-2-Clause
+; Copyright (c) 2020 KBEmbedded
+;
+; A Mailstation app intended to be run from the dataflash app context
+; This means it needs an app header and expects to be run from 0x4000
+
+; This loader app is based around the Mailstation app used in spew.s by
+; Cyrano Jones.
+;
+; This code is designed to be as small as possible as it needs to be
+; manually entered via the built-in hex editor inside the Mailstation
+; diagnostic menu.
+;
+; The code below receives first a 16-bit value of the total number of
+; bytes to follow. The first byte sent is the LSB. After that, this will
+; recieve the specified number of bytes which are written directly to
+; RAM page 1 which is set in to slot8000. Once the number of bytes is
+; transferred, this app will jump to the start of slot8000
+;
+; Originally written by FyberOptic
 
 	.module Loader
-	; A Mailstation app intended to be run from the dataflash app context
-	; This means it needs an app header and expects to be run from 0x4000
-
-	; This loader app is based around the Mailstation app used in spew.s by
-	; Cyrano Jones.
-	;
-	; This code is designed to be as small as possible as it needs to be
-	; manually entered via the built-in hex editor inside the Mailstation
-	; diagnostic menu.
-	;
-	; The code below receives first a 16-bit value of the total number of
-	; bytes to follow. The first byte sent is the LSB. After that, this will
-	; recieve the specified number of bytes which are written directly to
-	; RAM page 1 which is set in to slot8000. Once the number of bytes is
-	; transferred, this app will jump to the start of slot8000
-	;
-	; Originally written by FyberOptic
-
 	.area	_CODE
 	.area	_DATA
 	.globl	_start
@@ -45,7 +48,7 @@ caption:
 	.dw	#0x0001			; Unknown meaning
 	.dw	endcap-caption-6	; Calculate caption length
 	.dw	#0x0006			; Offset to first character
-	.ascii	"Loader"		; The caption string
+	.ascii	"LDR"			; The caption string
 endcap:
 
 icon:
@@ -55,7 +58,6 @@ icon:
 ;----------------------------------------------------------
 
 getbyte:
-	push	bc		; Preserve BC, HL
 	push	de
 
 	xor	a		; Put codeflash page 1 into slot8000.
@@ -69,7 +71,6 @@ getbyte2:
 	jr	z, getbyte2
 
 	pop	de
-	pop	bc
 	ret
 
 ; The first two bytes sent are the total number of bytes the loader should recv
