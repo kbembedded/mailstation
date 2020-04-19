@@ -7,10 +7,12 @@ AS = sdasz80
 ASFLAGS = -lso
 ASFLAGS_CRT0 := $(ASFLAGS) -g
 
-
 MSLIB_DIR = $(CURDIR)/../../mslib
 
 all: loader-stage2.bin loader-stage1.bin loader-stage0.bin
+
+$(MSLIB_DIR)/%.lib:
+	@$(MAKE) $(notdir $@) -C $(MSLIB_DIR)
 
 $(MSLIB_DIR)/%.rel:
 	@$(MAKE) $(notdir $@) -C $(MSLIB_DIR)
@@ -38,7 +40,7 @@ loader-stage0.bin: loader-stage0.ihx
 crt0%rel: crt0%s
 	$(AS) $(ASFLAGS_CRT0) $<
 
-loader-stage2.ihx: $(MSLIB_DIR)/crt0-slot4.rel $(MSLIB_DIR)/lcd.rel $(MSLIB_DIR)/graphics-textmode.rel $(MSLIB_DIR)/parport.rel $(MSLIB_DIR)/dflash_write.rel loader-stage2.rel
+loader-stage2.ihx: $(MSLIB_DIR)/crt0-slot4.rel $(MSLIB_DIR)/mslib.lib loader-stage2.rel
 	$(CC) $(CFLAGS) $(LDFLAGS) --code-loc 0x401A --data-loc 0xF000 $^ -o $@
 
 loader-stage1.ihx: crt0-loader-stage1.rel loader-stage1.rel
