@@ -3,13 +3,17 @@ INCLUDES = -I$(CURDIR)/../include/
 CC = sdcc
 CFLAGS = $(INCLUDES) -mz80
 AS = sdasz80
+AR = sdar
 ASFLAGS = -lso
 ASFLAGS_CRT0 := $(ASFLAGS) -g
 
 
-OBJS = $(patsubst %.s,%.rel,$(wildcard *.s)) $(patsubst %.c,%.rel,$(wildcard *.c))
+OBJS = dflash_write.rel graphics-textmode.rel keyboard.rel lcd.rel parport.rel
 
-all: $(OBJS)
+all: mslib.lib crt0-slot4.rel
+
+mslib.lib: $(OBJS)
+	$(AR) -rc $@ $^
 
 # crt0 sources need to be assembled with -g
 crt0%rel: crt0%s 
@@ -22,4 +26,4 @@ crt0%rel: crt0%s
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map *.asm
+	rm -f *.rel *.ihx *.bin *.lk *.sym *.lst *.noi *.map *.asm *.lib
