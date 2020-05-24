@@ -198,9 +198,16 @@ uint8_t load_from_parport(volatile uint8_t *buf)
 		}
 	}
 
+	if (len > 0x4000) {
+		printf("Binary being sent is greater than 16 KiB, aborting!\n");
+		lcd_update();
+		msfw_timeout(5000);
+		__asm__ ("jp	0x4000");
+	}
+
 	/* This printf, since not a static string, includes a lot
 	 * of overhead in the sdcc library to support it */
-	printf("Expecting binary that is %d bytes long\n", len);
+	printf("Expecting binary that is %05d bytes long\n", len);
 	for (; len; len--) {
 		timeout = 0;
 		while(1) {
