@@ -5,5 +5,6 @@
 #define __PARPORT_H__
 
 uint16_t msfw_parport_read_byte(void);
+uint8_t msfw_parport_write_byte(uint8_t val);
 
 #endif // __PARPORT_H__
