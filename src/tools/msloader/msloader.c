@@ -14,7 +14,7 @@
 #include "ms_ports.h"
 #include "parport.h"
 
-#include "loader-stage2-app_info.h"
+#include "msloader-app_info.h"
 
 struct opt_tbl {
 	char *string;
@@ -201,7 +201,7 @@ uint8_t load_from_parport(volatile uint8_t *buf)
 	if (len > 0x4000) {
 		printf("Binary being sent is greater than 16 KiB, aborting!\n");
 		lcd_update();
-		msfw_timeout(5000);
+		msfw_delay(5000);
 		__asm__ ("jp	0x4000");
 	}
 
