@@ -113,12 +113,16 @@ uint8_t line_max;
 void draw_header(void);
 void draw_options(void);
 static void loadrun_from_parport(void);
-static void go_to_main(void);
 static void loadrun_from_8000(void);
 static void loadrun_from_4000(void);
+static void dump_to_parport(void);
+static void dump_dflash(void);
+static void dump_cflash(void);
+static void go_to_main(void);
 
 static struct opt_tbl main_opts[] = {
 	{ " Load binary and execute...\n", loadrun_from_parport },
+	{ " Dump flash...\n", dump_to_parport },
 	{ " Reboot Mailstation\n", restart },
 	{ " Power off Mailstation\n", poweroff },
 	{ " Free-type mode\n", freetype },
@@ -147,6 +151,19 @@ static struct opt_tbl loadrun_opts[] = {
 static void loadrun_from_parport(void)
 {
 	cur_opts = loadrun_opts;
+	draw_header();
+	draw_options();
+}
+
+static struct opt_tbl dump_opts[] = {
+	{ " Dump Dataflash (512 KiB) to parallel port\n", dump_dflash },
+	{ " Dump Codeflash (1 MiB) to parallel port\n", dump_cflash },
+	{ NULL, NULL },
+};
+
+static void dump_to_parport(void)
+{
+	cur_opts = dump_opts;
 	draw_header();
 	draw_options();
 }
@@ -195,10 +212,6 @@ uint8_t load_from_parport(volatile uint8_t *buf)
 				timeout++;
 				if (timeout == 11) return 1;
 			}
-		}
-		if (!(len % 100)) {
-			putchar('.');
-			lcd_update();
 		}
 	}
 
@@ -249,6 +262,49 @@ static void loadrun_from_4000(void)
 	__asm__ ("jp	0xC010");
 }
 
+void dump_pages(uint8_t pagecnt)
+{
+	uint8_t page;
+	uint8_t *adr;
+
+	for (page = 0; page < pagecnt; page++) {
+		SLOT8_PAGE = page;
+		for (adr = (uint8_t *)0x8000; adr < (uint8_t *)0xC000; adr++) {
+			if (!msfw_parport_write_byte(*adr)) {
+				printf("Timed out!\n");
+				goto dump_pages_out;
+			}
+		}
+	}
+
+	printf("Done!\n");
+
+dump_pages_out:
+	lcd_update();
+	msfw_delay(5000);
+	__asm__ ("jp	0x4000");
+}
+
+static void dump_dflash(void)
+{
+	g_textmode_init();
+	printf("Dumping full dataflash ROM (512 KiB) over parallel port\n");
+	lcd_update();
+
+	SLOT8_DEV = DEV_DF;
+	dump_pages(32);
+}
+
+static void dump_cflash(void)
+{
+	g_textmode_init();
+	printf("Dumping full codeflash ROM (1 MiB) over parallel port\n");
+	lcd_update();
+
+	SLOT8_DEV = DEV_CF;
+	dump_pages(64);
+}
+
 void draw_header(void)
 {
 	g_textmode_init();
@@ -258,7 +314,7 @@ void draw_header(void)
 	g_textmode_clear_line(0);
 	g_textmode_clear_line(1);
 	g_textmode_clear_line(2);
-	printf("Mailstation Loader Utility v0.10\n\n");
+	printf("Mailstation Loader Utility v0.20\n\n");
 	g_textmode_set_invert(0);
 	g_textmode_set_ypos(19);
 	printf("Navigate with \'h\' \'j\' \'k\' and \'l\'\n");
@@ -284,6 +340,7 @@ void main(void) {
 	uint8_t scancode_buf[2];
 	uint8_t scancode_buf_q = 0;
 	uint8_t decode;
+
 
 	/* Since this is built to run from 0x4000, check slot4. If its RAM
 	 * then we need to write ourselves to dataflash app 0.
