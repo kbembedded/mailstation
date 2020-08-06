@@ -4,6 +4,10 @@
 #ifndef __KEYBOARD_H__
 #define __KEYBOARD_H__
 
+enum kb_scancodes {
+	sc_main_menu = 0x0,
+	sc_back = 0x01
+};
 
 /* Returns 1 if a valid scancode is available. Sets the scancode data
  * in two bytes passed in argument.

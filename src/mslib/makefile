@@ -10,7 +10,7 @@ ASFLAGS_CRT0 := $(ASFLAGS) -g
 
 OBJS = dflash_write.rel graphics-textmode.rel lcd.rel parport.rel
 
-all: mslib.lib crt0-slot4.rel
+all: mslib.lib crt0-slot4.rel crt0-app.rel
 
 mslib.lib: $(OBJS)
 	$(AR) -rc $@ $^
