@@ -1,4 +1,5 @@
 SUBDIRS := $(wildcard */.)
+SUBDIRS := $(filter-out misc, $(SUBDIRS))
 
 .PHONY: clean all $(SUBDIRS)
 
