@@ -52,7 +52,7 @@
 #define SC_n		0x86
 #define SC_BKSP		0x35
 #define SC_m		0x87
-#define SC_PGDN		0x17
+#define SC_PGUP		0x17
 #define SC_COMMA	0x72
 #define SC_TAB		0x40
 #define SC_PERIOD	0x73
