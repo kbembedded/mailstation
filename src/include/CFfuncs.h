@@ -2,6 +2,16 @@
 
 #include <stdint.h>
 
+// Tentative types for various values. (not used anywhere
+// yet, I'n not sure if it's a good idea to use them in the
+// function prototypes????????)  There is an 8 & 16 bit form
+// for each, 'coz sdcc insists on pushing single bytes on the
+// stack (ick!!!!) and the mailstations functions expect byte
+// parameters to be pushed as words (nomal z80 pushes).
+// So ret types are 8 bits, and when an 8 bit val is used as
+// a param, I let sdcc promote it, and ms firmware ignores hi byte.
+
+
 /*
  * Much of the information here was originally gathered and pioneered by
  * Cyrano Jones on the OG Yahoo! group. I've tried to gather it and document
@@ -10,12 +20,6 @@
 
 #ifndef __CFFUNCS_H__
 #define __CFFUNCS_H__
-
-struct menubar {
-	uint16_t string_id;	// string resource id-number for menubar
-	uint16_t menu_id;	// menu event subtype generated when item is pressed
-	uint8_t  scancode;	// prob should use f-keys (05 thru 09 on non-ergo kbd's)
-};
 
 /* An event in the eventq looks like the following. Unsure if this is needed
  * as the main loop sends an event to an app as multiple paramters. */
@@ -100,8 +104,9 @@ enum msos_app_sigs {
 	SIG_MENU 	= 0x0A, // Sent from menubar or popup menus
 
 	// Can send these to menubar widget
-	SIG_MENUBAR_OFF	= 0x0B,
-	SIG_MENUBAR_ON	= 0x0C,
+	// in msfw_menubar.h
+//	SIG_MENUBAR_OFF	= 0x0B,
+//	SIG_MENUBAR_ON	= 0x0C,
 
 	SIG_DRAW	= 0x0D, // Cause app/widget to draw
 
@@ -330,8 +335,10 @@ enum MESSAGEBOX_RET {
 
 #define msfw_default_handler(appid, appstate, signal, val1, val2) ((uint16_t (*)(uint16_t, uint16_t, uint16_t, uint16_t, uint16_t)) 0x0602)(appid, appstate, signal, val1, val2)
 
-/* XXX: Unknown args format */
-#define msfw_localize(x) ((void (*)(uint16_t)) 0x056B)(x)
+/* This is used in most Channels to allocate some data on the stack.
+ * This is not really needed in C implementations since non-static local
+ * vars are just put on the stack anyway */
+#define msfw_alloc_stack(x) ((void (*)(uint16_t)) 0x056B)(x)
 
 /*
  * int16_t msfw_string_get_resource(uint16_t resource_id, char *dest, uint16_t n)
@@ -362,14 +369,6 @@ enum MESSAGEBOX_RET {
  * Render a string to the right title bar area
  */
 #define msfw_draw_string_right_title(str) ((int16_t (*)(char *)) 0x082D)(str)
-
-/*
- * uint8_t msfw_menubar_set(int16_t appid, struct menubar *menu, int16_t n)
- *
- * Register a menubar and set its contents. n == number of menubar entries
- * returns true or false
- */
-#define msfw_menubar_set(appid, data, n) ((uint8_t (*)(int16_t, struct menubar *, int16_t)) 0x0638)(appid, data, n)
 
 /*
  * uint8_t msfw_widget_new(int16_t widget_type, uint16_t flags, int16_t left, int16_t top, int16_t height, int16_t width, int16_t appid, int16_t seqnum, uint16_t str_etc)
