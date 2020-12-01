@@ -9,7 +9,7 @@ ASFLAGS_CRT0 := $(ASFLAGS) -g
 
 MSLIB_DIR = $(CURDIR)/../../mslib
 
-all: hello_world.bin
+all: hello_world.bin test.bin
 
 $(MSLIB_DIR)/%.lib:
 	@$(MAKE) $(notdir $@) -C $(MSLIB_DIR)
@@ -30,9 +30,10 @@ $(MSLIB_DIR)/%.rel:
 crt0%rel: crt0%s
 	$(AS) $(ASFLAGS_CRT0) $<
 
-# The reference makefile doesn't seem to use a code or data location
+# It seems like dataflash apps always are called with the context of RAMp02
+# always being in Slot8000
 %.ihx: $(MSLIB_DIR)/crt0-app.rel $(MSLIB_DIR)/mslib.lib %.rel
-	$(CC) $(CFLAGS) $(LDFLAGS) --code-loc 0x401A --data-loc 0xF000 $^ -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) --code-loc 0x401A --data-loc 0x8000 $^ -o $@
 
 clean:
 	@$(MAKE) clean -C $(MSLIB_DIR)
