@@ -32,7 +32,7 @@
 #define SC_DASH		0x33
 #define SC_EQU		0x34
 #define SC_BKSP		0x35
-#define SC_BAK_SLASH	0x36
+#define SC_BACKSLASH	0x36
 #define SC_PGDN		0x37
 #define SC_TAB		0x40
 #define SC_q		0x41
@@ -45,10 +45,10 @@
 #define SC_i		0x50
 #define SC_o		0x51
 #define SC_p		0x52
-#define SC_OPN_BRKT	0x53
-#define SC_CLO_BRKT	0x54
+#define SC_OPENBRKT	0x53
+#define SC_CLOSEBRKT	0x54
 #define SC_SEMICOL	0x55
-#define SC_S_QUOTE	0x56
+#define SC_SQUOTE	0x56
 #define SC_ENTER	0x57
 #define SC_CAPS		0x60
 #define SC_a		0x61
@@ -62,7 +62,7 @@
 #define SC_l		0x71
 #define SC_COMMA	0x72
 #define SC_PERIOD	0x73
-#define SC_FWD_SLASH	0x74
+#define SC_FWDSLASH	0x74
 #define SC_UARROW	0x75
 #define SC_DARROW	0x76
 #define SC_RARROW	0x77
@@ -133,4 +133,4 @@ const char scode_lower[160] = {
 	0x00,	0x00,	0x00,	' ',	0x00,	0x00,	0x00,	0x00,
 };
 
-
+#endif // __KEYBOARD_H__
