@@ -21,6 +21,17 @@
 #ifndef __MSFW_WIDGET_H__
 #define __MSFW_WIDGET_H__
 
+/* Global flags that can be applied to most widgets:
+ * Text box
+ * Pick list
+ * Horiz. Pick list
+ * Thumbwheel (canfocus)
+ * Checkbox (canfocus)
+ */
+#define F_BORDER	0x0001 // Add border around widget
+#define F_UNDERLINE	0x0400 // Like border, but only bottom bounding of widget
+#define F_CANFOCUS	0x0004 // Focus can be moved to the widget
+
 /* Top left and bottom right corners of the container
  * I presume 0,0 is top left and 319,127 is bottom right
  */
@@ -68,14 +79,17 @@ struct window {
 /* Signals to send to this widget */
 #define S_TEXT_REFORMAT	0x16 // ?? I think the name is just a guess XXX:
 /* Required to set a buffer for any textbox format! */
+/* Is there any way to make the msfw dynamically handle this? */
 #define S_TEXT_SETBUF	0x37 // Point to a buffer for the text box, arg1 = buffer address, arg2 = buffer length
 #define S_TEXT_UKN1	0x38 // set ptr1.16 to "not this"   (sent after clearing editable bit) XXX:
 #define S_TEXT_UKN2	0x39 // test if ptr1.16 is 02, 03, or 04 XXX 
-#define S_TEXT_CAT	0x3A // Cat something to end of buffer, arg1 = ??? arg2 = ??? XXX
+/* When you use cat, arg1 is the buffer to append to the current buffer. arg2 can be used to resize? */
+/* Does this actually logically append the buffers to each other? so text rolls from one to the next? */
+#define S_TEXT_CAT	0x3A // Cat something to end of buffer, arg1 = ??? arg2 = ??? XXX "add this to end of buf, what is that?"
 #define S_TEXT_GET_LEN	0x3B // ret ptr1.4 length ??????????????????? XXX
 #define S_TEXT_SETBUFSZ	0x3C // set ptr1.2 = this buffsize ????????? XXX
 #define S_TEXT_GETBUFSZ 0x3D // ret ptr1.2 buffsize ?????????? XXX
-#define S_TEXT_ISEMPTY	0x3E // Return 1 if empty (or all spaces) (whitespace too?) XXX
+#define S_TEXT_ISEMPTY	0x3E // Return 1 if empty (or all spaces)
 #define S_TEXT_UKN3	0x42 // fmt 0010 related?????????????????????????????????????????????????????????????????????????? XXX
 #define S_TEXT_GETCUR	0x43 // ret ptr1.6  cursor???????????????????????????????????????????? XXX
 #define S_TEXT_SETCUR	0x44 // set ptr1.6 to this ?????????? XXX
@@ -94,26 +108,18 @@ struct window {
 #define F_TEXT_MLINE	0x0010 // Alphanumeric, multi line (vert scrolling)
 #define F_TEXT_MLINE_CLIP	0x0200 // Adds clipboard support to box, implies F_TEXT_MLINE
 #define F_TEXT_MLINE_SPELL	0x8000 // Adds spell check support to box, implies F_TEXT_MLINE
-/* These can be added to any of the above */
-/* XXX: Can these flags be used with multiple widgets? */
-#define F_TEXT_BORDER	0x0001 // Add border around text box
-#define F_TEXT_UNDERLINE	0x0400 // Like border, but only bottom bounding of text box
-#define F_TEXT_CANFOCUS	0x0004 // Focus can be moved to the text box
 
 /* Pick list widget? ***************************** XXX
  */ 
 #define WID_PICKLIST	0x01
 /* Flags to pass to picklist */
 #define F_PICK_EAT_KEY	0x0008 // Return "handled" for key events
-#define F_PICK_CANFOCUS	0x0004 // Can move focus to this weidget XXX Same as other canfocus
 
 /* Horizontal picklist? ************************** XXX
  */
 #define WID_HORIZ_PICKLIST	0x02
 /* Flags to pass to horizontal picklist */
 #define F_HPICK_EAT_KEY	0x0008 // Return "handled" for key events XXX Same as above
-#define F_HPICK_CANFOCUS	0x0004 // Can move focus to this weidget XXX Same as canfocus
-#define F_HPICK_BORDER	0x0001 // Add border XXX Same as BORDER
 
 /* Resource? ********************************** XXX
  */
@@ -180,12 +186,10 @@ struct window {
 /* Thumbwheel? widget ***************************8
  */
 #define WID_THUMBWHEEL	0x09
-#define	F_THUMB_CANFOCUS	0x0004 // XXX Same as other canfocus?
 
 /* Checkbox widget ****************************
  */
 #define WID_CHECKBOX	0x0A
-#define F_CHECK_CANFOCUS	0x0004 // XXX Same as other canfocus?
 
 enum WID_MESSAGEBOX_flagss {
 	MSG_OK		= 0x0100, // Def. OK
