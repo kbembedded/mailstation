@@ -1,7 +1,8 @@
 #include <CFfuncs.h>
 #include <msfw_menubar.h>
+#include <msfw_widget.h>
 #include <CFstrings.h>
-#include <KBscancodes.h>
+#include <keyboard.h>
 #include <stdint.h>
 #include <ms_ports.h>
 
@@ -24,7 +25,6 @@ enum MENU_VAL1 {
 	MENU_F5_2	= 0x0A,
 };
 
-char textbuff[10];
 struct string_info {
 	uint16_t str_len;
 	uint16_t str_offs;
@@ -104,7 +104,8 @@ const struct menubar menudata[] = {
 uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1, uint16_t val2)
 {
 	char buf[21];
-	//char textbuff[10];
+	/* This ends up in RAM not stack space */
+	static char textbuf[256];
 	static uint8_t textwidget;
 	uint8_t textwidget2;
 	uint8_t textwidget3;
@@ -131,8 +132,8 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 
 		/*XXX:  Is there a way to request a larger memory area for this? I don't think ramdisk_* provides a buffer but rather
 		 * a handle to the buffer */
-		//textwidget = msfw_widget_new(WID_TEXTENTRY, TEXT_MLINE_CLIP|TEXT_CANFOCUS|TEXT_BORDER, 0, 5, 290, 55, appid, 1, 0);
-		//msfw_widget_event_handle(textwidget, sig_setbuff, (uint16_t)textbuff, sizeof(textbuff));
+		textwidget = msfw_widget_new(WID_TEXTENTRY, F_TEXT_MLINE|F_TEXT_UNDERLINE, 0, 5, 290, 55, appid, 1, 0);
+		msfw_widget_event_handle(textwidget, S_TEXT_SETBUF, (uint16_t)textbuf, sizeof(textbuf));
 		//msfw_widget_focus_set(textwidget);
 
 #if 0
@@ -175,9 +176,18 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 		switch (val1) {
 		  case MENU_F1:
 			msfw_event_put_goprev();
+			/* No idea how sig_exit should work */
+			appstate = SIG_EXIT;
 			break;
 		  case MENU_F2:
 			/* Do nothing right now */
+			//msfw_widget_event_handle(textwidget, S_TEXT_SET_CUR, 2, 0);
+
+			//memset(buf, '\0', 20);
+			//memcpy(buf, "test", 4);
+			//msfw_widget_event_handle(textwidget, S_TEXT_CAT, (uint16_t)buf, sizeof(textbuf));
+			/* Doesn't do anything :( */
+			//msfw_widget_event_handle(textwidget, S_TEXT_REFORMAT, (uint16_t)buf, (uint16_t)buf);
 			;
 			break;
 		  case MENU_F3:
