@@ -105,9 +105,11 @@ struct window {
 #define F_TEXT_TIME	0x1000 // Time format, single line, HH:MM, 12 hour time (doesn't work quire right with border)
 #define F_TEXT_PASSWD	0x4000 // Password, single line, displays * instead of text
 #define F_TEXT_HSCROLL	0x0100 // Use with any single line above to allow longer lines than the screen can handle
+/* The MLINE modes cannot be ORed together, only one must be specified! */
+/* MLINE by itself wierdly interacts with top border, does NOT do line wrap */
 #define F_TEXT_MLINE	0x0010 // Alphanumeric, multi line (vert scrolling)
 #define F_TEXT_MLINE_CLIP	0x0200 // Adds clipboard support to box, implies F_TEXT_MLINE
-#define F_TEXT_MLINE_SPELL	0x8000 // Adds spell check support to box, implies F_TEXT_MLINE
+#define F_TEXT_MLINE_SPELL	0x8000 // Adds spell check support to box, implies F_TEXT_MLINE_CLIP
 
 /* Pick list widget? ***************************** XXX
  */ 
