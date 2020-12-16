@@ -85,6 +85,8 @@ struct window {
 #define S_TEXT_UKN2	0x39 // test if ptr1.16 is 02, 03, or 04 XXX 
 /* When you use cat, arg1 is the buffer to append to the current buffer. arg2 can be used to resize? */
 /* Does this actually logically append the buffers to each other? so text rolls from one to the next? */
+/* Looks like that is correct, this should be append as it originally was. Need to figure out how this
+ * actually works in terms of how buffers are set up. Compose app is probably the best way to do this */
 #define S_TEXT_CAT	0x3A // Cat something to end of buffer, arg1 = ??? arg2 = ??? XXX "add this to end of buf, what is that?"
 #define S_TEXT_GET_LEN	0x3B // ret ptr1.4 length ??????????????????? XXX
 #define S_TEXT_SETBUFSZ	0x3C // set ptr1.2 = this buffsize ????????? XXX
@@ -97,15 +99,17 @@ struct window {
 /* Text widget flags XXX: not all flags can be ORed together */
 /* single line boxes just center in whole box space aside from the ones with border issues */
 /* likely must be only one of: */
+/* XXX: Flags might not be able to be ORed together? */
 #define F_TEXT_ALPHA	0x0000 // Alphanumeric, single line
+#define F_TEXT_RO	0x0004 // XXX ??????
 #define F_TEXT_NUM	0x0040 // Numeric entry, single line
 #define F_TEXT_PHONE	0x2000 // Phone number format, single line (not sure this works as expected XXX)
 #define F_TEXT_IP	0x0080 // IP address format, single line (doesn't seem to work quite right with border)
 #define F_TEXT_DATE	0x0800 // Date format, single line (doesn' work quite right with border, also adds "MM/DD/YYYY" awkwardly)
 #define F_TEXT_TIME	0x1000 // Time format, single line, HH:MM, 12 hour time (doesn't work quire right with border)
 #define F_TEXT_PASSWD	0x4000 // Password, single line, displays * instead of text
-#define F_TEXT_HSCROLL	0x0100 // Use with any single line above to allow longer lines than the screen can handle
-/* The MLINE modes cannot be ORed together, only one must be specified! */
+#define F_TEXT_HSCROLL	0x0100 // Use with any single line above to allow longer lines than the screen can handle, XXX: Can be specified by itself
+/* The MLINE modes cannot be ORed together, only one must be specified! XXX: This seems to differ from some CF apps where these modes are ORed together*/
 /* MLINE by itself wierdly interacts with top border, does NOT do line wrap */
 #define F_TEXT_MLINE	0x0010 // Alphanumeric, multi line (vert scrolling)
 #define F_TEXT_MLINE_CLIP	0x0200 // Adds clipboard support to box, implies F_TEXT_MLINE
@@ -177,6 +181,8 @@ struct window {
 
 /* String Widget? ********************** ??
  */
+/* Last arg to widget_new is a string resource ID. Not sure if this can just display
+ * arbitrary text */
 #define WID_STRING	0x08
 /* flags to pass */
 #define F_STRING	0x0200 // Draw string in center???
@@ -229,13 +235,13 @@ enum MESSAGEBOX_RET {
  */
 
 /*
- * uint8_t msfw_widget_new(int16_t widget_type, uint16_t flags, int16_t left, int16_t top, int16_t height, int16_t width, int16_t appid, int16_t seqnum, uint16_t str_etc)
+ * uint8_t msfw_widget_new(int16_t widget_type, uint16_t flags, int16_t left, int16_t top, int16_t width, int16_t height, int16_t appid, int16_t seqnum, uint16_t str_etc)
  *
  * Creates a new widget of widget_type, with specific flags, defining its origin, height, width, the appid of the owner.
  * No clue what seq_num or str_etc are.
  * Returns wid handle.
  */
-#define msfw_widget_new(widget_type, flags, left, top, height, width, appid, seqnum, str_etc) ((uint8_t (*)(int16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, uint16_t)) 0x0692)(widget_type, flags, left, top, height, width, appid, seqnum, str_etc)
+#define msfw_widget_new(widget_type, flags, left, top, width, height, appid, seqnum, str_etc) ((uint8_t (*)(int16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, uint16_t)) 0x0692)(widget_type, flags, left, top, width, height, appid, seqnum, str_etc)
 
 /*
  * uint8_t msfw_widget_event_handle(int16_t wh, int16_t signal, uint16_t val1, uint16_t val2)
