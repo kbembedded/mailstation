@@ -101,7 +101,6 @@ struct window {
 /* likely must be only one of: */
 /* XXX: Flags might not be able to be ORed together? */
 #define F_TEXT_ALPHA	0x0000 // Alphanumeric, single line
-#define F_TEXT_RO	0x0004 // XXX ??????
 #define F_TEXT_NUM	0x0040 // Numeric entry, single line
 #define F_TEXT_PHONE	0x2000 // Phone number format, single line (not sure this works as expected XXX)
 #define F_TEXT_IP	0x0080 // IP address format, single line (doesn't seem to work quite right with border)
@@ -235,20 +234,24 @@ enum MESSAGEBOX_RET {
  */
 
 /*
- * uint8_t msfw_widget_new(int16_t widget_type, uint16_t flags, int16_t left, int16_t top, int16_t width, int16_t height, int16_t appid, int16_t seqnum, uint16_t str_etc)
+ * uint16_t msfw_widget_new(int16_t widget_type, uint16_t flags, int16_t left, int16_t top, int16_t width, int16_t height, int16_t appid, int16_t seqnum, uint16_t str_etc)
  *
  * Creates a new widget of widget_type, with specific flags, defining its origin, height, width, the appid of the owner.
  * No clue what seq_num or str_etc are.
  * Returns wid handle.
+ * XXX: In reality, a widget might not actually ever be more than 255, untested. But, this likely is a uint16_t based
+ * on other operations
  */
-#define msfw_widget_new(widget_type, flags, left, top, width, height, appid, seqnum, str_etc) ((uint8_t (*)(int16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, uint16_t)) 0x0692)(widget_type, flags, left, top, width, height, appid, seqnum, str_etc)
+#define msfw_widget_new(widget_type, flags, left, top, width, height, appid, seqnum, str_etc) ((uint16_t (*)(int16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, uint16_t)) 0x0692)(widget_type, flags, left, top, width, height, appid, seqnum, str_etc)
 
 /*
- * uint8_t msfw_widget_event_handle(int16_t wh, int16_t signal, uint16_t val1, uint16_t val2)
+ * uint16_t msfw_widget_event_handle(int16_t wh, int16_t signal, uint16_t val1, uint16_t val2)
  *
  * Send an event to a widget? Pointed to by widget handle wh, signal is event to handle, no clue what vals are here
+ * XXX: Based on the fact that S_TEXT_GETCUR uses the return value of this, and FW operations have been observed to
+ * see >255 value, this is actually probably uint16_8 rather than 8
  */
-#define msfw_widget_event_handle(wh, signal, val1, val2) ((uint8_t (*)(int16_t, int16_t, uint16_t, uint16_t)) 0x064A)(wh, signal, val1, val2)
+#define msfw_widget_event_handle(wh, signal, val1, val2) ((uint16_t (*)(int16_t, int16_t, uint16_t, uint16_t)) 0x064A)(wh, signal, val1, val2)
 
 /*
  * uint8_t msfw_widget_focus_set(int16_t wh)
@@ -271,6 +274,7 @@ enum MESSAGEBOX_RET {
  * I assume this makes a progress bar with a message and title based on resource strings?
  * Originally speced to use int16_t, but, that is wrong I think
  * the msg arg doesn't seem to work?
+ * XXX: This is likely a uint16_t, need to test more
  */
 #define msfw_msgbox_progbar(res_str_msg, res_str_title) ((uint8_t (*)(uint16_t, uint16_t)) 0x07F7)(res_str_msg, res_str_title)
 
@@ -278,6 +282,8 @@ enum MESSAGEBOX_RET {
  * uint16_t msfw_msgbox_destroy(int16_t widget) 
  *
  * Destroy messagebox
+ * XXX: Initial testing shows that this might be useful for more than msgbox. It doesn't appear msfw uses this
+ * for anything other than messagebox, but it still sends DONE signal to widget
  */
 #define msfw_msgbox_destroy(wid) ((uint16_t (*)(int16_t)) 0x07FD)(wid)
 
