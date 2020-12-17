@@ -86,6 +86,11 @@ const struct menubar menudata[] = {
 	{STR_IDX_BACK, MENU_F1, SC_F1},
 };
 
+void parse_cmd(uint16_t *str)
+{
+	if (!strncmp("back", str, 4)) msfw_event_put_goprev();
+}
+
 /* XXX: I HAVE NO CLUE WHAT APPSTATE REALL DOES, IT APPEARS IT AFFECTS SIGNAL SOME HOW? */
 /* Variables that need to persist should be static locals or globals. These are
  * put in to RAM at runtime which is safe to do.
@@ -103,6 +108,7 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 	static char bodybox_wid;
 	static char line_wid;
 	struct menubar fy_menu[1];
+	int i;
 
 
 	switch(signal) {
@@ -121,14 +127,14 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 
 		/* Put textbox inside of this */
 		memset(histbuf, '\0', sizeof(histbuf));
-		histbox_wid = msfw_widget_new(WID_TEXTENTRY, F_TEXT_MLINE_SPELL|F_TEXT_MLINE_CLIP|F_TEXT_RO, 3, 2, 0x13a, 0x4a, appid, 6, 0);
+		histbox_wid = msfw_widget_new(WID_TEXTENTRY, F_TEXT_MLINE_SPELL|F_TEXT_MLINE_CLIP, 3, 2, 0x13a, 0x4a, appid, 6, 0);
 		msfw_widget_event_handle(histbox_wid, S_TEXT_SETBUF, (uint16_t)histbuf, sizeof(histbuf));
 		msfw_widget_event_handle(histbox_wid, S_TEXT_REFORMAT, 0, 0);
 		msfw_widget_event_handle(histbox_wid, S_TEXT_UKN1, 1, 0); // Make RO?
 
 		/* Input box */
 		memset(linebuf, '\0', sizeof(linebuf));
-		line_wid = msfw_widget_new(WID_TEXTENTRY, F_TEXT_ALPHA|F_TEXT_HSCROLL, 3, 0x4b, 0x13a, 0x9, appid, 7, 0); // is HSCROLL needed? 
+		line_wid = msfw_widget_new(WID_TEXTENTRY, F_TEXT_ALPHA|F_TEXT_HSCROLL|F_CANFOCUS, 3, 0x4b, 0x13a, 0x9, appid, 7, 0); // is HSCROLL needed? 
 		msfw_widget_event_handle(line_wid, S_TEXT_SETBUF, (uint16_t)linebuf, sizeof(linebuf));
 		msfw_widget_event_handle(line_wid, S_TEXT_REFORMAT, 0, 0);
 		msfw_widget_focus_set(line_wid);
@@ -250,6 +256,14 @@ Widget event, handle: 0x0007, signal: 0x0009, arg1: 0x0057, arg2: 0x000D
 			msfw_event_put_goprev();
 			break;
 		  case SC_ENTER:
+#if 0
+Test to destroy and re-create
+It seems FW funcs will send 0x11 sig, SIG_WID_UNFOCUS, before destroying
+But also, For inbox, when scroll, it destroys widgets 0x0-0x1D with SIG_WID_DONE, then the next new widget gets a 0 num
+If I do that here, I get allocated the next widget. So, I think there is some function I am missing that tells the widget
+handler that I've destroyed the widgets.
+#endif
+			parse_cmd(linebuf);
 			memset(linebuf, '\0', sizeof(linebuf));
 			msfw_widget_event_handle(line_wid, S_TEXT_SETBUF, (uint16_t)linebuf, sizeof(linebuf));
 			msfw_widget_event_handle(line_wid, S_TEXT_REFORMAT, 0, 0);
