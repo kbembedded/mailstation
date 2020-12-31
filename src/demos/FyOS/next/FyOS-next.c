@@ -9,6 +9,7 @@
 #include <stddef.h>
 
 #include <string.h>
+#include <stdio.h>
 
 #include "FyOS-next-app_info.h"
 
@@ -86,9 +87,39 @@ const struct menubar menudata[] = {
 	{STR_IDX_BACK, MENU_F1, SC_F1},
 };
 
-void parse_cmd(uint16_t *str)
+/* XXX: Does not appear to be any good way to get the buffer start with just
+ * the widget handle. There might be a signal for this that is unknown ATM */
+void parse_cmd(uint16_t *str, uint16_t hist_wid_handle, char *hist_buf)
 {
+	char buf[20];
+	uint16_t buflen;
+
+	memset(buf, '\0', sizeof(buf));
+
 	if (!strncmp("back", str, 4)) msfw_event_put_goprev();
+	if (!strncmp("cmd", str, 3)) {
+		/* XXX: Need to figure out how to render a buffer @_@ */
+		strncpy(buf, "Response\r\n", 10);
+		buflen = msfw_widget_event_handle(hist_wid_handle, S_TEXT_GETBUFSZ, 0, 0);
+		msfw_widget_event_handle(hist_wid_handle, S_TEXT_CAT, (uint16_t)buf, buflen);
+		//strncpy(hist_buf, "Response", 8);
+		//msfw_widget_event_handle(hist_wid_handle, S_TEXT_SETBUF, (uint16_t)hist_buf, strlen(hist_buf));
+		//msfw_widget_event_handle(hist_wid_handle, S_TEXT_SETCUR, 8, 0);
+		//msfw_widget_event_handle(hist_wid_handle, S_TEXT_REFORMAT, 0, 0);
+	}
+	if (!strncmp("buflen", str, 6)) {
+		buflen = msfw_widget_event_handle(hist_wid_handle, S_TEXT_GETBUFSZ, 0, 0);
+		/* XXX: Dangerous */
+		sprintf(buf, "%d\r\n", buflen);
+		msfw_widget_event_handle(hist_wid_handle, S_TEXT_SETBUFSZ, 512, 0);
+		msfw_widget_event_handle(hist_wid_handle, S_TEXT_CAT, (uint16_t)buf, 512);
+	}
+
+	msfw_widget_of_woz(hist_wid_handle);
+
+	msfw_widget_event_handle(hist_wid_handle, SIG_DRAW, 0, 0);
+	//msfw_widget_event_handle(hist_wid_handle, S_TEXT_REFORMAT, 0, 0);
+	msfw_widget_event_handle(hist_wid_handle, SIG_DRAW, 0, 0);
 }
 
 /* XXX: I HAVE NO CLUE WHAT APPSTATE REALL DOES, IT APPEARS IT AFFECTS SIGNAL SOME HOW? */
@@ -127,7 +158,8 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 
 		/* Put textbox inside of this */
 		memset(histbuf, '\0', sizeof(histbuf));
-		histbox_wid = msfw_widget_new(WID_TEXTENTRY, F_TEXT_MLINE_SPELL|F_TEXT_MLINE_CLIP, 3, 2, 0x13a, 0x4a, appid, 6, 0);
+		//strcpy(histbuf, "This is a test of a\r\nmulti-line set of things to see if it correctly pre-loads the buffer\r\nas it should.");
+		histbox_wid = msfw_widget_new(WID_TEXTENTRY, F_CANFOCUS|F_TEXT_MLINE_CLIP, 3, 2, 0x13a, 0x4a, appid, 6, 0);
 		msfw_widget_event_handle(histbox_wid, S_TEXT_SETBUF, (uint16_t)histbuf, sizeof(histbuf));
 		msfw_widget_event_handle(histbox_wid, S_TEXT_REFORMAT, 0, 0);
 		msfw_widget_event_handle(histbox_wid, S_TEXT_UKN1, 1, 0); // Make RO?
@@ -261,9 +293,31 @@ Test to destroy and re-create
 It seems FW funcs will send 0x11 sig, SIG_WID_UNFOCUS, before destroying
 But also, For inbox, when scroll, it destroys widgets 0x0-0x1D with SIG_WID_DONE, then the next new widget gets a 0 num
 If I do that here, I get allocated the next widget. So, I think there is some function I am missing that tells the widget
-handler that I've destroyed the widgets.
-#endif
+handler that Ive destroyed the widgets.
 			parse_cmd(linebuf);
+			memset(linebuf, '\0', sizeof(linebuf));
+			msfw_widget_destroy_all();
+
+			/* Create simple bounding box for prettyness */
+			bodybox_wid = msfw_widget_new(WID_RESOURCE, F_RES_BOX, 2, 1, 0x13c, 0x55, appid, 5, 0); // Why 5? inbox app used this, not sure what this does
+			msfw_widget_event_handle(bodybox_wid, S_TEXT_REFORMAT, 0, 0); //reformat?
+
+			/* Put textbox inside of this */
+			memset(histbuf, '\0', sizeof(histbuf));
+			histbox_wid = msfw_widget_new(WID_TEXTENTRY, F_TEXT_MLINE_SPELL|F_TEXT_MLINE_CLIP, 3, 2, 0x13a, 0x4a, appid, 6, 0);
+			msfw_widget_event_handle(histbox_wid, S_TEXT_SETBUF, (uint16_t)histbuf, sizeof(histbuf));
+			msfw_widget_event_handle(histbox_wid, S_TEXT_REFORMAT, 0, 0);
+			msfw_widget_event_handle(histbox_wid, S_TEXT_UKN1, 1, 0); // Make RO?
+
+			/* Input box */
+			line_wid = msfw_widget_new(WID_TEXTENTRY, F_TEXT_ALPHA|F_TEXT_HSCROLL|F_CANFOCUS, 3, 0x4c, 0x13a, 0x9, appid, 7, 0); // is HSCROLL needed? 
+			msfw_widget_event_handle(line_wid, S_TEXT_SETBUF, (uint16_t)linebuf, sizeof(linebuf));
+			msfw_widget_event_handle(line_wid, S_TEXT_REFORMAT, 0, 0);
+			msfw_widget_event_handle(line_wid, SIG_DRAW, 0, 0);
+			/* XXX: Test set cursor here to see if it affects the rendered buffer */
+			msfw_widget_focus_set(line_wid);
+#endif
+			parse_cmd(linebuf, histbox_wid, histbuf);
 			memset(linebuf, '\0', sizeof(linebuf));
 			msfw_widget_event_handle(line_wid, S_TEXT_SETBUF, (uint16_t)linebuf, sizeof(linebuf));
 			msfw_widget_event_handle(line_wid, S_TEXT_REFORMAT, 0, 0);
@@ -300,22 +354,6 @@ handler that I've destroyed the widgets.
 			msfw_event_put_goprev();
 			/* No idea how sig_exit should work */
 			appstate = SIG_EXIT;
-			break;
-		  case MENU_F2:
-			/* Do nothing right now */
-			//msfw_widget_event_handle(textwidget, S_TEXT_SET_CUR, 2, 0);
-
-			memset(buf, '\0', 20);
-			memcpy(buf, "test", 4);
-			//msfw_widget_event_handle(textwidget, S_TEXT_CAT, (uint16_t)buf, sizeof(histbuf));
-			//msfw_widget_event_handle(textwidget, SIG_DRAW, (uint16_t)buf, (uint16_t)buf);
-			;
-			break;
-		  case MENU_F3:
-			/* Spawn progress bar with timer */
-			//progbar = msfw_msgbox_progbar(STR_IDX_APP00, STR_IDX_APP09);
-			//msfw_widget_event_handle(progbar, sig_pdlg_status, STR_IDX_APP11, 0);
-			//timer = msfw_timer_new(appid, 1000, 1);
 			break;
 		  default:
 			break;
