@@ -83,11 +83,8 @@ struct window {
 #define S_TEXT_SETBUF	0x37 // Point to a buffer for the text box, arg1 = buffer address, arg2 = buffer length
 #define S_TEXT_UKN1	0x38 // set ptr1.16 to "not this"   (sent after clearing editable bit) XXX:
 #define S_TEXT_UKN2	0x39 // test if ptr1.16 is 02, 03, or 04 XXX 
-/* When you use cat, arg1 is the buffer to append to the current buffer. arg2 can be used to resize? */
-/* Does this actually logically append the buffers to each other? so text rolls from one to the next? */
-/* Looks like that is correct, this should be append as it originally was. Need to figure out how this
- * actually works in terms of how buffers are set up. Compose app is probably the best way to do this */
-#define S_TEXT_CAT	0x3A // Cat something to end of buffer, arg1 = ??? arg2 = ??? XXX "add this to end of buf, what is that?"
+/* S_TEXT_CAT will append buffer pointer arg1 to the end of the widget's set buffer. arg2 is basically setbufsz and cannot be 0 */
+#define S_TEXT_CAT	0x3A // Cat something to end of buffer, arg1 = start of buffer arg2 = setbufsz len
 #define S_TEXT_GET_LEN	0x3B // ret ptr1.4 length ??????????????????? XXX
 #define S_TEXT_SETBUFSZ	0x3C // set ptr1.2 = this buffsize ????????? XXX
 #define S_TEXT_GETBUFSZ 0x3D // ret ptr1.2 buffsize ?????????? XXX
@@ -103,11 +100,11 @@ struct window {
 #define F_TEXT_ALPHA	0x0000 // Alphanumeric, single line
 #define F_TEXT_NUM	0x0040 // Numeric entry, single line
 #define F_TEXT_PHONE	0x2000 // Phone number format, single line (not sure this works as expected XXX)
+#define F_TEXT_HSCROLL	0x0100 // Use with any single line above to allow longer lines than the screen can handle, XXX: Can be specified by itself
 #define F_TEXT_IP	0x0080 // IP address format, single line (doesn't seem to work quite right with border)
 #define F_TEXT_DATE	0x0800 // Date format, single line (doesn' work quite right with border, also adds "MM/DD/YYYY" awkwardly)
 #define F_TEXT_TIME	0x1000 // Time format, single line, HH:MM, 12 hour time (doesn't work quire right with border)
 #define F_TEXT_PASSWD	0x4000 // Password, single line, displays * instead of text
-#define F_TEXT_HSCROLL	0x0100 // Use with any single line above to allow longer lines than the screen can handle, XXX: Can be specified by itself
 /* The MLINE modes cannot be ORed together, only one must be specified! XXX: This seems to differ from some CF apps where these modes are ORed together*/
 /* MLINE by itself wierdly interacts with top border, does NOT do line wrap */
 #define F_TEXT_MLINE	0x0010 // Alphanumeric, multi line (vert scrolling)
@@ -243,6 +240,31 @@ enum MESSAGEBOX_RET {
  * on other operations
  */
 #define msfw_widget_new(widget_type, flags, left, top, width, height, appid, seqnum, str_etc) ((uint16_t (*)(int16_t, uint16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, uint16_t)) 0x0692)(widget_type, flags, left, top, width, height, appid, seqnum, str_etc)
+
+/*
+ * uint8_t msfw_widget_destroy(uint16_t widget)
+ *
+ * Untested, but, hey, it looks like this destroys a single widget, might be useful?
+ */
+#define msfw_widget_destory(widget) ((uint8_t (*)(uint16_t)) 0x069E)(widget)
+
+/*
+ * void??? msfw_widget_of_woz(uint16_t widget)
+ *
+ * No clue what this does, but is called out by this name in the original RE docs
+ * Lets hope it does something useful shal we?
+ */
+#define msfw_widget_of_woz(widget) ((void (*)(uint16_t widget)) 0x06A4)(widget)
+
+/*
+ * void msfw_widget_destroy_all()
+ *
+ * Destroys all widgets, handles 0x0-0x1D, and removes them from the current app to allow for new ones to be created
+ * XXX: Guess right now that this is a void, the last few opcodes before returning don't seem to put anything in H or L
+ * XXX: Doesn't appear to be working. Cyrano's docs indicate this as destory all, and email view func tracing also shows
+ * it as being the start of destroying all the widgets. Not sure what I'm missing
+ */
+#define msfw_widget_destroy_all ((void (*)(void)) 0x0779)
 
 /*
  * uint16_t msfw_widget_event_handle(int16_t wh, int16_t signal, uint16_t val1, uint16_t val2)
