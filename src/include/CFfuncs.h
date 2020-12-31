@@ -87,7 +87,7 @@ enum msos_app_sigs {
 
 	// Widget specific signals
 	// These will likely be best handled by the main loop and not app
-	SIG_WID_INIT	= 0x0E, // 
+	SIG_WID_INIT	= 0x0E, // Does _not_ appear to need to be called by an app itself
 	SIG_WID_DONE	= 0x0F, // Send to close dialogs
 	SIG_WID_FOCUS	= 0x10, // Force focus to widget
 	SIG_WID_UNFOCUS	= 0x11, // Remove focus from widget
