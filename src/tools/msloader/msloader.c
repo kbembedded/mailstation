@@ -67,11 +67,59 @@ static void freetype(void)
 	}
 }
 
+/* Use 0 to disable all channels */
+static uint8_t enable_channel_max(uint8_t max)
+{
+	uint8_t page, dev;
+	uint8_t sect_buf[256];
+	uint8_t ret = 0;
+
+	page = SLOT8_PAGE;
+	dev = SLOT8_DEV;
+
+	if (SLOT4_DEV == DEV_DF) {
+		g_textmode_init();
+		printf("Error! Cannot modify channels when running from Dataflash\n");
+		printf("Only call enable_channel_max() when running from RAM\n");
+		lcd_update();
+		msfw_delay(5000);
+		__asm__ ("jp	0x4000");
+	}
+
+	SLOT8_DEV = DEV_DF;
+	SLOT8_PAGE = 0x8;
+	memset(sect_buf, '\0', 256);
+	sect_buf[0x00] = max;
+	sect_buf[0x09] = 0x18;
+	sect_buf[0x0b] = 0x1;
+	sect_buf[0x0f] = 0x19;
+	sect_buf[0x11] = 0x2;
+	sect_buf[0x15] = 0x1a;
+	sect_buf[0x17] = 0x3;
+	sect_buf[0x1b] = 0x1b;
+	sect_buf[0x1d] = 0x4;
+	sect_buf[0x21] = 0x1c;
+
+	dflash_unlock();
+	ret |= dflash_erase_sector(0x8000);
+	ret |= dflash_write_sector(0x8000, sect_buf);
+	dflash_lock();
+
+	if (ret) {
+		printf("Channel enable failed!\n");
+	} else {
+		printf("Channel enable successful!\n");
+	}
+
+	return ret;
+}
+
 static void self_write_to_app0(void)
 {
 	uint16_t src_adr, dst_adr;
 	uint8_t sect_buf[256];
 	uint8_t ret = 0;
+	volatile uint8_t *cur_channel = (uint8_t *)0x8000;
 
 	g_textmode_init();
 	printf("Writing self to DF, Mailstation App 0\n");
@@ -94,6 +142,10 @@ static void self_write_to_app0(void)
 	}
 
 	dflash_lock();
+
+	SLOT8_PAGE = 0x8; // App management page
+	/* Do this to fill out all app records */
+	enable_channel_max(*cur_channel);
 
 	if (ret) {
 		printf("Write failed!\n");
@@ -325,6 +377,7 @@ void loadsave_common(uint8_t channel)
 	unsigned int i;
 	uint16_t len, dst_adr;
 	uint8_t sect_buf[256];
+	uint8_t *cur_channel = (uint8_t *)0x8000;
 
 
 
@@ -362,11 +415,9 @@ void loadsave_common(uint8_t channel)
 	page = SLOT8_PAGE;
 	dev = SLOT8_DEV;
 
-	printf("len %d\n", len);
 	if (len & 0xFF) len = (len & ~(0xff)) + 0x100;
 	/* Write the length of the file to DF channel */
 	len = (len / 256);
-	printf("len %d\n", len);
 	lcd_update();
 	msfw_delay(2000);
 
@@ -382,31 +433,26 @@ void loadsave_common(uint8_t channel)
 		dflash_unlock();
 		ret |= dflash_erase_sector(dst_adr);
 		ret |= dflash_write_sector(dst_adr, sect_buf);
-		printf("wrote sect %d\n", i);
 		lcd_update();
 		dflash_lock();
 		SLOT8_PAGE = page;
 		SLOT8_DEV = dev;
 	}
 
-#if 0
-	/* TODO: Enable channel if not already. Theres probably a firmware func
-	 * to do this already */
 	SLOT8_DEV = DEV_DF;
 	SLOT8_PAGE = 8;
-	memcpy((uint8_t *)0xc010, 0x8000, 256);
-	if ((uint8_t *)0xc010 < channel) {
-		/* TODO: Enable channel here
-		 * likely no bounds checking at first, whatever */
+	/* While channels are numbered 0-4, the number of enabled channels
+	 * is 0-5, with 0 being none and 1 being only channel 0. */
+	channel++;
+	if (channel > *cur_channel) {
+		ret |= enable_channel_max(channel);
 	}
-#endif
 
-	g_textmode_init();
 
 	if (ret) {
-		printf("Write failed!\n");
+		printf("Write of new app failed!\n");
 	} else {
-		printf("Write successful!\n");
+		printf("Write of new app successful!\n");
 	}
 
 	printf("Powering off in 5 seconds\n");
