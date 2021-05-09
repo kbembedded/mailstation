@@ -180,9 +180,27 @@ static void dump_cflash(void);
 static void manage_dflash(void);
 static void go_to_main(void);
 
-static void manage_dflash(void) {
-	;
-	/* Clean this up later */
+static void chan_dis(void);
+static void chan_en0(void);
+static void chan_en1(void);
+static void chan_en2(void);
+static void chan_en3(void);
+static void chan_en4(void);
+static struct opt_tbl manage_dflash_opts[] = {
+	{ " Disable all Channels (CAUTION! This will disable msloader!)\n", chan_dis },
+	{ " Enable Channel 0\n", chan_en0 },
+	{ " Enable Channel 0-1\n", chan_en1 },
+	{ " Enable Channel 0-2\n", chan_en2 },
+	{ " Enable Channel 0-3\n", chan_en3 },
+	{ " Enable Channel 0-4\n", chan_en4 },
+	{ NULL, NULL },
+};
+
+static void manage_dflash(void)
+{
+	cur_opts = manage_dflash_opts;
+	draw_header();
+	draw_options();
 }
 
 static struct opt_tbl main_opts[] = {
@@ -501,6 +519,71 @@ static void loadsave_to_4(void)
 	loadsave_common(4);
 }
 
+static void chan_en_common(uint8_t max)
+{
+	uint8_t ret;
+
+	/* XXX: I _think_ that RAMp1 is always in slot8 when launching DF app
+	 * need to verify this.
+	 * Set up slot8 to be page 1 of RAM. We're going to rewrite ourself
+	 * there, do the trampoline to move that in slot4, and then set
+	 * slot8 to be RAMp2 for the actual loading process.
+	 */
+	SLOT8_PAGE = 2;
+	SLOT8_DEV = DEV_RAM;
+	memcpy((uint8_t *)0x8000, (uint8_t *)0x4000, 0x4000);
+
+	/* Clobber all of our graphics buffer, overkill, but its a known
+	 * value that needs to be kept to. It beats trying to calculate the
+	 * exact length of our trampoline.
+	 */
+	memcpy((uint8_t *)0xC010, reload_ram_trampoline, 0x1400);
+	__asm__ ("call	0xC010");
+
+	g_textmode_init();
+	ret = enable_channel_max(max);
+
+	if (ret) {
+		printf("Channel management failed!\n");
+	} else {
+		printf("Channel management successful!\n");
+	}
+
+	lcd_update();
+	msfw_delay(5000);
+	__asm__("jp	0x4000");
+}
+
+static void chan_dis(void)
+{
+	chan_en_common(0);
+}
+
+static void chan_en0(void)
+{
+	chan_en_common(1);
+}
+
+static void chan_en1(void)
+{
+	chan_en_common(2);
+}
+
+static void chan_en2(void)
+{
+	chan_en_common(3);
+}
+
+static void chan_en3(void)
+{
+	chan_en_common(4);
+}
+
+static void chan_en4(void)
+{
+	chan_en_common(5);
+}
+
 
 void dump_pages(uint8_t pagecnt)
 {
@@ -554,7 +637,7 @@ void draw_header(void)
 	g_textmode_clear_line(0);
 	g_textmode_clear_line(1);
 	g_textmode_clear_line(2);
-	printf("Mailstation Loader Utility v0.21test5\n\n");
+	printf("Mailstation Loader Utility v0.21test6\n\n");
 	g_textmode_set_invert(0);
 	g_textmode_set_ypos(19);
 	printf("Navigate with \'h\' \'j\' \'k\' and \'l\'\n");
