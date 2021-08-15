@@ -13,17 +13,12 @@ for DIR in */; do
   cd "${DIR}" || exit
   mkdir disasm
   FILE=$(ls ./*codeflash*.bin | head -n 1)
-  (
-    cd disasm
-    split -d -b 16384 --additional-suffix .bin "../${FILE}" page
-  )
-  echo "Disassembling $(basename ${FILE})"
   for I in $(seq -w 0 63); do
-    #dd if="${FILE}" of=disasm/page"${I}".bin bs=16384 count=1 skip="${I}"
+    dd if="${FILE}" of=disasm/page"${I}".bin bs=16384 count=1 skip="${I}"
     echo -e "; vim: syntax=z8a" > disasm/page"${I}".s
-    z80dasm -alt -g 0x4000 disasm/page"${I}".bin >> disasm/page"${I}".s >/dev/null 2>&1
+    z80dasm -alt -g 0x4000 disasm/page"${I}".bin >> disasm/page"${I}".s
   done
   echo -e "; vim: syntax=z8a" > disasm/page00.s
-  z80dasm -alt -g 0x0 disasm/page00.bin >> disasm/page00.s >/dev/null 2>&1
+  z80dasm -alt -g 0x0 disasm/page00.bin >> disasm/page00.s
 )
 done
