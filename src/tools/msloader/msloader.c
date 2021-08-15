@@ -12,7 +12,7 @@
 #include "lcd.h"
 #include "led.h"
 #include "ms_ports.h"
-#include "parport.h"
+#include "msfw_parport.h"
 
 #include "msloader-app_info.h"
 
