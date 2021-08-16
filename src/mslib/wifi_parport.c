@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "CFfuncs.h"
 #include "ms_ports.h"
 
 /* XXX: Not yet sure if this is necessary, but is done in the wsloader code */
@@ -31,14 +32,18 @@ void wifi_parport_prepare(void)
 }
 
 /* Read a byte on parallel port */
-/* Currently blocking, but, would like to implement it as a timeout
- * like msfw has */
+/* Will timeout after 1s if no data received */
 uint16_t wifi_parport_read_byte(void)
 {
 	uint16_t ret;
+	uint16_t cnt = 1000;
 
 	/* Sender will raise busy when ready to send data */
-	while(!(PAR_STAT_DR & PAR_STAT_BUSYn));
+	while(!(PAR_STAT_DR & PAR_STAT_BUSYn)) {
+		msfw_delay(1);
+		cnt--;
+		if(cnt == 0) return 0;
+	}
 
 	/* Set the data port as input */
 	PAR_DAT_DDR = 0x00;
@@ -50,7 +55,10 @@ uint16_t wifi_parport_read_byte(void)
 	while(PAR_STAT_DR & PAR_STAT_BUSYn);
 
 	/* Read data from sender */
-	ret = PAR_DAT_DR;
+	ret = (uint16_t)PAR_DAT_DR;
+	/* Set upper byte to 0xFF to mimic msfw_parport_read_byte setting
+	 * that byte as true if data is valid */
+	ret |= 0xFF00;
 
 	/* Lower autofeed/linefeed to let sender know we've read data */
 	PAR_CTRL_DR &= ~(PAR_CTRL_AUTFn);
