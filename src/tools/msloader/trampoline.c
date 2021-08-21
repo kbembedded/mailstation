@@ -4,8 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "led.h"
-#include "ms_ports.h"
+#include <ms_ports.h>
 
 extern uint8_t end_of_file;
 

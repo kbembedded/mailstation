@@ -5,6 +5,7 @@
 *.rel
 *.ihx
 *.bin
+*.bin.h
 *.map
 *.lk
 *.noi
