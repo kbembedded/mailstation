@@ -12,9 +12,14 @@
 #include "lcd.h"
 #include "led.h"
 #include "ms_ports.h"
-#include "parport.h"
+#include "msfw_parport.h"
+#include "wifi_parport.h"
 
 #include "msloader-app_info.h"
+
+/* Set up function pointers fot selecting which parport method to use */
+uint16_t (*parport_read_ptr)(void) = &msfw_parport_read_byte;
+uint16_t (*parport_write_ptr)(uint8_t) = &msfw_parport_write_byte;
 
 struct opt_tbl {
 	char *string;
@@ -207,6 +212,7 @@ static struct opt_tbl main_opts[] = {
 	{ " Load binary and execute...\n", loadrun_from_parport },
 	{ " Load binary and write to Dataflash...\n", loadsave_from_parport },
 	{ " Dump flash...\n", dump_to_parport },
+	{ " Select parallel method...\n", sel_parport },
 	{ " Manage Dataflash...\n", manage_dflash },
 	{ " Reboot Mailstation\n", restart },
 	{ " Power off Mailstation\n", poweroff },
@@ -217,6 +223,33 @@ static struct opt_tbl main_opts[] = {
 static void go_to_main(void)
 {
 	cur_opts = main_opts;
+	draw_header();
+	draw_options();
+}
+
+static void sel_parport_msfw(void)
+{
+	parport_read_ptr = &msfw_parport_read_byte;
+	parport_write_ptr = &msfw_parport_write_byte;
+	go_to_main();
+}
+
+static void sel_parport_wifi(void)
+{
+	parport_read_ptr = &wifi_parport_read_byte;
+	parport_write_ptr = &wifi_parport_write_byte;
+	go_to_main();
+}
+
+static struct opt_tbl parport_opts[] = {
+	{ " Use msfw parallel port method (tribbles) [default]\n", sel_parport_msfw },
+	{ " Use WiFiStation parallel port method (bytes)\n", sel_parport_wifi },
+	{ NULL, NULL },
+};
+
+static void sel_parport(void)
+{
+	cur_opts = parport_opts;
 	draw_header();
 	draw_options();
 }
@@ -287,7 +320,7 @@ uint16_t load_from_parport(volatile uint8_t *buf)
 	for (i = 0; i < 2; i++) {
 		timeout = 0;
 		while(1) {
-			ret = msfw_parport_read_byte();
+			ret = (*parport_read_ptr)();
 			if (ret & 0xFF00) {
 				len = len >> 8;
 				len |= ((ret & 0xFF) << 8);
@@ -314,7 +347,7 @@ uint16_t load_from_parport(volatile uint8_t *buf)
 	for (; len; len--) {
 		timeout = 0;
 		while(1) {
-			ret = msfw_parport_read_byte();
+			ret = (*parport_read_ptr)();
 			if (ret & 0xFF00) {
 				*(buf++) = (ret & 0xFF);
 				break;
@@ -600,7 +633,7 @@ void dump_pages(uint8_t pagecnt)
 	for (page = 0; page < pagecnt; page++) {
 		SLOT8_PAGE = page;
 		for (adr = (uint8_t *)0x8000; adr < (uint8_t *)0xC000; adr++) {
-			if (!msfw_parport_write_byte(*adr)) {
+			if (!(*parport_write_ptr)(*adr)) {
 				printf("Timed out!\n");
 				goto dump_pages_out;
 			}
@@ -644,8 +677,11 @@ void draw_header(void)
 	g_textmode_clear_line(0);
 	g_textmode_clear_line(1);
 	g_textmode_clear_line(2);
-	printf("Mailstation Loader Utility v0.22\n\n");
+	printf("Mailstation Loader Utility v0.23RC1\n\n");
 	g_textmode_set_invert(0);
+	g_textmode_set_ypos(17);
+	printf("Parallel port method is set to: %s\n", parport_read_ptr == \
+	  &msfw_parport_read_byte ? "msfw method" : "WiFiStation method");
 	g_textmode_set_ypos(19);
 	printf("Navigate with \'h\' \'j\' \'k\' and \'l\'\n");
 }
