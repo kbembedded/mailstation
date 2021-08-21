@@ -23,7 +23,8 @@
 #include "CFfuncs.h"
 #include "ms_ports.h"
 
-/* XXX: Not yet sure if this is necessary, but is done in the wsloader code */
+/* XXX: This is necessary to do before using the wifistation method,
+ * It may be possible to track down a CF func that does essentially this */
 void wifi_parport_prepare(void)
 {
 	/* Set all control lines low */
@@ -37,6 +38,8 @@ uint16_t wifi_parport_read_byte(void)
 {
 	uint16_t ret;
 	uint16_t cnt = 1000;
+
+	wifi_parport_prepare();
 
 	/* Sender will raise busy when ready to send data */
 	while(!(PAR_STAT_DR & PAR_STAT_BUSYn)) {
@@ -69,5 +72,7 @@ uint16_t wifi_parport_read_byte(void)
 /* Looks like this will return 0 in the case of a timeout? */
 uint16_t wifi_parport_write_byte(uint8_t val)
 {
+	wifi_parport_prepare();
+
 	return (uint16_t)val;
 }
