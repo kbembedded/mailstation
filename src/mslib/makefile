@@ -9,7 +9,7 @@ ASFLAGS_CRT0 := $(ASFLAGS) -g
 
 
 OBJS = dflash_write.rel graphics-textmode.rel lcd.rel msfw_parport.rel \
-wifi_parport.rel
+wifi_parport.rel keyboard.rel
 
 all: mslib.lib crt0-slot4.rel
 
