@@ -44,11 +44,25 @@ static struct opt_tbl ram_opts[] = {
 	{ NULL, NULL },
 };
 
-static void restart(void)
+static void restart(void) __naked
 {
-	/* XXX: Is there a better way to do this? */
-	/* SDCC doesn't like when you use sdasz80 notation of #0x0000 */
-	__asm__ ("jp	0x0000");
+	/* It appears that if we convince MSOS that RAM was re-initialized,
+	 * then it will think it was a fresh poweron. The marker for this is
+	 * buried somewhere in 0xDXXX which changes from version to version.
+	 * So, disable interrupts, clobber all of SlotC with 0x00, and then
+	 * jump to 0x0000
+	 */
+
+	__asm
+		di
+		ld	de, #0xc001
+		ld	hl, #0xc000
+		ld	bc, #0x3fff
+		xor	a
+		ld	(hl), a
+		ldir
+		jp	0x0000
+	__endasm;
 }
 
 static void poweroff(void)
