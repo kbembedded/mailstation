@@ -1,0 +1,12 @@
+--
+-m
+-j
+-x
+-i bloader_bin
+-b _CODE = 0x8000
+-b _DATA = 0x0000
+-k C:\Program Files\SDCC\bin\..\lib\z80
+-l z80
+bloader.o
+
+-e

@@ -1,0 +1,51 @@
+XL
+H 2 areas 2E global symbols
+M putchar
+S __keyscanstates DefF16B
+S _textmodebuffer DefEEC5
+S __interrupt_jump DefFDFD
+S _p2shadow DefEE18
+S __codestart DefE400
+S _p3shadow DefEE1A
+S ms_clearkeytables DefEC2A
+S __getcharbuffer_ptr DefF149
+S printchar DefE6C0
+S __getcharbuffer_in DefF169
+S __getcharbuffer_out DefF16A
+S ms_getkeycodefrombuffer DefEBF1
+S __interrupt_table DefFE00
+S _UpdateCharLCD DefE5C4
+S ms_putkeyintobuffer DefEBCC
+S __getcharbuffer DefF149
+S _putchar DefE6B2
+S __cgafont_data DefF500
+S _ClearLCD DefE615
+S _bios_start DefE403
+S _interrupt_hook DefE443
+S _fillcharbuffer DefE912
+S _firmwareversionsafe DefEEC2
+S ms_scan_keymatrix DefEA6E
+S _recv_byte DefED3B
+S ms_init_keyboard DefEC65
+S __scancode_table DefEEBC
+S __p2shadow DefEEC0
+S __p3shadow DefEEC1
+S _LCD_CAS DefE7A9
+S _interrupt_counter DefF207
+S _putchar_rr_s DefE6B2
+S handlescancode DefE860
+S ms_keyscan DefE982
+S _scrollscreen DefE669
+S _kbhit DefE96A
+S _putchar_rr_dbs DefE6BB
+S _cursorx DefEEC3
+S _cursory DefEEC4
+S ms_initkeybuffer DefEC57
+S handlekeyrepeat DefE7C8
+S ms_fullkeyboardinit DefECC0
+S _cgafont_addr DefF145
+S _getchar DefE93F
+S mycharbuffer DefF147
+S _send_byte_busy DefEDD7
+A _CODE size 0 flags 0
+A _GSINIT size 0 flags 0

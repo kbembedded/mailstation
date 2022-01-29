@@ -1,0 +1,45 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 1.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.=  2710 L   |     .__.ABS.=  0000 G   |     .__.CPU.=  0000 L
+    .__.H$L.=  0000 L   |     _ClearLC=  E638 G   |     _LCD_CAS=  E815 G
+    _UpdateC=  E5E7 G   |     __cgafon=  F500 G   |     __charbu=  F26A G
+  0 __clock    0000 GR  |     __codest=  E400 G   |     __getcha=  F248 G
+    __getcha=  F268 G   |     __getcha=  F269 G   |     __getcha=  F248 G
+    __interr=  FDFD G   |     __interr=  FE00 G   |     __keysca=  F26B G
+    __p2shad=  EFBB G   |     __p3shad=  EFBC G   |     __scanco=  EFB7 G
+    _bios_st=  E403 G   |     _cgafont=  F241 G   |     _cursorx=  EFBF G
+    _cursory=  EFC0 G   |     _disable=  E88F G   |     _enable_=  E8B0 G
+  6 _exit      0000 GR  |     _fillcha=  EA06 G   |     _firmwar=  EFBD G
+    _getchar=  EA31 G   |     _interru=  F307 G   |     _interru=  E455 G
+    _kbhit  =  EA5C G   |     _main      **** GX  |     _p2shado=  EF13 G
+    _p3shado=  EF15 G   |     _putchar=  E6E2 G   |     _putchar=  E6F0 G
+    _putchar=  E6EB G   |     _putchar=  E6E2 G   |     _recv_by=  EE2D G
+    _scrolls=  E68E G   |     _send_by=  EEC9 G   |     _textmod=  EFC1 G
+    _updatec=  E834 G   |   4 gsinit     0000 GR  |     handleke=  E8B5 G
+    handlesc=  E954 G   |     ms_clear=  ED1C G   |     ms_fullk=  EDB2 G
+    ms_getke=  ECE3 G   |     ms_init_=  ED57 G   |     ms_initk=  ED49 G
+    ms_keysc=  EA74 G   |     ms_putke=  ECBE G   |     ms_scan_=  EB60 G
+    mycharbu=  F246 G   |     printcha=  E771 G
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 2.
+Hexadecimal [16-Bits]
+
+Area Table
+
+   0 _CODE      size    1   flags    0
+   1 _HEADER    size    0   flags    8
+   2 _HEADER0   size    A   flags    8
+   3 _HOME      size    0   flags    0
+   4 _GSINIT    size    0   flags    0
+   5 _GSFINAL   size    1   flags    0
+   6 _EXITPRO   size    0   flags    0
+   7 _EXITPRO   size    0   flags    0
+   8 _DATA      size    0   flags    0
+   9 _BSS       size    0   flags    0
+   A _HEAP      size    0   flags    0
+   B _FILLER    size    0   flags    8
+   C _FILLER1   size    1   flags    8
+

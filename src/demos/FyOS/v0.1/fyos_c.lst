@@ -1,0 +1,1867 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.8.0 #10562 (Linux)
+                              4 ;--------------------------------------------------------
+                              5 	.module fyos_c
+                              6 	.optsdcc -mz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _main
+                             12 	.globl _printSP
+                             13 	.globl _cmd_help
+                             14 	.globl _cmd_scancodes
+                             15 	.globl _cmd_hextoint
+                             16 	.globl _cmd_port_out
+                             17 	.globl _cmd_port_in
+                             18 	.globl _cmd_poke
+                             19 	.globl _cmd_peek
+                             20 	.globl _enable_charbuffer
+                             21 	.globl _disable_charbuffer
+                             22 	.globl _kbhit
+                             23 	.globl _strtolower
+                             24 	.globl _gets
+                             25 	.globl _hextobyte
+                             26 	.globl _hextoint
+                             27 	.globl _printfcenter
+                             28 	.globl _getscancode
+                             29 	.globl _clrscr
+                             30 	.globl _powerdownmode
+                             31 	.globl _strtok
+                             32 	.globl _strcmp
+                             33 	.globl _putchar
+                             34 	.globl _getchar
+                             35 	.globl _puts
+                             36 	.globl _printf
+                             37 	.globl _versionpointer
+                             38 	.globl _myglobal
+                             39 	.globl _inputstring
+                             40 	.globl _mem4000
+                             41 ;--------------------------------------------------------
+                             42 ; special function registers
+                             43 ;--------------------------------------------------------
+                     0002    44 _port2	=	0x0002
+                     0005    45 _slot4000page	=	0x0005
+                     0006    46 _slot4000device	=	0x0006
+                     0007    47 _slot8000page	=	0x0007
+                     0008    48 _slot8000device	=	0x0008
+                     0021    49 _port_printerstatus	=	0x0021
+                     002D    50 _port_printerdata	=	0x002d
+                             51 ;--------------------------------------------------------
+                             52 ; ram data
+                             53 ;--------------------------------------------------------
+                             54 	.area _DATA
+                     4000    55 _mem4000	=	0x4000
+   0000                      56 _inputstring::
+   0000                      57 	.ds 256
+                             58 ;--------------------------------------------------------
+                             59 ; ram data
+                             60 ;--------------------------------------------------------
+                             61 	.area _INITIALIZED
+   0000                      62 _myglobal::
+   0000                      63 	.ds 1
+   0001                      64 _versionpointer::
+   0001                      65 	.ds 2
+                             66 ;--------------------------------------------------------
+                             67 ; absolute external ram data
+                             68 ;--------------------------------------------------------
+                             69 	.area _DABS (ABS)
+                             70 ;--------------------------------------------------------
+                             71 ; global & static initialisations
+                             72 ;--------------------------------------------------------
+                             73 	.area _HOME
+                             74 	.area _GSINIT
+                             75 	.area _GSFINAL
+                             76 	.area _GSINIT
+                             77 ;--------------------------------------------------------
+                             78 ; Home
+                             79 ;--------------------------------------------------------
+                             80 	.area _HOME
+                             81 	.area _HOME
+                             82 ;--------------------------------------------------------
+                             83 ; code
+                             84 ;--------------------------------------------------------
+                             85 	.area _CODE
+                             86 ;fyos_c.c:16: void cmd_peek(char *inputstring)
+                             87 ;	---------------------------------
+                             88 ; Function cmd_peek
+                             89 ; ---------------------------------
+   0000                      90 _cmd_peek::
+   0000 DD E5         [15]   91 	push	ix
+   0002 DD 21 00 00   [14]   92 	ld	ix,#0
+   0006 DD 39         [15]   93 	add	ix,sp
+   0008 F5            [11]   94 	push	af
+                             95 ;fyos_c.c:23: result = strtok(inputstring, " ");
+   0009 21r8Dr00      [10]   96 	ld	hl, #___str_0
+   000C E5            [11]   97 	push	hl
+   000D DD 6E 04      [19]   98 	ld	l, 4 (ix)
+   0010 DD 66 05      [19]   99 	ld	h, 5 (ix)
+   0013 E5            [11]  100 	push	hl
+   0014 CDr00r00      [17]  101 	call	_strtok
+   0017 F1            [10]  102 	pop	af
+   0018 F1            [10]  103 	pop	af
+   0019 4D            [ 4]  104 	ld	c, l
+   001A 44            [ 4]  105 	ld	b, h
+                            106 ;fyos_c.c:24: while (result != NULL) 
+   001B 11 00 00      [10]  107 	ld	de, #0x0000
+   001E                     108 00104$:
+   001E 78            [ 4]  109 	ld	a, b
+   001F B1            [ 4]  110 	or	a, c
+   0020 28 53         [12]  111 	jr	Z,00106$
+                            112 ;fyos_c.c:26: parmnum++;
+   0022 13            [ 6]  113 	inc	de
+                            114 ;fyos_c.c:27: hexint = 0;
+   0023 21 00 00      [10]  115 	ld	hl, #0x0000
+   0026 E3            [19]  116 	ex	(sp), hl
+                            117 ;fyos_c.c:28: if (hextoint(result, &hexint) == 1) printf("%04x -> %02x\n", hexint, mempointer[hexint]);
+   0027 21 00 00      [10]  118 	ld	hl, #0x0000
+   002A 39            [11]  119 	add	hl, sp
+   002B C5            [11]  120 	push	bc
+   002C D5            [11]  121 	push	de
+   002D E5            [11]  122 	push	hl
+   002E C5            [11]  123 	push	bc
+   002F CDr00r00      [17]  124 	call	_hextoint
+   0032 F1            [10]  125 	pop	af
+   0033 F1            [10]  126 	pop	af
+   0034 D1            [10]  127 	pop	de
+   0035 C1            [10]  128 	pop	bc
+   0036 2D            [ 4]  129 	dec	l
+   0037 20 1D         [12]  130 	jr	NZ,00102$
+   0039 E1            [10]  131 	pop	hl
+   003A E5            [11]  132 	push	hl
+   003B 4E            [ 7]  133 	ld	c, (hl)
+   003C 06 00         [ 7]  134 	ld	b, #0x00
+   003E D5            [11]  135 	push	de
+   003F C5            [11]  136 	push	bc
+   0040 DD 6E FE      [19]  137 	ld	l, -2 (ix)
+   0043 DD 66 FF      [19]  138 	ld	h, -1 (ix)
+   0046 E5            [11]  139 	push	hl
+   0047 21r8Fr00      [10]  140 	ld	hl, #___str_1
+   004A E5            [11]  141 	push	hl
+   004B CDr00r00      [17]  142 	call	_printf
+   004E 21 06 00      [10]  143 	ld	hl, #6
+   0051 39            [11]  144 	add	hl, sp
+   0052 F9            [ 6]  145 	ld	sp, hl
+   0053 D1            [10]  146 	pop	de
+   0054 18 0C         [12]  147 	jr	00103$
+   0056                     148 00102$:
+                            149 ;fyos_c.c:29: else printf("Invalid hex: %s\n", result);
+   0056 D5            [11]  150 	push	de
+   0057 C5            [11]  151 	push	bc
+   0058 21r9Dr00      [10]  152 	ld	hl, #___str_2
+   005B E5            [11]  153 	push	hl
+   005C CDr00r00      [17]  154 	call	_printf
+   005F F1            [10]  155 	pop	af
+   0060 F1            [10]  156 	pop	af
+   0061 D1            [10]  157 	pop	de
+   0062                     158 00103$:
+                            159 ;fyos_c.c:30: result = strtok( NULL, " " );
+   0062 D5            [11]  160 	push	de
+   0063 21r8Dr00      [10]  161 	ld	hl, #___str_0
+   0066 E5            [11]  162 	push	hl
+   0067 21 00 00      [10]  163 	ld	hl, #0x0000
+   006A E5            [11]  164 	push	hl
+   006B CDr00r00      [17]  165 	call	_strtok
+   006E F1            [10]  166 	pop	af
+   006F F1            [10]  167 	pop	af
+   0070 4D            [ 4]  168 	ld	c, l
+   0071 44            [ 4]  169 	ld	b, h
+   0072 D1            [10]  170 	pop	de
+   0073 18 A9         [12]  171 	jr	00104$
+   0075                     172 00106$:
+                            173 ;fyos_c.c:33: if (parmnum == 0) { printf("Usage: peek FFFF D42 F03B...\n"); }
+   0075 7A            [ 4]  174 	ld	a, d
+   0076 B3            [ 4]  175 	or	a, e
+   0077 20 08         [12]  176 	jr	NZ,00108$
+   0079 21rAEr00      [10]  177 	ld	hl, #___str_4
+   007C E5            [11]  178 	push	hl
+   007D CDr00r00      [17]  179 	call	_puts
+   0080 F1            [10]  180 	pop	af
+   0081                     181 00108$:
+                            182 ;fyos_c.c:34: printf("\n");
+   0081 21rCBr00      [10]  183 	ld	hl, #___str_6
+   0084 E5            [11]  184 	push	hl
+   0085 CDr00r00      [17]  185 	call	_puts
+                            186 ;fyos_c.c:35: }
+   0088 DD F9         [10]  187 	ld	sp,ix
+   008A DD E1         [14]  188 	pop	ix
+   008C C9            [10]  189 	ret
+   008D                     190 ___str_0:
+   008D 20                  191 	.ascii " "
+   008E 00                  192 	.db 0x00
+   008F                     193 ___str_1:
+   008F 25 30 34 78 20 2D   194 	.ascii "%04x -> %02x"
+        3E 20 25 30 32 78
+   009B 0A                  195 	.db 0x0a
+   009C 00                  196 	.db 0x00
+   009D                     197 ___str_2:
+   009D 49 6E 76 61 6C 69   198 	.ascii "Invalid hex: %s"
+        64 20 68 65 78 3A
+        20 25 73
+   00AC 0A                  199 	.db 0x0a
+   00AD 00                  200 	.db 0x00
+   00AE                     201 ___str_4:
+   00AE 55 73 61 67 65 3A   202 	.ascii "Usage: peek FFFF D42 F03B..."
+        20 70 65 65 6B 20
+        46 46 46 46 20 44
+        34 32 20 46 30 33
+        42 2E 2E 2E
+   00CA 00                  203 	.db 0x00
+   00CB                     204 ___str_6:
+   00CB 00                  205 	.db 0x00
+                            206 ;fyos_c.c:37: void cmd_poke(char *inputstring)
+                            207 ;	---------------------------------
+                            208 ; Function cmd_poke
+                            209 ; ---------------------------------
+   00CC                     210 _cmd_poke::
+   00CC DD E5         [15]  211 	push	ix
+   00CE DD 21 00 00   [14]  212 	ld	ix,#0
+   00D2 DD 39         [15]  213 	add	ix,sp
+   00D4 21 F9 FF      [10]  214 	ld	hl, #-7
+   00D7 39            [11]  215 	add	hl, sp
+   00D8 F9            [ 6]  216 	ld	sp, hl
+                            217 ;fyos_c.c:40: unsigned char *mempointer = 0;
+   00D9 DD 36 FC 00   [19]  218 	ld	-4 (ix), #0x00
+   00DD DD 36 FD 00   [19]  219 	ld	-3 (ix), #0x00
+                            220 ;fyos_c.c:41: unsigned int hexint = 0;
+   00E1 DD 36 FA 00   [19]  221 	ld	-6 (ix), #0x00
+   00E5 DD 36 FB 00   [19]  222 	ld	-5 (ix), #0x00
+                            223 ;fyos_c.c:42: unsigned char hexbyte = 0;
+   00E9 DD 36 F9 00   [19]  224 	ld	-7 (ix), #0x00
+                            225 ;fyos_c.c:43: int parmnum = 0;
+   00ED 01 00 00      [10]  226 	ld	bc, #0x0000
+                            227 ;fyos_c.c:45: result = strtok(inputstring, " ");
+   00F0 C5            [11]  228 	push	bc
+   00F1 21rDBr01      [10]  229 	ld	hl, #___str_7
+   00F4 E5            [11]  230 	push	hl
+   00F5 DD 6E 04      [19]  231 	ld	l, 4 (ix)
+   00F8 DD 66 05      [19]  232 	ld	h, 5 (ix)
+   00FB E5            [11]  233 	push	hl
+   00FC CDr00r00      [17]  234 	call	_strtok
+   00FF F1            [10]  235 	pop	af
+   0100 F1            [10]  236 	pop	af
+   0101 EB            [ 4]  237 	ex	de,hl
+   0102 C1            [10]  238 	pop	bc
+                            239 ;fyos_c.c:46: while (result != NULL) 
+   0103 DD 36 FE 00   [19]  240 	ld	-2 (ix), #0x00
+   0107 DD 36 FF 00   [19]  241 	ld	-1 (ix), #0x00
+   010B                     242 00111$:
+   010B 7A            [ 4]  243 	ld	a, d
+   010C B3            [ 4]  244 	or	a, e
+   010D CArA7r01      [10]  245 	jp	Z, 00113$
+                            246 ;fyos_c.c:48: parmnum++;
+   0110 DD 34 FE      [23]  247 	inc	-2 (ix)
+   0113 20 03         [12]  248 	jr	NZ,00154$
+   0115 DD 34 FF      [23]  249 	inc	-1 (ix)
+   0118                     250 00154$:
+   0118 DD 4E FE      [19]  251 	ld	c, -2 (ix)
+   011B DD 46 FF      [19]  252 	ld	b, -1 (ix)
+                            253 ;fyos_c.c:49: if (parmnum == 1)
+   011E DD 7E FE      [19]  254 	ld	a, -2 (ix)
+   0121 3D            [ 4]  255 	dec	a
+   0122 DD B6 FF      [19]  256 	or	a, -1 (ix)
+   0125 20 35         [12]  257 	jr	NZ,00105$
+                            258 ;fyos_c.c:51: hexint = 0;
+   0127 DD 36 FA 00   [19]  259 	ld	-6 (ix), #0x00
+   012B DD 36 FB 00   [19]  260 	ld	-5 (ix), #0x00
+                            261 ;fyos_c.c:52: if (hextoint(result, &hexint) == 1) mempointer = (unsigned char *)hexint;
+   012F 21 01 00      [10]  262 	ld	hl, #0x0001
+   0132 39            [11]  263 	add	hl, sp
+   0133 C5            [11]  264 	push	bc
+   0134 D5            [11]  265 	push	de
+   0135 E5            [11]  266 	push	hl
+   0136 D5            [11]  267 	push	de
+   0137 CDr00r00      [17]  268 	call	_hextoint
+   013A F1            [10]  269 	pop	af
+   013B F1            [10]  270 	pop	af
+   013C D1            [10]  271 	pop	de
+   013D C1            [10]  272 	pop	bc
+   013E 2D            [ 4]  273 	dec	l
+   013F 20 0E         [12]  274 	jr	NZ,00102$
+   0141 DD 7E FA      [19]  275 	ld	a, -6 (ix)
+   0144 DD 77 FC      [19]  276 	ld	-4 (ix), a
+   0147 DD 7E FB      [19]  277 	ld	a, -5 (ix)
+   014A DD 77 FD      [19]  278 	ld	-3 (ix), a
+   014D 18 0D         [12]  279 	jr	00105$
+   014F                     280 00102$:
+                            281 ;fyos_c.c:53: else { printf("Invalid address: %s\n\n", result); return; }
+   014F D5            [11]  282 	push	de
+   0150 21rDDr01      [10]  283 	ld	hl, #___str_8
+   0153 E5            [11]  284 	push	hl
+   0154 CDr00r00      [17]  285 	call	_printf
+   0157 F1            [10]  286 	pop	af
+   0158 F1            [10]  287 	pop	af
+   0159 C3rD6r01      [10]  288 	jp	00117$
+   015C                     289 00105$:
+                            290 ;fyos_c.c:55: if (parmnum == 2)
+   015C DD 7E FE      [19]  291 	ld	a, -2 (ix)
+   015F D6 02         [ 7]  292 	sub	a, #0x02
+   0161 DD B6 FF      [19]  293 	or	a, -1 (ix)
+   0164 20 2E         [12]  294 	jr	NZ,00110$
+                            295 ;fyos_c.c:57: hexbyte = 0;
+   0166 DD 36 F9 00   [19]  296 	ld	-7 (ix), #0x00
+                            297 ;fyos_c.c:58: if (hextobyte(result, &hexbyte) == 1) *mempointer = hexbyte;
+   016A 21 00 00      [10]  298 	ld	hl, #0x0000
+   016D 39            [11]  299 	add	hl, sp
+   016E C5            [11]  300 	push	bc
+   016F D5            [11]  301 	push	de
+   0170 E5            [11]  302 	push	hl
+   0171 D5            [11]  303 	push	de
+   0172 CDr00r00      [17]  304 	call	_hextobyte
+   0175 F1            [10]  305 	pop	af
+   0176 F1            [10]  306 	pop	af
+   0177 D1            [10]  307 	pop	de
+   0178 C1            [10]  308 	pop	bc
+   0179 2D            [ 4]  309 	dec	l
+   017A 20 0C         [12]  310 	jr	NZ,00107$
+   017C DD 6E FC      [19]  311 	ld	l, -4 (ix)
+   017F DD 66 FD      [19]  312 	ld	h, -3 (ix)
+   0182 DD 7E F9      [19]  313 	ld	a, -7 (ix)
+   0185 77            [ 7]  314 	ld	(hl), a
+   0186 18 0C         [12]  315 	jr	00110$
+   0188                     316 00107$:
+                            317 ;fyos_c.c:59: else { printf("Invalid data byte: %s\n\n", result); return; }
+   0188 D5            [11]  318 	push	de
+   0189 21rF3r01      [10]  319 	ld	hl, #___str_9
+   018C E5            [11]  320 	push	hl
+   018D CDr00r00      [17]  321 	call	_printf
+   0190 F1            [10]  322 	pop	af
+   0191 F1            [10]  323 	pop	af
+   0192 18 42         [12]  324 	jr	00117$
+   0194                     325 00110$:
+                            326 ;fyos_c.c:61: result = strtok( NULL, " " );
+   0194 C5            [11]  327 	push	bc
+   0195 21rDBr01      [10]  328 	ld	hl, #___str_7
+   0198 E5            [11]  329 	push	hl
+   0199 21 00 00      [10]  330 	ld	hl, #0x0000
+   019C E5            [11]  331 	push	hl
+   019D CDr00r00      [17]  332 	call	_strtok
+   01A0 F1            [10]  333 	pop	af
+   01A1 F1            [10]  334 	pop	af
+   01A2 EB            [ 4]  335 	ex	de,hl
+   01A3 C1            [10]  336 	pop	bc
+   01A4 C3r0Br01      [10]  337 	jp	00111$
+   01A7                     338 00113$:
+                            339 ;fyos_c.c:64: if (parmnum == 0) { printf("Usage: poke ABCD E1\n"); }
+   01A7 78            [ 4]  340 	ld	a, b
+   01A8 B1            [ 4]  341 	or	a, c
+   01A9 20 0A         [12]  342 	jr	NZ,00115$
+   01AB 21r0Br02      [10]  343 	ld	hl, #___str_11
+   01AE E5            [11]  344 	push	hl
+   01AF CDr00r00      [17]  345 	call	_puts
+   01B2 F1            [10]  346 	pop	af
+   01B3 18 19         [12]  347 	jr	00116$
+   01B5                     348 00115$:
+                            349 ;fyos_c.c:65: else printf("%04x -> %02x\n", hexint, hexbyte);
+   01B5 DD 4E F9      [19]  350 	ld	c, -7 (ix)
+   01B8 06 00         [ 7]  351 	ld	b, #0x00
+   01BA C5            [11]  352 	push	bc
+   01BB DD 6E FA      [19]  353 	ld	l, -6 (ix)
+   01BE DD 66 FB      [19]  354 	ld	h, -5 (ix)
+   01C1 E5            [11]  355 	push	hl
+   01C2 21r1Fr02      [10]  356 	ld	hl, #___str_12
+   01C5 E5            [11]  357 	push	hl
+   01C6 CDr00r00      [17]  358 	call	_printf
+   01C9 21 06 00      [10]  359 	ld	hl, #6
+   01CC 39            [11]  360 	add	hl, sp
+   01CD F9            [ 6]  361 	ld	sp, hl
+   01CE                     362 00116$:
+                            363 ;fyos_c.c:66: printf("\n");
+   01CE 21r2Dr02      [10]  364 	ld	hl, #___str_14
+   01D1 E5            [11]  365 	push	hl
+   01D2 CDr00r00      [17]  366 	call	_puts
+   01D5 F1            [10]  367 	pop	af
+   01D6                     368 00117$:
+                            369 ;fyos_c.c:67: }
+   01D6 DD F9         [10]  370 	ld	sp, ix
+   01D8 DD E1         [14]  371 	pop	ix
+   01DA C9            [10]  372 	ret
+   01DB                     373 ___str_7:
+   01DB 20                  374 	.ascii " "
+   01DC 00                  375 	.db 0x00
+   01DD                     376 ___str_8:
+   01DD 49 6E 76 61 6C 69   377 	.ascii "Invalid address: %s"
+        64 20 61 64 64 72
+        65 73 73 3A 20 25
+        73
+   01F0 0A                  378 	.db 0x0a
+   01F1 0A                  379 	.db 0x0a
+   01F2 00                  380 	.db 0x00
+   01F3                     381 ___str_9:
+   01F3 49 6E 76 61 6C 69   382 	.ascii "Invalid data byte: %s"
+        64 20 64 61 74 61
+        20 62 79 74 65 3A
+        20 25 73
+   0208 0A                  383 	.db 0x0a
+   0209 0A                  384 	.db 0x0a
+   020A 00                  385 	.db 0x00
+   020B                     386 ___str_11:
+   020B 55 73 61 67 65 3A   387 	.ascii "Usage: poke ABCD E1"
+        20 70 6F 6B 65 20
+        41 42 43 44 20 45
+        31
+   021E 00                  388 	.db 0x00
+   021F                     389 ___str_12:
+   021F 25 30 34 78 20 2D   390 	.ascii "%04x -> %02x"
+        3E 20 25 30 32 78
+   022B 0A                  391 	.db 0x0a
+   022C 00                  392 	.db 0x00
+   022D                     393 ___str_14:
+   022D 00                  394 	.db 0x00
+                            395 ;fyos_c.c:71: void cmd_port_in(char *inputstring)
+                            396 ;	---------------------------------
+                            397 ; Function cmd_port_in
+                            398 ; ---------------------------------
+   022E                     399 _cmd_port_in::
+   022E DD E5         [15]  400 	push	ix
+   0230 DD 21 00 00   [14]  401 	ld	ix,#0
+   0234 DD 39         [15]  402 	add	ix,sp
+   0236 F5            [11]  403 	push	af
+   0237 F5            [11]  404 	push	af
+   0238 3B            [ 6]  405 	dec	sp
+                            406 ;fyos_c.c:75: unsigned int hexint = 0;
+   0239 21 00 00      [10]  407 	ld	hl, #0x0000
+   023C E3            [19]  408 	ex	(sp), hl
+                            409 ;fyos_c.c:76: volatile unsigned char hexbyte = 0;
+   023D DD 36 FD 00   [19]  410 	ld	-3 (ix), #0x00
+                            411 ;fyos_c.c:77: int parmnum = 0;
+   0241 01 00 00      [10]  412 	ld	bc, #0x0000
+                            413 ;fyos_c.c:79: result = strtok(inputstring, " ");
+   0244 C5            [11]  414 	push	bc
+   0245 21rEEr02      [10]  415 	ld	hl, #___str_15
+   0248 E5            [11]  416 	push	hl
+   0249 DD 6E 04      [19]  417 	ld	l, 4 (ix)
+   024C DD 66 05      [19]  418 	ld	h, 5 (ix)
+   024F E5            [11]  419 	push	hl
+   0250 CDr00r00      [17]  420 	call	_strtok
+   0253 F1            [10]  421 	pop	af
+   0254 F1            [10]  422 	pop	af
+   0255 EB            [ 4]  423 	ex	de,hl
+   0256 C1            [10]  424 	pop	bc
+                            425 ;fyos_c.c:80: while (result != NULL) 
+   0257 DD 36 FE 00   [19]  426 	ld	-2 (ix), #0x00
+   025B DD 36 FF 00   [19]  427 	ld	-1 (ix), #0x00
+   025F                     428 00104$:
+   025F 7A            [ 4]  429 	ld	a, d
+   0260 B3            [ 4]  430 	or	a, e
+   0261 28 72         [12]  431 	jr	Z,00106$
+                            432 ;fyos_c.c:82: parmnum++;
+   0263 DD 34 FE      [23]  433 	inc	-2 (ix)
+   0266 20 03         [12]  434 	jr	NZ,00131$
+   0268 DD 34 FF      [23]  435 	inc	-1 (ix)
+   026B                     436 00131$:
+   026B DD 4E FE      [19]  437 	ld	c, -2 (ix)
+   026E DD 46 FF      [19]  438 	ld	b, -1 (ix)
+                            439 ;fyos_c.c:83: hexint = 0;
+   0271 21 00 00      [10]  440 	ld	hl, #0x0000
+   0274 E3            [19]  441 	ex	(sp), hl
+                            442 ;fyos_c.c:84: hexbyte = 0;
+   0275 DD 36 FD 00   [19]  443 	ld	-3 (ix), #0x00
+                            444 ;fyos_c.c:85: if (hextoint(result, &hexint) == 1)
+   0279 21 00 00      [10]  445 	ld	hl, #0x0000
+   027C 39            [11]  446 	add	hl, sp
+   027D C5            [11]  447 	push	bc
+   027E D5            [11]  448 	push	de
+   027F E5            [11]  449 	push	hl
+   0280 D5            [11]  450 	push	de
+   0281 CDr00r00      [17]  451 	call	_hextoint
+   0284 F1            [10]  452 	pop	af
+   0285 F1            [10]  453 	pop	af
+   0286 D1            [10]  454 	pop	de
+   0287 C1            [10]  455 	pop	bc
+   0288 2D            [ 4]  456 	dec	l
+   0289 20 2C         [12]  457 	jr	NZ,00102$
+                            458 ;fyos_c.c:96: __endasm;
+   028B F5            [11]  459 	push	af
+   028C C5            [11]  460 	push	bc
+   028D DD 4E FC      [19]  461 	ld	c, -4(ix) ; low byte hexint
+   0290 DD 46 FD      [19]  462 	ld	b, -3(ix) ; high byte hexint
+   0293 ED 78         [12]  463 	in	a, (C)
+   0295 DD 77 FB      [19]  464 	ld	-5(ix), a ; hexbyte
+   0298 C1            [10]  465 	pop	bc
+   0299 F1            [10]  466 	pop	af
+                            467 ;fyos_c.c:97: printf("%04x -> %02x\n", hexint, hexbyte);
+   029A DD 5E FD      [19]  468 	ld	e, -3 (ix)
+   029D 16 00         [ 7]  469 	ld	d, #0x00
+   029F C5            [11]  470 	push	bc
+   02A0 D5            [11]  471 	push	de
+   02A1 DD 6E FB      [19]  472 	ld	l, -5 (ix)
+   02A4 DD 66 FC      [19]  473 	ld	h, -4 (ix)
+   02A7 E5            [11]  474 	push	hl
+   02A8 21rF0r02      [10]  475 	ld	hl, #___str_16
+   02AB E5            [11]  476 	push	hl
+   02AC CDr00r00      [17]  477 	call	_printf
+   02AF 21 06 00      [10]  478 	ld	hl, #6
+   02B2 39            [11]  479 	add	hl, sp
+   02B3 F9            [ 6]  480 	ld	sp, hl
+   02B4 C1            [10]  481 	pop	bc
+   02B5 18 0C         [12]  482 	jr	00103$
+   02B7                     483 00102$:
+                            484 ;fyos_c.c:99: else { printf("Invalid address: %s\n\n", result); return; }       		
+   02B7 D5            [11]  485 	push	de
+   02B8 21rFEr02      [10]  486 	ld	hl, #___str_17
+   02BB E5            [11]  487 	push	hl
+   02BC CDr00r00      [17]  488 	call	_printf
+   02BF F1            [10]  489 	pop	af
+   02C0 F1            [10]  490 	pop	af
+   02C1 18 26         [12]  491 	jr	00109$
+   02C3                     492 00103$:
+                            493 ;fyos_c.c:100: result = strtok( NULL, " " );
+   02C3 C5            [11]  494 	push	bc
+   02C4 21rEEr02      [10]  495 	ld	hl, #___str_15
+   02C7 E5            [11]  496 	push	hl
+   02C8 21 00 00      [10]  497 	ld	hl, #0x0000
+   02CB E5            [11]  498 	push	hl
+   02CC CDr00r00      [17]  499 	call	_strtok
+   02CF F1            [10]  500 	pop	af
+   02D0 F1            [10]  501 	pop	af
+   02D1 EB            [ 4]  502 	ex	de,hl
+   02D2 C1            [10]  503 	pop	bc
+   02D3 18 8A         [12]  504 	jr	00104$
+   02D5                     505 00106$:
+                            506 ;fyos_c.c:103: if (parmnum == 0) { printf("Usage: PORT_IN AB E1...\n"); }   	
+   02D5 78            [ 4]  507 	ld	a, b
+   02D6 B1            [ 4]  508 	or	a, c
+   02D7 20 08         [12]  509 	jr	NZ,00108$
+   02D9 21r14r03      [10]  510 	ld	hl, #___str_19
+   02DC E5            [11]  511 	push	hl
+   02DD CDr00r00      [17]  512 	call	_puts
+   02E0 F1            [10]  513 	pop	af
+   02E1                     514 00108$:
+                            515 ;fyos_c.c:104: printf("\n");
+   02E1 21r2Cr03      [10]  516 	ld	hl, #___str_21
+   02E4 E5            [11]  517 	push	hl
+   02E5 CDr00r00      [17]  518 	call	_puts
+   02E8 F1            [10]  519 	pop	af
+   02E9                     520 00109$:
+                            521 ;fyos_c.c:105: }
+   02E9 DD F9         [10]  522 	ld	sp, ix
+   02EB DD E1         [14]  523 	pop	ix
+   02ED C9            [10]  524 	ret
+   02EE                     525 ___str_15:
+   02EE 20                  526 	.ascii " "
+   02EF 00                  527 	.db 0x00
+   02F0                     528 ___str_16:
+   02F0 25 30 34 78 20 2D   529 	.ascii "%04x -> %02x"
+        3E 20 25 30 32 78
+   02FC 0A                  530 	.db 0x0a
+   02FD 00                  531 	.db 0x00
+   02FE                     532 ___str_17:
+   02FE 49 6E 76 61 6C 69   533 	.ascii "Invalid address: %s"
+        64 20 61 64 64 72
+        65 73 73 3A 20 25
+        73
+   0311 0A                  534 	.db 0x0a
+   0312 0A                  535 	.db 0x0a
+   0313 00                  536 	.db 0x00
+   0314                     537 ___str_19:
+   0314 55 73 61 67 65 3A   538 	.ascii "Usage: PORT_IN AB E1..."
+        20 50 4F 52 54 5F
+        49 4E 20 41 42 20
+        45 31 2E 2E 2E
+   032B 00                  539 	.db 0x00
+   032C                     540 ___str_21:
+   032C 00                  541 	.db 0x00
+                            542 ;fyos_c.c:109: void cmd_port_out(char *inputstring)
+                            543 ;	---------------------------------
+                            544 ; Function cmd_port_out
+                            545 ; ---------------------------------
+   032D                     546 _cmd_port_out::
+   032D DD E5         [15]  547 	push	ix
+   032F DD 21 00 00   [14]  548 	ld	ix,#0
+   0333 DD 39         [15]  549 	add	ix,sp
+   0335 F5            [11]  550 	push	af
+   0336 F5            [11]  551 	push	af
+   0337 3B            [ 6]  552 	dec	sp
+                            553 ;fyos_c.c:113: unsigned int hexint = 0;
+   0338 DD 36 FC 00   [19]  554 	ld	-4 (ix), #0x00
+   033C DD 36 FD 00   [19]  555 	ld	-3 (ix), #0x00
+                            556 ;fyos_c.c:114: unsigned char hexbyte = 0;
+   0340 DD 36 FB 00   [19]  557 	ld	-5 (ix), #0x00
+                            558 ;fyos_c.c:115: int parmnum = 0;
+   0344 01 00 00      [10]  559 	ld	bc, #0x0000
+                            560 ;fyos_c.c:117: result = strtok(inputstring, " ");
+   0347 C5            [11]  561 	push	bc
+   0348 21r29r04      [10]  562 	ld	hl, #___str_22
+   034B E5            [11]  563 	push	hl
+   034C DD 6E 04      [19]  564 	ld	l, 4 (ix)
+   034F DD 66 05      [19]  565 	ld	h, 5 (ix)
+   0352 E5            [11]  566 	push	hl
+   0353 CDr00r00      [17]  567 	call	_strtok
+   0356 F1            [10]  568 	pop	af
+   0357 F1            [10]  569 	pop	af
+   0358 EB            [ 4]  570 	ex	de,hl
+   0359 C1            [10]  571 	pop	bc
+                            572 ;fyos_c.c:118: while (result != NULL) 
+   035A DD 36 FE 00   [19]  573 	ld	-2 (ix), #0x00
+   035E DD 36 FF 00   [19]  574 	ld	-1 (ix), #0x00
+   0362                     575 00110$:
+   0362 7A            [ 4]  576 	ld	a, d
+   0363 B3            [ 4]  577 	or	a, e
+   0364 CArF5r03      [10]  578 	jp	Z, 00112$
+                            579 ;fyos_c.c:120: parmnum++;
+   0367 DD 34 FE      [23]  580 	inc	-2 (ix)
+   036A 20 03         [12]  581 	jr	NZ,00153$
+   036C DD 34 FF      [23]  582 	inc	-1 (ix)
+   036F                     583 00153$:
+   036F DD 4E FE      [19]  584 	ld	c, -2 (ix)
+   0372 DD 46 FF      [19]  585 	ld	b, -1 (ix)
+                            586 ;fyos_c.c:121: if (parmnum == 1)
+   0375 DD 7E FE      [19]  587 	ld	a, -2 (ix)
+   0378 3D            [ 4]  588 	dec	a
+   0379 DD B6 FF      [19]  589 	or	a, -1 (ix)
+   037C 20 27         [12]  590 	jr	NZ,00104$
+                            591 ;fyos_c.c:123: hexint = 0;
+   037E DD 36 FC 00   [19]  592 	ld	-4 (ix), #0x00
+   0382 DD 36 FD 00   [19]  593 	ld	-3 (ix), #0x00
+                            594 ;fyos_c.c:124: if (hextoint(result, &hexint) != 1) { printf("Invalid address: %s\n\n", result); return; }
+   0386 21 01 00      [10]  595 	ld	hl, #0x0001
+   0389 39            [11]  596 	add	hl, sp
+   038A C5            [11]  597 	push	bc
+   038B D5            [11]  598 	push	de
+   038C E5            [11]  599 	push	hl
+   038D D5            [11]  600 	push	de
+   038E CDr00r00      [17]  601 	call	_hextoint
+   0391 F1            [10]  602 	pop	af
+   0392 F1            [10]  603 	pop	af
+   0393 D1            [10]  604 	pop	de
+   0394 C1            [10]  605 	pop	bc
+   0395 2D            [ 4]  606 	dec	l
+   0396 28 0D         [12]  607 	jr	Z,00104$
+   0398 D5            [11]  608 	push	de
+   0399 21r2Br04      [10]  609 	ld	hl, #___str_23
+   039C E5            [11]  610 	push	hl
+   039D CDr00r00      [17]  611 	call	_printf
+   03A0 F1            [10]  612 	pop	af
+   03A1 F1            [10]  613 	pop	af
+   03A2 C3r24r04      [10]  614 	jp	00116$
+   03A5                     615 00104$:
+                            616 ;fyos_c.c:126: if (parmnum == 2)
+   03A5 DD 7E FE      [19]  617 	ld	a, -2 (ix)
+   03A8 D6 02         [ 7]  618 	sub	a, #0x02
+   03AA DD B6 FF      [19]  619 	or	a, -1 (ix)
+   03AD 20 33         [12]  620 	jr	NZ,00109$
+                            621 ;fyos_c.c:128: hexbyte = 0;
+   03AF DD 36 FB 00   [19]  622 	ld	-5 (ix), #0x00
+                            623 ;fyos_c.c:129: if (hextobyte(result, &hexbyte) == 1)
+   03B3 21 00 00      [10]  624 	ld	hl, #0x0000
+   03B6 39            [11]  625 	add	hl, sp
+   03B7 C5            [11]  626 	push	bc
+   03B8 D5            [11]  627 	push	de
+   03B9 E5            [11]  628 	push	hl
+   03BA D5            [11]  629 	push	de
+   03BB CDr00r00      [17]  630 	call	_hextobyte
+   03BE F1            [10]  631 	pop	af
+   03BF F1            [10]  632 	pop	af
+   03C0 D1            [10]  633 	pop	de
+   03C1 C1            [10]  634 	pop	bc
+   03C2 2D            [ 4]  635 	dec	l
+   03C3 20 11         [12]  636 	jr	NZ,00106$
+                            637 ;fyos_c.c:140: __endasm;
+   03C5 F5            [11]  638 	push	af
+   03C6 C5            [11]  639 	push	bc
+   03C7 DD 4E FC      [19]  640 	ld	c, -4(ix) ; low byte hexint
+   03CA DD 46 FD      [19]  641 	ld	b, -3(ix) ; high byte hexint
+   03CD DD 7E FB      [19]  642 	ld	a, -5(ix) ; hexbyte
+   03D0 ED 79         [12]  643 	out	(C), a
+   03D2 C1            [10]  644 	pop	bc
+   03D3 F1            [10]  645 	pop	af
+   03D4 18 0C         [12]  646 	jr	00109$
+   03D6                     647 00106$:
+                            648 ;fyos_c.c:142: else { printf("Invalid data byte: %s\n\n", result); return; }
+   03D6 D5            [11]  649 	push	de
+   03D7 21r41r04      [10]  650 	ld	hl, #___str_24
+   03DA E5            [11]  651 	push	hl
+   03DB CDr00r00      [17]  652 	call	_printf
+   03DE F1            [10]  653 	pop	af
+   03DF F1            [10]  654 	pop	af
+   03E0 18 42         [12]  655 	jr	00116$
+   03E2                     656 00109$:
+                            657 ;fyos_c.c:144: result = strtok( NULL, " " );
+   03E2 C5            [11]  658 	push	bc
+   03E3 21r29r04      [10]  659 	ld	hl, #___str_22
+   03E6 E5            [11]  660 	push	hl
+   03E7 21 00 00      [10]  661 	ld	hl, #0x0000
+   03EA E5            [11]  662 	push	hl
+   03EB CDr00r00      [17]  663 	call	_strtok
+   03EE F1            [10]  664 	pop	af
+   03EF F1            [10]  665 	pop	af
+   03F0 EB            [ 4]  666 	ex	de,hl
+   03F1 C1            [10]  667 	pop	bc
+   03F2 C3r62r03      [10]  668 	jp	00110$
+   03F5                     669 00112$:
+                            670 ;fyos_c.c:147: if (parmnum == 0) { printf("Usage: PORT_OUT AB E1\n"); }
+   03F5 78            [ 4]  671 	ld	a, b
+   03F6 B1            [ 4]  672 	or	a, c
+   03F7 20 0A         [12]  673 	jr	NZ,00114$
+   03F9 21r59r04      [10]  674 	ld	hl, #___str_26
+   03FC E5            [11]  675 	push	hl
+   03FD CDr00r00      [17]  676 	call	_puts
+   0400 F1            [10]  677 	pop	af
+   0401 18 19         [12]  678 	jr	00115$
+   0403                     679 00114$:
+                            680 ;fyos_c.c:148: else printf("%04x -> %02x\n", hexint, hexbyte);
+   0403 DD 4E FB      [19]  681 	ld	c, -5 (ix)
+   0406 06 00         [ 7]  682 	ld	b, #0x00
+   0408 C5            [11]  683 	push	bc
+   0409 DD 6E FC      [19]  684 	ld	l, -4 (ix)
+   040C DD 66 FD      [19]  685 	ld	h, -3 (ix)
+   040F E5            [11]  686 	push	hl
+   0410 21r6Fr04      [10]  687 	ld	hl, #___str_27
+   0413 E5            [11]  688 	push	hl
+   0414 CDr00r00      [17]  689 	call	_printf
+   0417 21 06 00      [10]  690 	ld	hl, #6
+   041A 39            [11]  691 	add	hl, sp
+   041B F9            [ 6]  692 	ld	sp, hl
+   041C                     693 00115$:
+                            694 ;fyos_c.c:149: printf("\n");
+   041C 21r7Dr04      [10]  695 	ld	hl, #___str_29
+   041F E5            [11]  696 	push	hl
+   0420 CDr00r00      [17]  697 	call	_puts
+   0423 F1            [10]  698 	pop	af
+   0424                     699 00116$:
+                            700 ;fyos_c.c:150: }
+   0424 DD F9         [10]  701 	ld	sp, ix
+   0426 DD E1         [14]  702 	pop	ix
+   0428 C9            [10]  703 	ret
+   0429                     704 ___str_22:
+   0429 20                  705 	.ascii " "
+   042A 00                  706 	.db 0x00
+   042B                     707 ___str_23:
+   042B 49 6E 76 61 6C 69   708 	.ascii "Invalid address: %s"
+        64 20 61 64 64 72
+        65 73 73 3A 20 25
+        73
+   043E 0A                  709 	.db 0x0a
+   043F 0A                  710 	.db 0x0a
+   0440 00                  711 	.db 0x00
+   0441                     712 ___str_24:
+   0441 49 6E 76 61 6C 69   713 	.ascii "Invalid data byte: %s"
+        64 20 64 61 74 61
+        20 62 79 74 65 3A
+        20 25 73
+   0456 0A                  714 	.db 0x0a
+   0457 0A                  715 	.db 0x0a
+   0458 00                  716 	.db 0x00
+   0459                     717 ___str_26:
+   0459 55 73 61 67 65 3A   718 	.ascii "Usage: PORT_OUT AB E1"
+        20 50 4F 52 54 5F
+        4F 55 54 20 41 42
+        20 45 31
+   046E 00                  719 	.db 0x00
+   046F                     720 ___str_27:
+   046F 25 30 34 78 20 2D   721 	.ascii "%04x -> %02x"
+        3E 20 25 30 32 78
+   047B 0A                  722 	.db 0x0a
+   047C 00                  723 	.db 0x00
+   047D                     724 ___str_29:
+   047D 00                  725 	.db 0x00
+                            726 ;fyos_c.c:154: void cmd_hextoint(char *inputstring)
+                            727 ;	---------------------------------
+                            728 ; Function cmd_hextoint
+                            729 ; ---------------------------------
+   047E                     730 _cmd_hextoint::
+   047E DD E5         [15]  731 	push	ix
+   0480 DD 21 00 00   [14]  732 	ld	ix,#0
+   0484 DD 39         [15]  733 	add	ix,sp
+   0486 F5            [11]  734 	push	af
+                            735 ;fyos_c.c:160: result = strtok(inputstring, " ");
+   0487 21r06r05      [10]  736 	ld	hl, #___str_30
+   048A E5            [11]  737 	push	hl
+   048B DD 6E 04      [19]  738 	ld	l, 4 (ix)
+   048E DD 66 05      [19]  739 	ld	h, 5 (ix)
+   0491 E5            [11]  740 	push	hl
+   0492 CDr00r00      [17]  741 	call	_strtok
+   0495 F1            [10]  742 	pop	af
+   0496 F1            [10]  743 	pop	af
+   0497 4D            [ 4]  744 	ld	c, l
+   0498 44            [ 4]  745 	ld	b, h
+                            746 ;fyos_c.c:161: while (result != NULL) 
+   0499 11 00 00      [10]  747 	ld	de, #0x0000
+   049C                     748 00104$:
+   049C 78            [ 4]  749 	ld	a, b
+   049D B1            [ 4]  750 	or	a, c
+   049E 28 4E         [12]  751 	jr	Z,00106$
+                            752 ;fyos_c.c:163: parmnum++;
+   04A0 13            [ 6]  753 	inc	de
+                            754 ;fyos_c.c:164: hexint = 0;
+   04A1 21 00 00      [10]  755 	ld	hl, #0x0000
+   04A4 E3            [19]  756 	ex	(sp), hl
+                            757 ;fyos_c.c:165: if (hextoint(result, &hexint) == 1) printf("%4s -> %u\n", result, hexint);
+   04A5 21 00 00      [10]  758 	ld	hl, #0x0000
+   04A8 39            [11]  759 	add	hl, sp
+   04A9 C5            [11]  760 	push	bc
+   04AA D5            [11]  761 	push	de
+   04AB E5            [11]  762 	push	hl
+   04AC C5            [11]  763 	push	bc
+   04AD CDr00r00      [17]  764 	call	_hextoint
+   04B0 F1            [10]  765 	pop	af
+   04B1 F1            [10]  766 	pop	af
+   04B2 D1            [10]  767 	pop	de
+   04B3 C1            [10]  768 	pop	bc
+   04B4 2D            [ 4]  769 	dec	l
+   04B5 20 18         [12]  770 	jr	NZ,00102$
+   04B7 D5            [11]  771 	push	de
+   04B8 DD 6E FE      [19]  772 	ld	l, -2 (ix)
+   04BB DD 66 FF      [19]  773 	ld	h, -1 (ix)
+   04BE E5            [11]  774 	push	hl
+   04BF C5            [11]  775 	push	bc
+   04C0 21r08r05      [10]  776 	ld	hl, #___str_31
+   04C3 E5            [11]  777 	push	hl
+   04C4 CDr00r00      [17]  778 	call	_printf
+   04C7 21 06 00      [10]  779 	ld	hl, #6
+   04CA 39            [11]  780 	add	hl, sp
+   04CB F9            [ 6]  781 	ld	sp, hl
+   04CC D1            [10]  782 	pop	de
+   04CD 18 0C         [12]  783 	jr	00103$
+   04CF                     784 00102$:
+                            785 ;fyos_c.c:166: else printf("Invalid hex: %s\n", result);
+   04CF D5            [11]  786 	push	de
+   04D0 C5            [11]  787 	push	bc
+   04D1 21r13r05      [10]  788 	ld	hl, #___str_32
+   04D4 E5            [11]  789 	push	hl
+   04D5 CDr00r00      [17]  790 	call	_printf
+   04D8 F1            [10]  791 	pop	af
+   04D9 F1            [10]  792 	pop	af
+   04DA D1            [10]  793 	pop	de
+   04DB                     794 00103$:
+                            795 ;fyos_c.c:167: result = strtok( NULL, " " );
+   04DB D5            [11]  796 	push	de
+   04DC 21r06r05      [10]  797 	ld	hl, #___str_30
+   04DF E5            [11]  798 	push	hl
+   04E0 21 00 00      [10]  799 	ld	hl, #0x0000
+   04E3 E5            [11]  800 	push	hl
+   04E4 CDr00r00      [17]  801 	call	_strtok
+   04E7 F1            [10]  802 	pop	af
+   04E8 F1            [10]  803 	pop	af
+   04E9 4D            [ 4]  804 	ld	c, l
+   04EA 44            [ 4]  805 	ld	b, h
+   04EB D1            [10]  806 	pop	de
+   04EC 18 AE         [12]  807 	jr	00104$
+   04EE                     808 00106$:
+                            809 ;fyos_c.c:170: if (parmnum == 0) { printf("Usage: hextoint FFC 422A 3B...\n"); }
+   04EE 7A            [ 4]  810 	ld	a, d
+   04EF B3            [ 4]  811 	or	a, e
+   04F0 20 08         [12]  812 	jr	NZ,00108$
+   04F2 21r24r05      [10]  813 	ld	hl, #___str_34
+   04F5 E5            [11]  814 	push	hl
+   04F6 CDr00r00      [17]  815 	call	_puts
+   04F9 F1            [10]  816 	pop	af
+   04FA                     817 00108$:
+                            818 ;fyos_c.c:171: printf("\n");
+   04FA 21r43r05      [10]  819 	ld	hl, #___str_36
+   04FD E5            [11]  820 	push	hl
+   04FE CDr00r00      [17]  821 	call	_puts
+                            822 ;fyos_c.c:172: }
+   0501 DD F9         [10]  823 	ld	sp,ix
+   0503 DD E1         [14]  824 	pop	ix
+   0505 C9            [10]  825 	ret
+   0506                     826 ___str_30:
+   0506 20                  827 	.ascii " "
+   0507 00                  828 	.db 0x00
+   0508                     829 ___str_31:
+   0508 25 34 73 20 2D 3E   830 	.ascii "%4s -> %u"
+        20 25 75
+   0511 0A                  831 	.db 0x0a
+   0512 00                  832 	.db 0x00
+   0513                     833 ___str_32:
+   0513 49 6E 76 61 6C 69   834 	.ascii "Invalid hex: %s"
+        64 20 68 65 78 3A
+        20 25 73
+   0522 0A                  835 	.db 0x0a
+   0523 00                  836 	.db 0x00
+   0524                     837 ___str_34:
+   0524 55 73 61 67 65 3A   838 	.ascii "Usage: hextoint FFC 422A 3B..."
+        20 68 65 78 74 6F
+        69 6E 74 20 46 46
+        43 20 34 32 32 41
+        20 33 42 2E 2E 2E
+   0542 00                  839 	.db 0x00
+   0543                     840 ___str_36:
+   0543 00                  841 	.db 0x00
+                            842 ;fyos_c.c:176: void cmd_scancodes()
+                            843 ;	---------------------------------
+                            844 ; Function cmd_scancodes
+                            845 ; ---------------------------------
+   0544                     846 _cmd_scancodes::
+   0544 DD E5         [15]  847 	push	ix
+   0546 DD 21 00 00   [14]  848 	ld	ix,#0
+   054A DD 39         [15]  849 	add	ix,sp
+   054C 21 FA FF      [10]  850 	ld	hl, #-6
+   054F 39            [11]  851 	add	hl, sp
+   0550 F9            [ 6]  852 	ld	sp, hl
+                            853 ;fyos_c.c:178: unsigned char lastkey = 0;
+   0551 0E 00         [ 7]  854 	ld	c, #0x00
+                            855 ;fyos_c.c:181: disable_charbuffer();
+   0553 C5            [11]  856 	push	bc
+   0554 CDr00r00      [17]  857 	call	_disable_charbuffer
+   0557 C1            [10]  858 	pop	bc
+                            859 ;fyos_c.c:187: while (getscancode(mycharbuffer) == 255) {} // get last scancodes just to clear it out
+   0558 21 00 00      [10]  860 	ld	hl, #0x0000
+   055B 39            [11]  861 	add	hl, sp
+   055C EB            [ 4]  862 	ex	de, hl
+   055D                     863 00101$:
+   055D 6B            [ 4]  864 	ld	l, e
+   055E 62            [ 4]  865 	ld	h, d
+   055F C5            [11]  866 	push	bc
+   0560 D5            [11]  867 	push	de
+   0561 E5            [11]  868 	push	hl
+   0562 CDr00r00      [17]  869 	call	_getscancode
+   0565 F1            [10]  870 	pop	af
+   0566 D1            [10]  871 	pop	de
+   0567 C1            [10]  872 	pop	bc
+   0568 7D            [ 4]  873 	ld	a, l
+   0569 3C            [ 4]  874 	inc	a
+   056A B4            [ 4]  875 	or	a, h
+   056B 28 F0         [12]  876 	jr	Z,00101$
+                            877 ;fyos_c.c:189: printf("Press any key to show scancode, or Back to return to command prompt.\n\n");
+   056D C5            [11]  878 	push	bc
+   056E D5            [11]  879 	push	de
+   056F 21rDBr05      [10]  880 	ld	hl, #___str_38
+   0572 E5            [11]  881 	push	hl
+   0573 CDr00r00      [17]  882 	call	_puts
+   0576 F1            [10]  883 	pop	af
+   0577 D1            [10]  884 	pop	de
+   0578 C1            [10]  885 	pop	bc
+                            886 ;fyos_c.c:191: while (lastkey != 1)
+   0579 DD 73 FE      [19]  887 	ld	-2 (ix), e
+   057C DD 72 FF      [19]  888 	ld	-1 (ix), d
+   057F DD 73 FC      [19]  889 	ld	-4 (ix), e
+   0582 DD 72 FD      [19]  890 	ld	-3 (ix), d
+   0585                     891 00106$:
+   0585 79            [ 4]  892 	ld	a, c
+   0586 3D            [ 4]  893 	dec	a
+   0587 28 36         [12]  894 	jr	Z,00108$
+                            895 ;fyos_c.c:193: if (getscancode(mycharbuffer) != 255)
+   0589 DD 6E FE      [19]  896 	ld	l, -2 (ix)
+   058C DD 66 FF      [19]  897 	ld	h, -1 (ix)
+   058F C5            [11]  898 	push	bc
+   0590 D5            [11]  899 	push	de
+   0591 E5            [11]  900 	push	hl
+   0592 CDr00r00      [17]  901 	call	_getscancode
+   0595 F1            [10]  902 	pop	af
+   0596 D1            [10]  903 	pop	de
+   0597 C1            [10]  904 	pop	bc
+   0598 7D            [ 4]  905 	ld	a, l
+   0599 3C            [ 4]  906 	inc	a
+   059A B4            [ 4]  907 	or	a, h
+   059B 28 E8         [12]  908 	jr	Z,00106$
+                            909 ;fyos_c.c:195: printfcenter("Scancode: %03d   Key state: %03d\n", mycharbuffer[0], mycharbuffer[1]);
+   059D DD 6E FC      [19]  910 	ld	l, -4 (ix)
+   05A0 DD 66 FD      [19]  911 	ld	h, -3 (ix)
+   05A3 23            [ 6]  912 	inc	hl
+   05A4 4E            [ 7]  913 	ld	c, (hl)
+   05A5 06 00         [ 7]  914 	ld	b, #0x00
+   05A7 1A            [ 7]  915 	ld	a, (de)
+   05A8 6F            [ 4]  916 	ld	l, a
+   05A9 26 00         [ 7]  917 	ld	h, #0x00
+   05AB D5            [11]  918 	push	de
+   05AC C5            [11]  919 	push	bc
+   05AD E5            [11]  920 	push	hl
+   05AE 21r21r06      [10]  921 	ld	hl, #___str_39
+   05B1 E5            [11]  922 	push	hl
+   05B2 CDr00r00      [17]  923 	call	_printfcenter
+   05B5 21 06 00      [10]  924 	ld	hl, #6
+   05B8 39            [11]  925 	add	hl, sp
+   05B9 F9            [ 6]  926 	ld	sp, hl
+   05BA D1            [10]  927 	pop	de
+                            928 ;fyos_c.c:196: lastkey = mycharbuffer[0];
+   05BB 1A            [ 7]  929 	ld	a, (de)
+   05BC 4F            [ 4]  930 	ld	c, a
+   05BD 18 C6         [12]  931 	jr	00106$
+   05BF                     932 00108$:
+                            933 ;fyos_c.c:199: printf("\n");
+   05BF 21r43r06      [10]  934 	ld	hl, #___str_41
+   05C2 E5            [11]  935 	push	hl
+   05C3 CDr00r00      [17]  936 	call	_puts
+   05C6 F1            [10]  937 	pop	af
+                            938 ;fyos_c.c:201: enable_charbuffer();
+   05C7 CDr00r00      [17]  939 	call	_enable_charbuffer
+                            940 ;fyos_c.c:203: while (kbhit()) getchar();
+   05CA                     941 00109$:
+   05CA CDr00r00      [17]  942 	call	_kbhit
+   05CD 7C            [ 4]  943 	ld	a, h
+   05CE B5            [ 4]  944 	or	a, l
+   05CF 28 05         [12]  945 	jr	Z,00112$
+   05D1 CDr00r00      [17]  946 	call	_getchar
+   05D4 18 F4         [12]  947 	jr	00109$
+   05D6                     948 00112$:
+                            949 ;fyos_c.c:205: }
+   05D6 DD F9         [10]  950 	ld	sp, ix
+   05D8 DD E1         [14]  951 	pop	ix
+   05DA C9            [10]  952 	ret
+   05DB                     953 ___str_38:
+   05DB 50 72 65 73 73 20   954 	.ascii "Press any key to show scancode, or Back to return to command"
+        61 6E 79 20 6B 65
+        79 20 74 6F 20 73
+        68 6F 77 20 73 63
+        61 6E 63 6F 64 65
+        2C 20 6F 72 20 42
+        61 63 6B 20 74 6F
+        20 72 65 74 75 72
+        6E 20 74 6F 20 63
+        6F 6D 6D 61 6E 64
+   0617 20 70 72 6F 6D 70   955 	.ascii " prompt."
+        74 2E
+   061F 0A                  956 	.db 0x0a
+   0620 00                  957 	.db 0x00
+   0621                     958 ___str_39:
+   0621 53 63 61 6E 63 6F   959 	.ascii "Scancode: %03d   Key state: %03d"
+        64 65 3A 20 25 30
+        33 64 20 20 20 4B
+        65 79 20 73 74 61
+        74 65 3A 20 25 30
+        33 64
+   0641 0A                  960 	.db 0x0a
+   0642 00                  961 	.db 0x00
+   0643                     962 ___str_41:
+   0643 00                  963 	.db 0x00
+                            964 ;fyos_c.c:208: void cmd_help(char *helpcommand)
+                            965 ;	---------------------------------
+                            966 ; Function cmd_help
+                            967 ; ---------------------------------
+   0644                     968 _cmd_help::
+   0644 DD E5         [15]  969 	push	ix
+   0646 DD 21 00 00   [14]  970 	ld	ix,#0
+   064A DD 39         [15]  971 	add	ix,sp
+                            972 ;fyos_c.c:212: if (helpcommand[0] == 0)
+   064C DD 4E 04      [19]  973 	ld	c, 4 (ix)
+   064F DD 46 05      [19]  974 	ld	b, 5 (ix)
+   0652 0A            [ 7]  975 	ld	a, (bc)
+   0653 B7            [ 4]  976 	or	a, a
+   0654 20 0B         [12]  977 	jr	NZ,00102$
+                            978 ;fyos_c.c:217: puts("Use HELP <COMMAND> for more info.\n\n");
+   0656 21r46r09      [10]  979 	ld	hl, #___str_74
+   0659 E5            [11]  980 	push	hl
+   065A CDr00r00      [17]  981 	call	_puts
+   065D F1            [10]  982 	pop	af
+                            983 ;fyos_c.c:218: return;
+   065E C3r63r07      [10]  984 	jp	00130$
+   0661                     985 00102$:
+                            986 ;fyos_c.c:220: strtolower(helpcommand);
+   0661 C5            [11]  987 	push	bc
+   0662 C5            [11]  988 	push	bc
+   0663 CDr00r00      [17]  989 	call	_strtolower
+   0666 21r66r07      [10]  990 	ld	hl, #___str_45
+   0669 E3            [19]  991 	ex	(sp),hl
+   066A DD 6E 04      [19]  992 	ld	l, 4 (ix)
+   066D DD 66 05      [19]  993 	ld	h, 5 (ix)
+   0670 E5            [11]  994 	push	hl
+   0671 CDr00r00      [17]  995 	call	_strcmp
+   0674 F1            [10]  996 	pop	af
+   0675 F1            [10]  997 	pop	af
+   0676 C1            [10]  998 	pop	bc
+   0677 7C            [ 4]  999 	ld	a, h
+   0678 B5            [ 4] 1000 	or	a, l
+   0679 20 0B         [12] 1001 	jr	NZ,00128$
+   067B 21r6Fr07      [10] 1002 	ld	hl, #___str_47
+   067E E5            [11] 1003 	push	hl
+   067F CDr00r00      [17] 1004 	call	_puts
+   0682 F1            [10] 1005 	pop	af
+   0683 C3r63r07      [10] 1006 	jp	00130$
+   0686                    1007 00128$:
+                           1008 ;fyos_c.c:226: else if (strcmp(helpcommand, "peek") == 0) printf("PEEK displays memory locations in hex.\n\n");
+   0686 C5            [11] 1009 	push	bc
+   0687 21r9Dr07      [10] 1010 	ld	hl, #___str_48
+   068A E5            [11] 1011 	push	hl
+   068B C5            [11] 1012 	push	bc
+   068C CDr00r00      [17] 1013 	call	_strcmp
+   068F F1            [10] 1014 	pop	af
+   0690 F1            [10] 1015 	pop	af
+   0691 C1            [10] 1016 	pop	bc
+   0692 7C            [ 4] 1017 	ld	a, h
+   0693 B5            [ 4] 1018 	or	a, l
+   0694 20 0B         [12] 1019 	jr	NZ,00125$
+   0696 21rA2r07      [10] 1020 	ld	hl, #___str_50
+   0699 E5            [11] 1021 	push	hl
+   069A CDr00r00      [17] 1022 	call	_puts
+   069D F1            [10] 1023 	pop	af
+   069E C3r63r07      [10] 1024 	jp	00130$
+   06A1                    1025 00125$:
+                           1026 ;fyos_c.c:227: else if (strcmp(helpcommand, "poke") == 0) printf("POKE writes a byte to a memory location.\n\n");
+   06A1 C5            [11] 1027 	push	bc
+   06A2 21rCAr07      [10] 1028 	ld	hl, #___str_51
+   06A5 E5            [11] 1029 	push	hl
+   06A6 C5            [11] 1030 	push	bc
+   06A7 CDr00r00      [17] 1031 	call	_strcmp
+   06AA F1            [10] 1032 	pop	af
+   06AB F1            [10] 1033 	pop	af
+   06AC C1            [10] 1034 	pop	bc
+   06AD 7C            [ 4] 1035 	ld	a, h
+   06AE B5            [ 4] 1036 	or	a, l
+   06AF 20 0B         [12] 1037 	jr	NZ,00122$
+   06B1 21rCFr07      [10] 1038 	ld	hl, #___str_53
+   06B4 E5            [11] 1039 	push	hl
+   06B5 CDr00r00      [17] 1040 	call	_puts
+   06B8 F1            [10] 1041 	pop	af
+   06B9 C3r63r07      [10] 1042 	jp	00130$
+   06BC                    1043 00122$:
+                           1044 ;fyos_c.c:228: else if (strcmp(helpcommand, "port_out") == 0) printf("PORT_OUT writes a byte to a port.\n\n");
+   06BC C5            [11] 1045 	push	bc
+   06BD 21rF9r07      [10] 1046 	ld	hl, #___str_54
+   06C0 E5            [11] 1047 	push	hl
+   06C1 C5            [11] 1048 	push	bc
+   06C2 CDr00r00      [17] 1049 	call	_strcmp
+   06C5 F1            [10] 1050 	pop	af
+   06C6 F1            [10] 1051 	pop	af
+   06C7 C1            [10] 1052 	pop	bc
+   06C8 7C            [ 4] 1053 	ld	a, h
+   06C9 B5            [ 4] 1054 	or	a, l
+   06CA 20 0B         [12] 1055 	jr	NZ,00119$
+   06CC 21r02r08      [10] 1056 	ld	hl, #___str_56
+   06CF E5            [11] 1057 	push	hl
+   06D0 CDr00r00      [17] 1058 	call	_puts
+   06D3 F1            [10] 1059 	pop	af
+   06D4 C3r63r07      [10] 1060 	jp	00130$
+   06D7                    1061 00119$:
+                           1062 ;fyos_c.c:229: else if (strcmp(helpcommand, "port_in") == 0) printf("PORT_IN reads a byte from port(s).\n\n");
+   06D7 C5            [11] 1063 	push	bc
+   06D8 21r25r08      [10] 1064 	ld	hl, #___str_57
+   06DB E5            [11] 1065 	push	hl
+   06DC C5            [11] 1066 	push	bc
+   06DD CDr00r00      [17] 1067 	call	_strcmp
+   06E0 F1            [10] 1068 	pop	af
+   06E1 F1            [10] 1069 	pop	af
+   06E2 C1            [10] 1070 	pop	bc
+   06E3 7C            [ 4] 1071 	ld	a, h
+   06E4 B5            [ 4] 1072 	or	a, l
+   06E5 20 0A         [12] 1073 	jr	NZ,00116$
+   06E7 21r2Dr08      [10] 1074 	ld	hl, #___str_59
+   06EA E5            [11] 1075 	push	hl
+   06EB CDr00r00      [17] 1076 	call	_puts
+   06EE F1            [10] 1077 	pop	af
+   06EF 18 72         [12] 1078 	jr	00130$
+   06F1                    1079 00116$:
+                           1080 ;fyos_c.c:230: else if (strcmp(helpcommand, "reset") == 0) printf("RESET resets FyOS to initial screen.\n\n");
+   06F1 C5            [11] 1081 	push	bc
+   06F2 21r51r08      [10] 1082 	ld	hl, #___str_60
+   06F5 E5            [11] 1083 	push	hl
+   06F6 C5            [11] 1084 	push	bc
+   06F7 CDr00r00      [17] 1085 	call	_strcmp
+   06FA F1            [10] 1086 	pop	af
+   06FB F1            [10] 1087 	pop	af
+   06FC C1            [10] 1088 	pop	bc
+   06FD 7C            [ 4] 1089 	ld	a, h
+   06FE B5            [ 4] 1090 	or	a, l
+   06FF 20 0A         [12] 1091 	jr	NZ,00113$
+   0701 21r57r08      [10] 1092 	ld	hl, #___str_62
+   0704 E5            [11] 1093 	push	hl
+   0705 CDr00r00      [17] 1094 	call	_puts
+   0708 F1            [10] 1095 	pop	af
+   0709 18 58         [12] 1096 	jr	00130$
+   070B                    1097 00113$:
+                           1098 ;fyos_c.c:232: else if (strcmp(helpcommand, "reboot") == 0) printf("REBOOT resets the Mailstation to 0x0000.\n\n");
+   070B C5            [11] 1099 	push	bc
+   070C 21r7Dr08      [10] 1100 	ld	hl, #___str_63
+   070F E5            [11] 1101 	push	hl
+   0710 C5            [11] 1102 	push	bc
+   0711 CDr00r00      [17] 1103 	call	_strcmp
+   0714 F1            [10] 1104 	pop	af
+   0715 F1            [10] 1105 	pop	af
+   0716 C1            [10] 1106 	pop	bc
+   0717 7C            [ 4] 1107 	ld	a, h
+   0718 B5            [ 4] 1108 	or	a, l
+   0719 20 0A         [12] 1109 	jr	NZ,00110$
+   071B 21r84r08      [10] 1110 	ld	hl, #___str_65
+   071E E5            [11] 1111 	push	hl
+   071F CDr00r00      [17] 1112 	call	_puts
+   0722 F1            [10] 1113 	pop	af
+   0723 18 3E         [12] 1114 	jr	00130$
+   0725                    1115 00110$:
+                           1116 ;fyos_c.c:233: else if (strcmp(helpcommand, "scancodes") == 0) printf("SCANCODES is an interactive key viewer.\n\n");
+   0725 C5            [11] 1117 	push	bc
+   0726 21rAEr08      [10] 1118 	ld	hl, #___str_66
+   0729 E5            [11] 1119 	push	hl
+   072A C5            [11] 1120 	push	bc
+   072B CDr00r00      [17] 1121 	call	_strcmp
+   072E F1            [10] 1122 	pop	af
+   072F F1            [10] 1123 	pop	af
+   0730 C1            [10] 1124 	pop	bc
+   0731 7C            [ 4] 1125 	ld	a, h
+   0732 B5            [ 4] 1126 	or	a, l
+   0733 20 0A         [12] 1127 	jr	NZ,00107$
+   0735 21rB8r08      [10] 1128 	ld	hl, #___str_68
+   0738 E5            [11] 1129 	push	hl
+   0739 CDr00r00      [17] 1130 	call	_puts
+   073C F1            [10] 1131 	pop	af
+   073D 18 24         [12] 1132 	jr	00130$
+   073F                    1133 00107$:
+                           1134 ;fyos_c.c:234: else if (strcmp(helpcommand, "powerdown") == 0) printf("POWERDOWN turns off the Mailstation\n  via firmware function 0x0A6B.\n\n");
+   073F C5            [11] 1135 	push	bc
+   0740 21rE1r08      [10] 1136 	ld	hl, #___str_69
+   0743 E5            [11] 1137 	push	hl
+   0744 C5            [11] 1138 	push	bc
+   0745 CDr00r00      [17] 1139 	call	_strcmp
+   0748 F1            [10] 1140 	pop	af
+   0749 F1            [10] 1141 	pop	af
+   074A C1            [10] 1142 	pop	bc
+   074B 7C            [ 4] 1143 	ld	a, h
+   074C B5            [ 4] 1144 	or	a, l
+   074D 20 0A         [12] 1145 	jr	NZ,00104$
+   074F 21rEBr08      [10] 1146 	ld	hl, #___str_71
+   0752 E5            [11] 1147 	push	hl
+   0753 CDr00r00      [17] 1148 	call	_puts
+   0756 F1            [10] 1149 	pop	af
+   0757 18 0A         [12] 1150 	jr	00130$
+   0759                    1151 00104$:
+                           1152 ;fyos_c.c:235: else printf("Unknown command: %s\n\n", helpcommand);	
+   0759 C5            [11] 1153 	push	bc
+   075A 21r30r09      [10] 1154 	ld	hl, #___str_72
+   075D E5            [11] 1155 	push	hl
+   075E CDr00r00      [17] 1156 	call	_printf
+   0761 F1            [10] 1157 	pop	af
+   0762 F1            [10] 1158 	pop	af
+   0763                    1159 00130$:
+                           1160 ;fyos_c.c:236: }
+   0763 DD E1         [14] 1161 	pop	ix
+   0765 C9            [10] 1162 	ret
+   0766                    1163 ___str_45:
+   0766 68 65 78 74 6F 69  1164 	.ascii "hextoint"
+        6E 74
+   076E 00                 1165 	.db 0x00
+   076F                    1166 ___str_47:
+   076F 48 45 58 54 4F 49  1167 	.ascii "HEXTOINT displays hex strings as"
+        4E 54 20 64 69 73
+        70 6C 61 79 73 20
+        68 65 78 20 73 74
+        72 69 6E 67 73 20
+        61 73
+   078F 0A                 1168 	.db 0x0a
+   0790 20 20 69 6E 74 65  1169 	.ascii "  integers."
+        67 65 72 73 2E
+   079B 0A                 1170 	.db 0x0a
+   079C 00                 1171 	.db 0x00
+   079D                    1172 ___str_48:
+   079D 70 65 65 6B        1173 	.ascii "peek"
+   07A1 00                 1174 	.db 0x00
+   07A2                    1175 ___str_50:
+   07A2 50 45 45 4B 20 64  1176 	.ascii "PEEK displays memory locations in hex."
+        69 73 70 6C 61 79
+        73 20 6D 65 6D 6F
+        72 79 20 6C 6F 63
+        61 74 69 6F 6E 73
+        20 69 6E 20 68 65
+        78 2E
+   07C8 0A                 1177 	.db 0x0a
+   07C9 00                 1178 	.db 0x00
+   07CA                    1179 ___str_51:
+   07CA 70 6F 6B 65        1180 	.ascii "poke"
+   07CE 00                 1181 	.db 0x00
+   07CF                    1182 ___str_53:
+   07CF 50 4F 4B 45 20 77  1183 	.ascii "POKE writes a byte to a memory location."
+        72 69 74 65 73 20
+        61 20 62 79 74 65
+        20 74 6F 20 61 20
+        6D 65 6D 6F 72 79
+        20 6C 6F 63 61 74
+        69 6F 6E 2E
+   07F7 0A                 1184 	.db 0x0a
+   07F8 00                 1185 	.db 0x00
+   07F9                    1186 ___str_54:
+   07F9 70 6F 72 74 5F 6F  1187 	.ascii "port_out"
+        75 74
+   0801 00                 1188 	.db 0x00
+   0802                    1189 ___str_56:
+   0802 50 4F 52 54 5F 4F  1190 	.ascii "PORT_OUT writes a byte to a port."
+        55 54 20 77 72 69
+        74 65 73 20 61 20
+        62 79 74 65 20 74
+        6F 20 61 20 70 6F
+        72 74 2E
+   0823 0A                 1191 	.db 0x0a
+   0824 00                 1192 	.db 0x00
+   0825                    1193 ___str_57:
+   0825 70 6F 72 74 5F 69  1194 	.ascii "port_in"
+        6E
+   082C 00                 1195 	.db 0x00
+   082D                    1196 ___str_59:
+   082D 50 4F 52 54 5F 49  1197 	.ascii "PORT_IN reads a byte from port(s)."
+        4E 20 72 65 61 64
+        73 20 61 20 62 79
+        74 65 20 66 72 6F
+        6D 20 70 6F 72 74
+        28 73 29 2E
+   084F 0A                 1198 	.db 0x0a
+   0850 00                 1199 	.db 0x00
+   0851                    1200 ___str_60:
+   0851 72 65 73 65 74     1201 	.ascii "reset"
+   0856 00                 1202 	.db 0x00
+   0857                    1203 ___str_62:
+   0857 52 45 53 45 54 20  1204 	.ascii "RESET resets FyOS to initial screen."
+        72 65 73 65 74 73
+        20 46 79 4F 53 20
+        74 6F 20 69 6E 69
+        74 69 61 6C 20 73
+        63 72 65 65 6E 2E
+   087B 0A                 1205 	.db 0x0a
+   087C 00                 1206 	.db 0x00
+   087D                    1207 ___str_63:
+   087D 72 65 62 6F 6F 74  1208 	.ascii "reboot"
+   0883 00                 1209 	.db 0x00
+   0884                    1210 ___str_65:
+   0884 52 45 42 4F 4F 54  1211 	.ascii "REBOOT resets the Mailstation to 0x0000."
+        20 72 65 73 65 74
+        73 20 74 68 65 20
+        4D 61 69 6C 73 74
+        61 74 69 6F 6E 20
+        74 6F 20 30 78 30
+        30 30 30 2E
+   08AC 0A                 1212 	.db 0x0a
+   08AD 00                 1213 	.db 0x00
+   08AE                    1214 ___str_66:
+   08AE 73 63 61 6E 63 6F  1215 	.ascii "scancodes"
+        64 65 73
+   08B7 00                 1216 	.db 0x00
+   08B8                    1217 ___str_68:
+   08B8 53 43 41 4E 43 4F  1218 	.ascii "SCANCODES is an interactive key viewer."
+        44 45 53 20 69 73
+        20 61 6E 20 69 6E
+        74 65 72 61 63 74
+        69 76 65 20 6B 65
+        79 20 76 69 65 77
+        65 72 2E
+   08DF 0A                 1219 	.db 0x0a
+   08E0 00                 1220 	.db 0x00
+   08E1                    1221 ___str_69:
+   08E1 70 6F 77 65 72 64  1222 	.ascii "powerdown"
+        6F 77 6E
+   08EA 00                 1223 	.db 0x00
+   08EB                    1224 ___str_71:
+   08EB 50 4F 57 45 52 44  1225 	.ascii "POWERDOWN turns off the Mailstation"
+        4F 57 4E 20 74 75
+        72 6E 73 20 6F 66
+        66 20 74 68 65 20
+        4D 61 69 6C 73 74
+        61 74 69 6F 6E
+   090E 0A                 1226 	.db 0x0a
+   090F 20 20 76 69 61 20  1227 	.ascii "  via firmware function 0x0A6B."
+        66 69 72 6D 77 61
+        72 65 20 66 75 6E
+        63 74 69 6F 6E 20
+        30 78 30 41 36 42
+        2E
+   092E 0A                 1228 	.db 0x0a
+   092F 00                 1229 	.db 0x00
+   0930                    1230 ___str_72:
+   0930 55 6E 6B 6E 6F 77  1231 	.ascii "Unknown command: %s"
+        6E 20 63 6F 6D 6D
+        61 6E 64 3A 20 25
+        73
+   0943 0A                 1232 	.db 0x0a
+   0944 0A                 1233 	.db 0x0a
+   0945 00                 1234 	.db 0x00
+   0946                    1235 ___str_74:
+   0946 41 76 61 69 6C 61  1236 	.ascii "Available commands:"
+        62 6C 65 20 63 6F
+        6D 6D 61 6E 64 73
+        3A
+   0959 0A                 1237 	.db 0x0a
+   095A 0A                 1238 	.db 0x0a
+   095B 0A                 1239 	.db 0x0a
+   095C 20 43 4C 53 2C 20  1240 	.ascii " CLS, HELP, HEXTOINT, PEEK, POKE,"
+        48 45 4C 50 2C 20
+        48 45 58 54 4F 49
+        4E 54 2C 20 50 45
+        45 4B 2C 20 50 4F
+        4B 45 2C
+   097D 0A                 1241 	.db 0x0a
+   097E 20 50 4F 52 54 5F  1242 	.ascii " PORT_IN, PORT_OUT, POWERDOWN, REBOOT,"
+        49 4E 2C 20 50 4F
+        52 54 5F 4F 55 54
+        2C 20 50 4F 57 45
+        52 44 4F 57 4E 2C
+        20 52 45 42 4F 4F
+        54 2C
+   09A4 0A                 1243 	.db 0x0a
+   09A5 20 52 45 53 45 54  1244 	.ascii " RESET, SCANCODES"
+        2C 20 53 43 41 4E
+        43 4F 44 45 53
+   09B6 0A                 1245 	.db 0x0a
+   09B7 0A                 1246 	.db 0x0a
+   09B8 0A                 1247 	.db 0x0a
+   09B9 55 73 65 20 48 45  1248 	.ascii "Use HELP <COMMAND> for more info."
+        4C 50 20 3C 43 4F
+        4D 4D 41 4E 44 3E
+        20 66 6F 72 20 6D
+        6F 72 65 20 69 6E
+        66 6F 2E
+   09DA 0A                 1249 	.db 0x0a
+   09DB 0A                 1250 	.db 0x0a
+   09DC 00                 1251 	.db 0x00
+                           1252 ;fyos_c.c:239: void printSP()
+                           1253 ;	---------------------------------
+                           1254 ; Function printSP
+                           1255 ; ---------------------------------
+   09DD                    1256 _printSP::
+   09DD F5            [11] 1257 	push	af
+                           1258 ;fyos_c.c:241: volatile unsigned int SPval = 0;
+   09DE 21 00 00      [10] 1259 	ld	hl, #0x0000
+   09E1 E3            [19] 1260 	ex	(sp), hl
+                           1261 ;fyos_c.c:248: __endasm;
+   09E2 21 00 00      [10] 1262 	ld	hl, #0
+   09E5 39            [11] 1263 	add	hl, sp
+   09E6 DD 74 FF      [19] 1264 	ld	-1(ix), h
+   09E9 DD 75 FE      [19] 1265 	ld	-2(ix), l
+                           1266 ;fyos_c.c:250: printf("SP: %x\n", SPval);
+   09EC E1            [10] 1267 	pop	hl
+   09ED E5            [11] 1268 	push	hl
+   09EE E5            [11] 1269 	push	hl
+   09EF 21rFAr09      [10] 1270 	ld	hl, #___str_75
+   09F2 E5            [11] 1271 	push	hl
+   09F3 CDr00r00      [17] 1272 	call	_printf
+   09F6 F1            [10] 1273 	pop	af
+   09F7 F1            [10] 1274 	pop	af
+                           1275 ;fyos_c.c:251: }
+   09F8 F1            [10] 1276 	pop	af
+   09F9 C9            [10] 1277 	ret
+   09FA                    1278 ___str_75:
+   09FA 53 50 3A 20 25 78  1279 	.ascii "SP: %x"
+   0A00 0A                 1280 	.db 0x0a
+   0A01 00                 1281 	.db 0x00
+                           1282 ;fyos_c.c:254: int main()
+                           1283 ;	---------------------------------
+                           1284 ; Function main
+                           1285 ; ---------------------------------
+   0A02                    1286 _main::
+                           1287 ;fyos_c.c:261: cursorx = 0;
+   0A02 21r00r00      [10] 1288 	ld	hl,#_cursorx + 0
+   0A05 36 00         [10] 1289 	ld	(hl), #0x00
+                           1290 ;fyos_c.c:262: cursory = 0;	
+   0A07 21r00r00      [10] 1291 	ld	hl,#_cursory + 0
+   0A0A 36 00         [10] 1292 	ld	(hl), #0x00
+                           1293 ;fyos_c.c:271: resetprogram:
+   0A0C                    1294 00101$:
+                           1295 ;fyos_c.c:272: clrscr();	
+   0A0C CDr00r00      [17] 1296 	call	_clrscr
+                           1297 ;fyos_c.c:273: printfcenter("FyOS v0.1\nby FyberOptic\n \n");
+   0A0F 21rCFr0B      [10] 1298 	ld	hl, #___str_76
+   0A12 E5            [11] 1299 	push	hl
+   0A13 CDr00r00      [17] 1300 	call	_printfcenter
+   0A16 F1            [10] 1301 	pop	af
+                           1302 ;fyos_c.c:274: printf("Mailstation firmware: v%d.%d\n", versionpointer[1], versionpointer[0]);		
+   0A17 2Ar01r00      [16] 1303 	ld	hl, (_versionpointer)
+   0A1A 5E            [ 7] 1304 	ld	e, (hl)
+   0A1B 16 00         [ 7] 1305 	ld	d, #0x00
+   0A1D 2Ar01r00      [16] 1306 	ld	hl, (_versionpointer)
+   0A20 23            [ 6] 1307 	inc	hl
+   0A21 4E            [ 7] 1308 	ld	c, (hl)
+   0A22 06 00         [ 7] 1309 	ld	b, #0x00
+   0A24 D5            [11] 1310 	push	de
+   0A25 C5            [11] 1311 	push	bc
+   0A26 21rEAr0B      [10] 1312 	ld	hl, #___str_77
+   0A29 E5            [11] 1313 	push	hl
+   0A2A CDr00r00      [17] 1314 	call	_printf
+   0A2D 21 06 00      [10] 1315 	ld	hl, #6
+   0A30 39            [11] 1316 	add	hl, sp
+   0A31 F9            [ 6] 1317 	ld	sp, hl
+                           1318 ;fyos_c.c:285: printf("\nGlobal var init test: ");
+   0A32 21r08r0C      [10] 1319 	ld	hl, #___str_78
+   0A35 E5            [11] 1320 	push	hl
+   0A36 CDr00r00      [17] 1321 	call	_printf
+   0A39 F1            [10] 1322 	pop	af
+                           1323 ;fyos_c.c:286: if (myglobal == 100) puts("Pass"); else puts("Fail");
+   0A3A 3Ar00r00      [13] 1324 	ld	a,(#_myglobal + 0)
+   0A3D D6 64         [ 7] 1325 	sub	a, #0x64
+   0A3F 20 0A         [12] 1326 	jr	NZ,00103$
+   0A41 21r20r0C      [10] 1327 	ld	hl, #___str_79
+   0A44 E5            [11] 1328 	push	hl
+   0A45 CDr00r00      [17] 1329 	call	_puts
+   0A48 F1            [10] 1330 	pop	af
+   0A49 18 08         [12] 1331 	jr	00104$
+   0A4B                    1332 00103$:
+   0A4B 21r25r0C      [10] 1333 	ld	hl, #___str_80
+   0A4E E5            [11] 1334 	push	hl
+   0A4F CDr00r00      [17] 1335 	call	_puts
+   0A52 F1            [10] 1336 	pop	af
+   0A53                    1337 00104$:
+                           1338 ;fyos_c.c:288: printf("\nP2shadow: %x\nP3shadow: %x\ncgafont_addr: %x\n", p2shadow, p3shadow, cgafont_addr);	
+   0A53 2Ar00r00      [16] 1339 	ld	hl, (_cgafont_addr)
+   0A56 E5            [11] 1340 	push	hl
+   0A57 2Ar00r00      [16] 1341 	ld	hl, (_p3shadow)
+   0A5A E5            [11] 1342 	push	hl
+   0A5B 2Ar00r00      [16] 1343 	ld	hl, (_p2shadow)
+   0A5E E5            [11] 1344 	push	hl
+   0A5F 21r2Ar0C      [10] 1345 	ld	hl, #___str_81
+   0A62 E5            [11] 1346 	push	hl
+   0A63 CDr00r00      [17] 1347 	call	_printf
+   0A66 21 08 00      [10] 1348 	ld	hl, #8
+   0A69 39            [11] 1349 	add	hl, sp
+   0A6A F9            [ 6] 1350 	ld	sp, hl
+                           1351 ;fyos_c.c:290: printSP();
+   0A6B CDrDDr09      [17] 1352 	call	_printSP
+                           1353 ;fyos_c.c:291: putchar('\n');
+   0A6E 21 0A 00      [10] 1354 	ld	hl, #0x000a
+   0A71 E5            [11] 1355 	push	hl
+   0A72 CDr00r00      [17] 1356 	call	_putchar
+   0A75 F1            [10] 1357 	pop	af
+                           1358 ;fyos_c.c:297: commandloop:
+   0A76                    1359 00105$:
+                           1360 ;fyos_c.c:298: putchar('>'); gets(inputstring);
+   0A76 21 3E 00      [10] 1361 	ld	hl, #0x003e
+   0A79 E5            [11] 1362 	push	hl
+   0A7A CDr00r00      [17] 1363 	call	_putchar
+   0A7D F1            [10] 1364 	pop	af
+   0A7E 01r00r00      [10] 1365 	ld	bc, #_inputstring
+   0A81 C5            [11] 1366 	push	bc
+   0A82 CDr00r00      [17] 1367 	call	_gets
+   0A85 F1            [10] 1368 	pop	af
+                           1369 ;fyos_c.c:302: if (inputstring[0] == 0) goto commandloop;
+   0A86 3Ar00r00      [13] 1370 	ld	a, (#_inputstring + 0)
+   0A89 B7            [ 4] 1371 	or	a, a
+   0A8A 28 EA         [12] 1372 	jr	Z,00105$
+                           1373 ;fyos_c.c:305: stringpointer = strtok(inputstring, " ");		// separate command
+   0A8C 21r57r0C      [10] 1374 	ld	hl, #___str_82
+   0A8F E5            [11] 1375 	push	hl
+   0A90 21r00r00      [10] 1376 	ld	hl, #_inputstring
+   0A93 E5            [11] 1377 	push	hl
+   0A94 CDr00r00      [17] 1378 	call	_strtok
+   0A97 F1            [10] 1379 	pop	af
+   0A98 F1            [10] 1380 	pop	af
+   0A99 4D            [ 4] 1381 	ld	c, l
+   0A9A 44            [ 4] 1382 	ld	b, h
+                           1383 ;fyos_c.c:306: if (stringpointer == NULL) stringpointer = inputstring;
+   0A9B 78            [ 4] 1384 	ld	a, b
+   0A9C B1            [ 4] 1385 	or	a, c
+   0A9D 20 03         [12] 1386 	jr	NZ,00109$
+   0A9F 01r00r00      [10] 1387 	ld	bc, #_inputstring
+   0AA2                    1388 00109$:
+                           1389 ;fyos_c.c:308: stringparms = strtok(NULL, "\0");
+   0AA2 C5            [11] 1390 	push	bc
+   0AA3 21r59r0C      [10] 1391 	ld	hl, #___str_83
+   0AA6 E5            [11] 1392 	push	hl
+   0AA7 21 00 00      [10] 1393 	ld	hl, #0x0000
+   0AAA E5            [11] 1394 	push	hl
+   0AAB CDr00r00      [17] 1395 	call	_strtok
+   0AAE F1            [10] 1396 	pop	af
+   0AAF F1            [10] 1397 	pop	af
+   0AB0 C1            [10] 1398 	pop	bc
+                           1399 ;fyos_c.c:310: if (strcmp(stringpointer, "reset") == 0) goto resetprogram;
+   0AB1 E5            [11] 1400 	push	hl
+   0AB2 C5            [11] 1401 	push	bc
+   0AB3 11r5Br0C      [10] 1402 	ld	de, #___str_84
+   0AB6 D5            [11] 1403 	push	de
+   0AB7 C5            [11] 1404 	push	bc
+   0AB8 CDr00r00      [17] 1405 	call	_strcmp
+   0ABB F1            [10] 1406 	pop	af
+   0ABC F1            [10] 1407 	pop	af
+   0ABD EB            [ 4] 1408 	ex	de,hl
+   0ABE C1            [10] 1409 	pop	bc
+   0ABF E1            [10] 1410 	pop	hl
+   0AC0 7A            [ 4] 1411 	ld	a, d
+   0AC1 B3            [ 4] 1412 	or	a, e
+   0AC2 CAr0Cr0A      [10] 1413 	jp	Z, 00101$
+                           1414 ;fyos_c.c:312: else if (strcmp(stringpointer, "hextoint") == 0) cmd_hextoint(stringparms);
+   0AC5 E5            [11] 1415 	push	hl
+   0AC6 C5            [11] 1416 	push	bc
+   0AC7 11r61r0C      [10] 1417 	ld	de, #___str_85
+   0ACA D5            [11] 1418 	push	de
+   0ACB C5            [11] 1419 	push	bc
+   0ACC CDr00r00      [17] 1420 	call	_strcmp
+   0ACF F1            [10] 1421 	pop	af
+   0AD0 F1            [10] 1422 	pop	af
+   0AD1 EB            [ 4] 1423 	ex	de,hl
+   0AD2 C1            [10] 1424 	pop	bc
+   0AD3 E1            [10] 1425 	pop	hl
+   0AD4 7A            [ 4] 1426 	ld	a, d
+   0AD5 B3            [ 4] 1427 	or	a, e
+   0AD6 20 07         [12] 1428 	jr	NZ,00138$
+   0AD8 E5            [11] 1429 	push	hl
+   0AD9 CDr7Er04      [17] 1430 	call	_cmd_hextoint
+   0ADC F1            [10] 1431 	pop	af
+   0ADD 18 97         [12] 1432 	jr	00105$
+   0ADF                    1433 00138$:
+                           1434 ;fyos_c.c:314: else if (strcmp(stringpointer, "cls") == 0) clrscr();
+   0ADF E5            [11] 1435 	push	hl
+   0AE0 C5            [11] 1436 	push	bc
+   0AE1 11r6Ar0C      [10] 1437 	ld	de, #___str_86
+   0AE4 D5            [11] 1438 	push	de
+   0AE5 C5            [11] 1439 	push	bc
+   0AE6 CDr00r00      [17] 1440 	call	_strcmp
+   0AE9 F1            [10] 1441 	pop	af
+   0AEA F1            [10] 1442 	pop	af
+   0AEB EB            [ 4] 1443 	ex	de,hl
+   0AEC C1            [10] 1444 	pop	bc
+   0AED E1            [10] 1445 	pop	hl
+   0AEE 7A            [ 4] 1446 	ld	a, d
+   0AEF B3            [ 4] 1447 	or	a, e
+   0AF0 20 06         [12] 1448 	jr	NZ,00135$
+   0AF2 CDr00r00      [17] 1449 	call	_clrscr
+   0AF5 C3r76r0A      [10] 1450 	jp	00105$
+   0AF8                    1451 00135$:
+                           1452 ;fyos_c.c:315: else if (strcmp(stringpointer, "peek") == 0) cmd_peek(stringparms);
+   0AF8 E5            [11] 1453 	push	hl
+   0AF9 C5            [11] 1454 	push	bc
+   0AFA 11r6Er0C      [10] 1455 	ld	de, #___str_87
+   0AFD D5            [11] 1456 	push	de
+   0AFE C5            [11] 1457 	push	bc
+   0AFF CDr00r00      [17] 1458 	call	_strcmp
+   0B02 F1            [10] 1459 	pop	af
+   0B03 F1            [10] 1460 	pop	af
+   0B04 EB            [ 4] 1461 	ex	de,hl
+   0B05 C1            [10] 1462 	pop	bc
+   0B06 E1            [10] 1463 	pop	hl
+   0B07 7A            [ 4] 1464 	ld	a, d
+   0B08 B3            [ 4] 1465 	or	a, e
+   0B09 20 08         [12] 1466 	jr	NZ,00132$
+   0B0B E5            [11] 1467 	push	hl
+   0B0C CDr00r00      [17] 1468 	call	_cmd_peek
+   0B0F F1            [10] 1469 	pop	af
+   0B10 C3r76r0A      [10] 1470 	jp	00105$
+   0B13                    1471 00132$:
+                           1472 ;fyos_c.c:316: else if (strcmp(stringpointer, "poke") == 0) cmd_poke(stringparms);
+   0B13 E5            [11] 1473 	push	hl
+   0B14 C5            [11] 1474 	push	bc
+   0B15 11r73r0C      [10] 1475 	ld	de, #___str_88
+   0B18 D5            [11] 1476 	push	de
+   0B19 C5            [11] 1477 	push	bc
+   0B1A CDr00r00      [17] 1478 	call	_strcmp
+   0B1D F1            [10] 1479 	pop	af
+   0B1E F1            [10] 1480 	pop	af
+   0B1F EB            [ 4] 1481 	ex	de,hl
+   0B20 C1            [10] 1482 	pop	bc
+   0B21 E1            [10] 1483 	pop	hl
+   0B22 7A            [ 4] 1484 	ld	a, d
+   0B23 B3            [ 4] 1485 	or	a, e
+   0B24 20 08         [12] 1486 	jr	NZ,00129$
+   0B26 E5            [11] 1487 	push	hl
+   0B27 CDrCCr00      [17] 1488 	call	_cmd_poke
+   0B2A F1            [10] 1489 	pop	af
+   0B2B C3r76r0A      [10] 1490 	jp	00105$
+   0B2E                    1491 00129$:
+                           1492 ;fyos_c.c:317: else if (strcmp(stringpointer, "port_in") == 0) cmd_port_in(stringparms);
+   0B2E E5            [11] 1493 	push	hl
+   0B2F C5            [11] 1494 	push	bc
+   0B30 11r78r0C      [10] 1495 	ld	de, #___str_89
+   0B33 D5            [11] 1496 	push	de
+   0B34 C5            [11] 1497 	push	bc
+   0B35 CDr00r00      [17] 1498 	call	_strcmp
+   0B38 F1            [10] 1499 	pop	af
+   0B39 F1            [10] 1500 	pop	af
+   0B3A EB            [ 4] 1501 	ex	de,hl
+   0B3B C1            [10] 1502 	pop	bc
+   0B3C E1            [10] 1503 	pop	hl
+   0B3D 7A            [ 4] 1504 	ld	a, d
+   0B3E B3            [ 4] 1505 	or	a, e
+   0B3F 20 08         [12] 1506 	jr	NZ,00126$
+   0B41 E5            [11] 1507 	push	hl
+   0B42 CDr2Er02      [17] 1508 	call	_cmd_port_in
+   0B45 F1            [10] 1509 	pop	af
+   0B46 C3r76r0A      [10] 1510 	jp	00105$
+   0B49                    1511 00126$:
+                           1512 ;fyos_c.c:318: else if (strcmp(stringpointer, "port_out") == 0) cmd_port_out(stringparms);
+   0B49 E5            [11] 1513 	push	hl
+   0B4A C5            [11] 1514 	push	bc
+   0B4B 11r80r0C      [10] 1515 	ld	de, #___str_90
+   0B4E D5            [11] 1516 	push	de
+   0B4F C5            [11] 1517 	push	bc
+   0B50 CDr00r00      [17] 1518 	call	_strcmp
+   0B53 F1            [10] 1519 	pop	af
+   0B54 F1            [10] 1520 	pop	af
+   0B55 EB            [ 4] 1521 	ex	de,hl
+   0B56 C1            [10] 1522 	pop	bc
+   0B57 E1            [10] 1523 	pop	hl
+   0B58 7A            [ 4] 1524 	ld	a, d
+   0B59 B3            [ 4] 1525 	or	a, e
+   0B5A 20 08         [12] 1526 	jr	NZ,00123$
+   0B5C E5            [11] 1527 	push	hl
+   0B5D CDr2Dr03      [17] 1528 	call	_cmd_port_out
+   0B60 F1            [10] 1529 	pop	af
+   0B61 C3r76r0A      [10] 1530 	jp	00105$
+   0B64                    1531 00123$:
+                           1532 ;fyos_c.c:319: else if (strcmp(stringpointer, "help") == 0) cmd_help(stringparms);
+   0B64 E5            [11] 1533 	push	hl
+   0B65 C5            [11] 1534 	push	bc
+   0B66 11r89r0C      [10] 1535 	ld	de, #___str_91
+   0B69 D5            [11] 1536 	push	de
+   0B6A C5            [11] 1537 	push	bc
+   0B6B CDr00r00      [17] 1538 	call	_strcmp
+   0B6E F1            [10] 1539 	pop	af
+   0B6F F1            [10] 1540 	pop	af
+   0B70 EB            [ 4] 1541 	ex	de,hl
+   0B71 C1            [10] 1542 	pop	bc
+   0B72 E1            [10] 1543 	pop	hl
+   0B73 7A            [ 4] 1544 	ld	a, d
+   0B74 B3            [ 4] 1545 	or	a, e
+   0B75 20 08         [12] 1546 	jr	NZ,00120$
+   0B77 E5            [11] 1547 	push	hl
+   0B78 CDr44r06      [17] 1548 	call	_cmd_help
+   0B7B F1            [10] 1549 	pop	af
+   0B7C C3r76r0A      [10] 1550 	jp	00105$
+   0B7F                    1551 00120$:
+                           1552 ;fyos_c.c:320: else if (strcmp(stringpointer, "scancodes") == 0) cmd_scancodes();
+   0B7F C5            [11] 1553 	push	bc
+   0B80 21r8Er0C      [10] 1554 	ld	hl, #___str_92
+   0B83 E5            [11] 1555 	push	hl
+   0B84 C5            [11] 1556 	push	bc
+   0B85 CDr00r00      [17] 1557 	call	_strcmp
+   0B88 F1            [10] 1558 	pop	af
+   0B89 F1            [10] 1559 	pop	af
+   0B8A C1            [10] 1560 	pop	bc
+   0B8B 7C            [ 4] 1561 	ld	a, h
+   0B8C B5            [ 4] 1562 	or	a, l
+   0B8D 20 06         [12] 1563 	jr	NZ,00117$
+   0B8F CDr44r05      [17] 1564 	call	_cmd_scancodes
+   0B92 C3r76r0A      [10] 1565 	jp	00105$
+   0B95                    1566 00117$:
+                           1567 ;fyos_c.c:321: else if (strcmp(stringpointer, "powerdown") == 0) powerdownmode();
+   0B95 C5            [11] 1568 	push	bc
+   0B96 21r98r0C      [10] 1569 	ld	hl, #___str_93
+   0B99 E5            [11] 1570 	push	hl
+   0B9A C5            [11] 1571 	push	bc
+   0B9B CDr00r00      [17] 1572 	call	_strcmp
+   0B9E F1            [10] 1573 	pop	af
+   0B9F F1            [10] 1574 	pop	af
+   0BA0 C1            [10] 1575 	pop	bc
+   0BA1 7C            [ 4] 1576 	ld	a, h
+   0BA2 B5            [ 4] 1577 	or	a, l
+   0BA3 20 06         [12] 1578 	jr	NZ,00114$
+   0BA5 CDr00r00      [17] 1579 	call	_powerdownmode
+   0BA8 C3r76r0A      [10] 1580 	jp	00105$
+   0BAB                    1581 00114$:
+                           1582 ;fyos_c.c:328: else if (strcmp(stringpointer, "reboot") == 0)
+   0BAB 21rA2r0C      [10] 1583 	ld	hl, #___str_94
+   0BAE E5            [11] 1584 	push	hl
+   0BAF C5            [11] 1585 	push	bc
+   0BB0 CDr00r00      [17] 1586 	call	_strcmp
+   0BB3 F1            [10] 1587 	pop	af
+   0BB4 F1            [10] 1588 	pop	af
+   0BB5 7C            [ 4] 1589 	ld	a, h
+   0BB6 B5            [ 4] 1590 	or	a, l
+   0BB7 20 06         [12] 1591 	jr	NZ,00111$
+                           1592 ;fyos_c.c:332: __endasm;
+   0BB9 C3 00 00      [10] 1593 	jp	0x0000
+   0BBC C3r76r0A      [10] 1594 	jp	00105$
+   0BBF                    1595 00111$:
+                           1596 ;fyos_c.c:336: printf("Unknown command: %s\n\n", inputstring);
+   0BBF 21r00r00      [10] 1597 	ld	hl, #_inputstring
+   0BC2 E5            [11] 1598 	push	hl
+   0BC3 21rA9r0C      [10] 1599 	ld	hl, #___str_95
+   0BC6 E5            [11] 1600 	push	hl
+   0BC7 CDr00r00      [17] 1601 	call	_printf
+   0BCA F1            [10] 1602 	pop	af
+   0BCB F1            [10] 1603 	pop	af
+                           1604 ;fyos_c.c:339: goto commandloop;
+                           1605 ;fyos_c.c:344: return 0;
+                           1606 ;fyos_c.c:346: }
+   0BCC C3r76r0A      [10] 1607 	jp	00105$
+   0BCF                    1608 ___str_76:
+   0BCF 46 79 4F 53 20 76  1609 	.ascii "FyOS v0.1"
+        30 2E 31
+   0BD8 0A                 1610 	.db 0x0a
+   0BD9 62 79 20 46 79 62  1611 	.ascii "by FyberOptic"
+        65 72 4F 70 74 69
+        63
+   0BE6 0A                 1612 	.db 0x0a
+   0BE7 20                 1613 	.ascii " "
+   0BE8 0A                 1614 	.db 0x0a
+   0BE9 00                 1615 	.db 0x00
+   0BEA                    1616 ___str_77:
+   0BEA 4D 61 69 6C 73 74  1617 	.ascii "Mailstation firmware: v%d.%d"
+        61 74 69 6F 6E 20
+        66 69 72 6D 77 61
+        72 65 3A 20 76 25
+        64 2E 25 64
+   0C06 0A                 1618 	.db 0x0a
+   0C07 00                 1619 	.db 0x00
+   0C08                    1620 ___str_78:
+   0C08 0A                 1621 	.db 0x0a
+   0C09 47 6C 6F 62 61 6C  1622 	.ascii "Global var init test: "
+        20 76 61 72 20 69
+        6E 69 74 20 74 65
+        73 74 3A 20
+   0C1F 00                 1623 	.db 0x00
+   0C20                    1624 ___str_79:
+   0C20 50 61 73 73        1625 	.ascii "Pass"
+   0C24 00                 1626 	.db 0x00
+   0C25                    1627 ___str_80:
+   0C25 46 61 69 6C        1628 	.ascii "Fail"
+   0C29 00                 1629 	.db 0x00
+   0C2A                    1630 ___str_81:
+   0C2A 0A                 1631 	.db 0x0a
+   0C2B 50 32 73 68 61 64  1632 	.ascii "P2shadow: %x"
+        6F 77 3A 20 25 78
+   0C37 0A                 1633 	.db 0x0a
+   0C38 50 33 73 68 61 64  1634 	.ascii "P3shadow: %x"
+        6F 77 3A 20 25 78
+   0C44 0A                 1635 	.db 0x0a
+   0C45 63 67 61 66 6F 6E  1636 	.ascii "cgafont_addr: %x"
+        74 5F 61 64 64 72
+        3A 20 25 78
+   0C55 0A                 1637 	.db 0x0a
+   0C56 00                 1638 	.db 0x00
+   0C57                    1639 ___str_82:
+   0C57 20                 1640 	.ascii " "
+   0C58 00                 1641 	.db 0x00
+   0C59                    1642 ___str_83:
+   0C59 00                 1643 	.db 0x00
+   0C5A 00                 1644 	.db 0x00
+   0C5B                    1645 ___str_84:
+   0C5B 72 65 73 65 74     1646 	.ascii "reset"
+   0C60 00                 1647 	.db 0x00
+   0C61                    1648 ___str_85:
+   0C61 68 65 78 74 6F 69  1649 	.ascii "hextoint"
+        6E 74
+   0C69 00                 1650 	.db 0x00
+   0C6A                    1651 ___str_86:
+   0C6A 63 6C 73           1652 	.ascii "cls"
+   0C6D 00                 1653 	.db 0x00
+   0C6E                    1654 ___str_87:
+   0C6E 70 65 65 6B        1655 	.ascii "peek"
+   0C72 00                 1656 	.db 0x00
+   0C73                    1657 ___str_88:
+   0C73 70 6F 6B 65        1658 	.ascii "poke"
+   0C77 00                 1659 	.db 0x00
+   0C78                    1660 ___str_89:
+   0C78 70 6F 72 74 5F 69  1661 	.ascii "port_in"
+        6E
+   0C7F 00                 1662 	.db 0x00
+   0C80                    1663 ___str_90:
+   0C80 70 6F 72 74 5F 6F  1664 	.ascii "port_out"
+        75 74
+   0C88 00                 1665 	.db 0x00
+   0C89                    1666 ___str_91:
+   0C89 68 65 6C 70        1667 	.ascii "help"
+   0C8D 00                 1668 	.db 0x00
+   0C8E                    1669 ___str_92:
+   0C8E 73 63 61 6E 63 6F  1670 	.ascii "scancodes"
+        64 65 73
+   0C97 00                 1671 	.db 0x00
+   0C98                    1672 ___str_93:
+   0C98 70 6F 77 65 72 64  1673 	.ascii "powerdown"
+        6F 77 6E
+   0CA1 00                 1674 	.db 0x00
+   0CA2                    1675 ___str_94:
+   0CA2 72 65 62 6F 6F 74  1676 	.ascii "reboot"
+   0CA8 00                 1677 	.db 0x00
+   0CA9                    1678 ___str_95:
+   0CA9 55 6E 6B 6E 6F 77  1679 	.ascii "Unknown command: %s"
+        6E 20 63 6F 6D 6D
+        61 6E 64 3A 20 25
+        73
+   0CBC 0A                 1680 	.db 0x0a
+   0CBD 0A                 1681 	.db 0x0a
+   0CBE 00                 1682 	.db 0x00
+   0CBF                    1683 ___str_96:
+   0CBF 0A                 1684 	.db 0x0a
+   0CC0 0A                 1685 	.db 0x0a
+   0CC1 0A                 1686 	.db 0x0a
+   0CC2 0A                 1687 	.db 0x0a
+   0CC3 0A                 1688 	.db 0x0a
+   0CC4 0A                 1689 	.db 0x0a
+   0CC5 0A                 1690 	.db 0x0a
+   0CC6 0A                 1691 	.db 0x0a
+   0CC7 20 20 20 20 20 20  1692 	.ascii "        Waiting for transfer..."
+        20 20 57 61 69 74
+        69 6E 67 20 66 6F
+        72 20 74 72 61 6E
+        73 66 65 72 2E 2E
+        2E
+   0CE6 00                 1693 	.db 0x00
+                           1694 	.area _CODE
+                           1695 	.area _INITIALIZER
+   0000                    1696 __xinit__myglobal:
+   0000 64                 1697 	.db #0x64	; 100	'd'
+   0001                    1698 __xinit__versionpointer:
+   0001 36 00              1699 	.dw #0x0036
+                           1700 	.area _CABS (ABS)

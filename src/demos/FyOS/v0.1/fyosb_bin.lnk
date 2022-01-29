@@ -1,0 +1,14 @@
+--
+-m
+-j
+-x
+-i fyosb_bin
+-b _CODE = 0xc010
+-b _DATA = 0x0000
+-k C:\Program Files\SDCC\bin\..\lib\z80
+-l z80
+crt0b.o
+..\mailstation.o
+fyos_c.o
+
+-e

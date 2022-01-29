@@ -1,0 +1,29 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 1.
+Hexadecimal [16-Bits]
+
+
+
+                              1 	
+                              2         .module bloader
+                              3         
+                              4         .area	_DATA
+                              5         .area	_CODE
+                              6          
+   0000 F3            [ 4]    7 	di
+                              8 	
+                              9 	;ld	hl, #endoffile
+                             10 	;ld	de, #0xc000
+                             11 	;ld	bc, #0x4000
+                             12 	;ldir
+                             13 	;jp	0xe400
+                             14 
+   0001 21 0F 00      [10]   15 	ld	hl, #endoffile
+   0004 11 00 E0      [10]   16 	ld	de, #0xe000
+   0007 01 00 20      [10]   17 	ld	bc, #0x2000
+   000A ED B0         [21]   18 	ldir
+                             19 	
+   000C C3 00 E0      [10]   20 	jp	0xe000
+                             21 	
+                             22         
+                             23         
+   000F                      24 endoffile:

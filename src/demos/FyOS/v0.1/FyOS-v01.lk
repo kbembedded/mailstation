@@ -1,0 +1,12 @@
+-mjwx
+-i FyOS-v01.ihx
+-b _CODE = 0xc010
+-b _DATA = 0x0000
+-k /usr/bin/../share/sdcc/lib/z80
+-k /usr/share/sdcc/lib/z80
+-l z80
+crt0b.rel
+mailstation.rel
+fyos_c.rel
+
+-e

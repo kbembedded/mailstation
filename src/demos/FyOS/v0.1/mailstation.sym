@@ -1,0 +1,60 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 1.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  2710 L
+    .__.ABS.                                                    =  0000 G
+    .__.CPU.                                                    =  0000 L
+    .__.H$L.                                                    =  0000 L
+    _ClearLCD                                                      **** GX
+  0 ___str_0                                                       00F1 R
+  0 ___str_1                                                       00F3 R
+  0 _clrscr                                                        0004 GR
+    _cursorx                                                       **** GX
+    _cursory                                                       **** GX
+    _getchar                                                       **** GX
+  0 _gets                                                          01FA GR
+  0 _getscancode                                                   001E GR
+  0 _hex_nibble                                                    00F7 GR
+  0 _hextobyte                                                     01A3 GR
+  0 _hextoint                                                      014A GR
+  0 _isupper                                                       02B6 GR
+    _mem4000                                                    =  4000 G
+    _port2                                                      =  0002 
+    _port_printerdata                                           =  002D 
+    _port_printerstatus                                         =  0021 
+  0 _powerdownmode                                                 0000 GR
+    _printf                                                        **** GX
+  0 _printfXY                                                      0048 GR
+  0 _printfcenter                                                  0084 GR
+    _putchar                                                       **** GX
+    _slot4000device                                             =  0006 
+    _slot4000page                                               =  0005 
+    _slot8000device                                             =  0008 
+    _slot8000page                                               =  0007 
+    _strlen                                                        **** GX
+    _strtok                                                        **** GX
+  0 _strtolower                                                    02F2 GR
+    _textmodebuffer                                                **** GX
+  0 _tolower                                                       02D0 GR
+    _vprintf                                                       **** GX
+    _vsprintf                                                      **** GX
+  0 endgetscancode                                                 0038 R
+    ms_getkeycodefrombuffer                                        **** GX
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 2.
+Hexadecimal [16-Bits]
+
+Area Table
+
+   0 _CODE                                      size  306   flags    0
+   1 _DATA                                      size    0   flags    0
+   2 _INITIALIZED                               size    0   flags    0
+   3 _DABS                                      size    0   flags    8
+   4 _HOME                                      size    0   flags    0
+   5 _GSINIT                                    size    0   flags    0
+   6 _GSFINAL                                   size    0   flags    0
+   7 _INITIALIZER                               size    0   flags    0
+   8 _CABS                                      size    0   flags    8
+

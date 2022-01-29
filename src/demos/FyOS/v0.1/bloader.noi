@@ -1,0 +1,6 @@
+DEF .__.ABS. 0x0
+DEF l__DATA 0x0
+DEF l__CODE 0xF
+DEF s__CODE 0x8000
+DEF s__DATA 0x800F
+LOAD bloader.ihx

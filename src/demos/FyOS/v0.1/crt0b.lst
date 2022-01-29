@@ -1,0 +1,177 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 1.
+Hexadecimal [16-Bits]
+
+
+
+                              1 	;; FyOS crt0b.s for Z80
+                              2         ;; Dependent on bios in memory
+                              3 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 2.
+Hexadecimal [16-Bits]
+
+
+
+                              4 	.include "bios.inc"
+                              1 ; no$gmb format .sym file
+                              2 ; Generated automagically by ASxxxx linker V01.75 + NoICE + SDCC Feb 1999 (SDK 3.0.0)
+                              3 ; Area: .  .ABS.
+                     FDFD     4 	__interrupt_jump == #0xFDFD
+                     FE00     5 	__interrupt_table == #0xFE00
+                              6 ; Area: _CODE
+                     E400     7 	__codestart == #0xE400
+                     E403     8 	_bios_start == #0xE403
+                     E455     9 	_interrupt_hook == #0xE455
+                     E5E7    10 	_UpdateCharLCD == #0xE5E7
+                     E638    11 	_ClearLCD == #0xE638
+                     E68E    12 	_scrollscreen == #0xE68E
+                     E6E2    13 	_putchar == #0xE6E2
+                     E6E2    14 	_putchar_rr_s == #0xE6E2
+                     E6EB    15 	_putchar_rr_dbs == #0xE6EB
+                     E6F0    16 	_putcharXY == #0xE6F0
+                     E771    17 	printchar == #0xE771
+                     E815    18 	_LCD_CAS == #0xE815
+                     E834    19 	_updatecursor == #0xE834
+                     E88F    20 	_disable_charbuffer == #0xE88F
+                     E8B0    21 	_enable_charbuffer == #0xE8B0
+                     E8B5    22 	handlekeyrepeat == #0xE8B5
+                     E954    23 	handlescancode == #0xE954
+                     EA06    24 	_fillcharbuffer == #0xEA06
+                     EA31    25 	_getchar == #0xEA31
+                     EA5C    26 	_kbhit == #0xEA5C
+                     EA74    27 	ms_keyscan == #0xEA74
+                     EB60    28 	ms_scan_keymatrix == #0xEB60
+                     ECBE    29 	ms_putkeyintobuffer == #0xECBE
+                     ECE3    30 	ms_getkeycodefrombuffer == #0xECE3
+                     ED1C    31 	ms_clearkeytables == #0xED1C
+                     ED49    32 	ms_initkeybuffer == #0xED49
+                     ED57    33 	ms_init_keyboard == #0xED57
+                     EDB2    34 	ms_fullkeyboardinit == #0xEDB2
+                     EE2D    35 	_recv_byte == #0xEE2D
+                     EEC9    36 	_send_byte_busy == #0xEEC9
+                             37 ; Area: _GSINIT
+                             38 ; Area: _GSFINAL
+                             39 ; Area: _DATA
+                     EF13    40 	_p2shadow == #0xEF13
+                     EF15    41 	_p3shadow == #0xEF15
+                     EFB7    42 	__scancode_table == #0xEFB7
+                             43 ; Area: _DATA_END
+                             44 ; Area: _BSS
+                     EFBB    45 	__p2shadow == #0xEFBB
+                     EFBC    46 	__p3shadow == #0xEFBC
+                     EFBD    47 	_firmwareversionsafe == #0xEFBD
+                     EFBF    48 	_cursorx == #0xEFBF
+                     EFC0    49 	_cursory == #0xEFC0
+                     EFC1    50 	_textmodebuffer == #0xEFC1
+                     F241    51 	_cgafont_addr == #0xF241
+                     F246    52 	mycharbuffer == #0xF246
+                     F248    53 	__getcharbuffer == #0xF248
+                     F248    54 	__getcharbuffer_ptr == #0xF248
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 3.
+Hexadecimal [16-Bits]
+
+
+
+                     F268    55 	__getcharbuffer_in == #0xF268
+                     F269    56 	__getcharbuffer_out == #0xF269
+                     F26A    57 	__charbuffer_disable == #0xF26A
+                     F26B    58 	__keyscanstates == #0xF26B
+                     F307    59 	_interrupt_counter == #0xF307
+                             60 ; Area: _BSS_END
+                             61 ; Area: _CGAFONTDATA
+                     F500    62 	__cgafont_data == #0xF500
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 4.
+Hexadecimal [16-Bits]
+
+
+
+                              5         
+                              6         
+                              7         .module crt0b
+                              8        	.globl	_main
+                              9 
+                             10 ;------------------------------------------------------------------------------
+                             11 ; Initialization code
+                             12 ;------------------------------------------------------------------------------
+                             13 
+                             14 	.area	_HEADER (ABS)
+   C000                      15 	.org 	0xc000
+                             16 
+   C000 CD 00 00      [17]   17 	call    gsinit		; Initialize global variables	
+   C003 FB            [ 4]   18 	ei
+   C004 CD 00 00      [17]   19 	call	_main		; Run main C code	
+   C007 C3 00 00      [10]   20 	jp	_exit		; Do exit procedure
+                             21 
+                             22 
+                             23 ;------------------------------------------------------------------------------
+                             24 ; Ordering of segments for the linker.
+                             25 ;------------------------------------------------------------------------------
+                             26 
+                             27 	.area	_HOME
+                             28 	.area	_CODE
+                             29         .area   _GSINIT
+                             30         .area   _GSFINAL
+                             31         .area	_EXITPROC
+                             32         .area	_EXITPROCFINAL
+                             33 	.area	_DATA
+                             34         .area   _BSS        
+                             35         .area   _HEAP
+                             36         ;.area	_CABS
+                             37         ;.area	_OVERLAY  
+                             38         .area	_FILLER (ABS)
+   E3FF                      39         .org 0xe3ff
+   E3FF 00                   40         .db	0      
+                             41         
+                             42 
+                             43 
+                             44 ;------------------------------------------------------------------------------
+                             45 ; Some basic code segments:  __clock and _exit.
+                             46 ;
+                             47 ; No idea what __clock is, so we just return.
+                             48 ;
+                             49 ; _exit is run when your 'main' C function returns.
+                             50 ;------------------------------------------------------------------------------
+                             51 
+                             52         .area   _CODE
+                             53 
+                             54 ;------------------------------------------------------------------------------
+                             55 
+   0000                      56 __clock::
+                             57 	;ld	a,#2
+                             58         ;rst     0x08
+   0000 C9            [10]   59 	ret
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 5.
+Hexadecimal [16-Bits]
+
+
+
+                             60 
+                             61 ;------------------------------------------------------------------------------
+                             62 
+                             63 
+                             64 	.area	_EXITPROC
+   0000                      65 _exit::		
+                             66 
+                             67 	.area	_EXITPROCFINAL
+                             68 
+                             69 
+                             70 ;------------------------------------------------------------------------------
+                             71 
+                             72 
+                             73 
+                             74 
+                             75 ;------------------------------------------------------------------------------
+                             76 ; This area is where code gets inserted automatically to inialize variables.
+                             77 ;------------------------------------------------------------------------------
+                             78         
+                             79         .area   _GSINIT        
+   0000                      80 gsinit::
+                             81         .area   _GSFINAL
+   0000 C9            [10]   82         ret
+                             83 
+                             84 
+                             85 ;------------------------------------------------------------------------------
+                             86 ; Some variables we'll need.
+                             87 ;------------------------------------------------------------------------------
+                             88 	
+                             89 	.area	_BSS
+                             90 	

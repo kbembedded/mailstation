@@ -1,0 +1,256 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  .__.ABS.                           
+     00000000  l__BSS                          
+     00000000  l__CABS                         
+     00000000  l__DABS                         
+     00000000  l__EXITPROC                     
+     00000000  l__EXITPROCFINAL                
+     00000000  l__FILLER                       
+     00000000  l__GSINIT                       
+     00000000  l__HEADER                       
+     00000000  l__HEAP                         
+     00000000  l__HOME                         
+     00000000  s__CABS                         
+     00000000  s__DABS                         
+     00000000  s__FILLER                       
+     00000000  s__FILLER1                      
+     00000000  s__HEADER                       
+     00000000  s__HEADER0                      
+     00000001  l__FILLER1                      
+     00000001  l__GSFINAL                      
+     00000003  l__INITIALIZED                  
+     00000003  l__INITIALIZER                  
+     0000000A  l__HEADER0                      
+     00000102  l__DATA                         
+     00001D63  l__CODE                         
+     00004000  _mem4000                           fyos_c
+     0000C010  s__CODE                         
+     0000DD73  s__GSFINAL                      
+     0000DD73  s__GSINIT                       
+     0000DD73  s__HOME                         
+     0000DD74  s__DATA                         
+     0000DD74  s__EXITPROC                     
+     0000DD74  s__EXITPROCFINAL                
+     0000DE76  s__BSS                          
+     0000DE76  s__HEAP                         
+     0000DE76  s__INITIALIZED                  
+     0000DE79  s__INITIALIZER                  
+     0000E400  __codestart                        crt0b
+     0000E403  _bios_start                        crt0b
+     0000E455  _interrupt_hook                    crt0b
+     0000E5E7  _UpdateCharLCD                     crt0b
+     0000E638  _ClearLCD                          crt0b
+     0000E68E  _scrollscreen                      crt0b
+     0000E6E2  _putchar                           crt0b
+     0000E6E2  _putchar_rr_s                      crt0b
+     0000E6EB  _putchar_rr_dbs                    crt0b
+     0000E6F0  _putcharXY                         crt0b
+     0000E771  printchar                          crt0b
+     0000E815  _LCD_CAS                           crt0b
+     0000E834  _updatecursor                      crt0b
+     0000E88F  _disable_charbuffer                crt0b
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000E8B0  _enable_charbuffer                 crt0b
+     0000E8B5  handlekeyrepeat                    crt0b
+     0000E954  handlescancode                     crt0b
+     0000EA06  _fillcharbuffer                    crt0b
+     0000EA31  _getchar                           crt0b
+     0000EA5C  _kbhit                             crt0b
+     0000EA74  ms_keyscan                         crt0b
+     0000EB60  ms_scan_keymatrix                  crt0b
+     0000ECBE  ms_putkeyintobuffer                crt0b
+     0000ECE3  ms_getkeycodefrombuffer            crt0b
+     0000ED1C  ms_clearkeytables                  crt0b
+     0000ED49  ms_initkeybuffer                   crt0b
+     0000ED57  ms_init_keyboard                   crt0b
+     0000EDB2  ms_fullkeyboardinit                crt0b
+     0000EE2D  _recv_byte                         crt0b
+     0000EEC9  _send_byte_busy                    crt0b
+     0000EF13  _p2shadow                          crt0b
+     0000EF15  _p3shadow                          crt0b
+     0000EFB7  __scancode_table                   crt0b
+     0000EFBB  __p2shadow                         crt0b
+     0000EFBC  __p3shadow                         crt0b
+     0000EFBD  _firmwareversionsafe               crt0b
+     0000EFBF  _cursorx                           crt0b
+     0000EFC0  _cursory                           crt0b
+     0000EFC1  _textmodebuffer                    crt0b
+     0000F241  _cgafont_addr                      crt0b
+     0000F246  mycharbuffer                       crt0b
+     0000F248  __getcharbuffer                    crt0b
+     0000F248  __getcharbuffer_ptr                crt0b
+     0000F268  __getcharbuffer_in                 crt0b
+     0000F269  __getcharbuffer_out                crt0b
+     0000F26A  __charbuffer_disable               crt0b
+     0000F26B  __keyscanstates                    crt0b
+     0000F307  _interrupt_counter                 crt0b
+     0000F500  __cgafont_data                     crt0b
+     0000FDFD  __interrupt_jump                   crt0b
+     0000FE00  __interrupt_table                  crt0b
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_CODE                               0000C010    00001D63 =        7523. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000C010  __clock                            crt0b
+     0000C011  _powerdownmode                     mailstation
+     0000C015  _clrscr                            mailstation
+     0000C02F  _getscancode                       mailstation
+     0000C059  _printfXY                          mailstation
+     0000C095  _printfcenter                      mailstation
+     0000C108  _hex_nibble                        mailstation
+     0000C15B  _hextoint                          mailstation
+     0000C1B4  _hextobyte                         mailstation
+     0000C20B  _gets                              mailstation
+     0000C2C7  _isupper                           mailstation
+     0000C2E1  _tolower                           mailstation
+     0000C303  _strtolower                        mailstation
+     0000C317  _cmd_peek                          fyos_c
+     0000C3E3  _cmd_poke                          fyos_c
+     0000C545  _cmd_port_in                       fyos_c
+     0000C644  _cmd_port_out                      fyos_c
+     0000C795  _cmd_hextoint                      fyos_c
+     0000C85B  _cmd_scancodes                     fyos_c
+     0000C95B  _cmd_help                          fyos_c
+     0000CCF4  _printSP                           fyos_c
+     0000CD19  _main                              fyos_c
+     0000CFFE  _strtok                            _strtok
+     0000D0CD  _vsprintf                          sprintf
+     0000D102  _sprintf                           sprintf
+     0000D143  _vprintf                           vprintf
+     0000D163  _printf                            vprintf
+     0000D180  _puts                              puts
+     0000D1A6  _strlen                            
+     0000D1B5  _strcmp                            _strcmp
+     0000D30D  __print_format                     printf_large
+     0000DD72  ___sdcc_call_hl                    
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_HEADER0                            00000000    0000000A =          10. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_GSINIT                             0000DD73    00000000 =           0. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000DD73  gsinit                             crt0b
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_GSFINAL                            0000DD73    00000001 =           1. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_EXITPROC                           0000DD74    00000000 =           0. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000DD74  _exit                              crt0b
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_DATA                               0000DD74    00000102 =         258. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000DD74  _inputstring                       fyos_c
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_FILLER1                            00000000    00000001 =           1. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 10.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_INITIALIZED                        0000DE76    00000003 =           3. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000DE76  _myglobal                          fyos_c
+     0000DE77  _versionpointer                    fyos_c
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 11.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+_INITIALIZER                        0000DE79    00000003 =           3. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 12.
+
+Files Linked                              [ module(s) ]
+
+crt0b.rel                                 [ crt0b ]
+mailstation.rel                           [ mailstation ]
+fyos_c.rel                                [ fyos_c ]
+
+
+Libraries Linked                          [ object file ]
+
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ _strtok.rel ]
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ sprintf.rel ]
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ vprintf.rel ]
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ puts.rel ]
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ strlen.rel ]
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ _strcmp.rel ]
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ printf_large.rel ]
+/usr/bin/../share/sdcc/lib/z80/z80.lib    [ __sdcc_call_hl.rel ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 13.
+
+User Base Address Definitions
+
+_CODE = 0xc010
+_DATA = 0x0000
+
+

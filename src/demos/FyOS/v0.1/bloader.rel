@@ -1,0 +1,12 @@
+XL2
+H 2 areas 1 global symbols
+M bloader
+S .__.ABS. Def0000
+A _CODE size F flags 0 addr 0
+A _DATA size 0 flags 0 addr 0
+T 00 00 F3 21 0F 00 11 00 E0 01 00 20 ED B0 C3
+R 00 00 00 00 00 04 00 00
+T 0D 00 00 E0
+R 00 00 00 00
+T 0F 00
+R 00 00 00 00

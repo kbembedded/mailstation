@@ -1,0 +1,684 @@
+                              1 ;--------------------------------------------------------
+                              2 ; File Created by SDCC : free open source ANSI-C Compiler
+                              3 ; Version 3.8.0 #10562 (Linux)
+                              4 ;--------------------------------------------------------
+                              5 	.module mailstation
+                              6 	.optsdcc -mz80
+                              7 	
+                              8 ;--------------------------------------------------------
+                              9 ; Public variables in this module
+                             10 ;--------------------------------------------------------
+                             11 	.globl _ClearLCD
+                             12 	.globl _strlen
+                             13 	.globl _strtok
+                             14 	.globl _putchar
+                             15 	.globl _getchar
+                             16 	.globl _vsprintf
+                             17 	.globl _vprintf
+                             18 	.globl _printf
+                             19 	.globl _mem4000
+                             20 	.globl _powerdownmode
+                             21 	.globl _clrscr
+                             22 	.globl _getscancode
+                             23 	.globl _printfXY
+                             24 	.globl _printfcenter
+                             25 	.globl _hex_nibble
+                             26 	.globl _hextoint
+                             27 	.globl _hextobyte
+                             28 	.globl _gets
+                             29 	.globl _isupper
+                             30 	.globl _tolower
+                             31 	.globl _strtolower
+                             32 ;--------------------------------------------------------
+                             33 ; special function registers
+                             34 ;--------------------------------------------------------
+                     0002    35 _port2	=	0x0002
+                     0005    36 _slot4000page	=	0x0005
+                     0006    37 _slot4000device	=	0x0006
+                     0007    38 _slot8000page	=	0x0007
+                     0008    39 _slot8000device	=	0x0008
+                     0021    40 _port_printerstatus	=	0x0021
+                     002D    41 _port_printerdata	=	0x002d
+                             42 ;--------------------------------------------------------
+                             43 ; ram data
+                             44 ;--------------------------------------------------------
+                             45 	.area _DATA
+                     4000    46 _mem4000	=	0x4000
+                             47 ;--------------------------------------------------------
+                             48 ; ram data
+                             49 ;--------------------------------------------------------
+                             50 	.area _INITIALIZED
+                             51 ;--------------------------------------------------------
+                             52 ; absolute external ram data
+                             53 ;--------------------------------------------------------
+                             54 	.area _DABS (ABS)
+                             55 ;--------------------------------------------------------
+                             56 ; global & static initialisations
+                             57 ;--------------------------------------------------------
+                             58 	.area _HOME
+                             59 	.area _GSINIT
+                             60 	.area _GSFINAL
+                             61 	.area _GSINIT
+                             62 ;--------------------------------------------------------
+                             63 ; Home
+                             64 ;--------------------------------------------------------
+                             65 	.area _HOME
+                             66 	.area _HOME
+                             67 ;--------------------------------------------------------
+                             68 ; code
+                             69 ;--------------------------------------------------------
+                             70 	.area _CODE
+                             71 ;mailstation.c:10: void powerdownmode()
+                             72 ;	---------------------------------
+                             73 ; Function powerdownmode
+                             74 ; ---------------------------------
+   0000                      75 _powerdownmode::
+                             76 ;mailstation.c:14: __endasm;
+   0000 CD 6B 0A      [17]   77 	call	#0x0A6B ; Mailstation firmware powerdownmode function
+                             78 ;mailstation.c:15: }
+   0003 C9            [10]   79 	ret
+                             80 ;mailstation.c:43: void clrscr()
+                             81 ;	---------------------------------
+                             82 ; Function clrscr
+                             83 ; ---------------------------------
+   0004                      84 _clrscr::
+                             85 ;mailstation.c:49: cursorx = 0;
+   0004 21r00r00      [10]   86 	ld	hl,#_cursorx + 0
+   0007 36 00         [10]   87 	ld	(hl), #0x00
+                             88 ;mailstation.c:50: cursory = 0;
+   0009 21r00r00      [10]   89 	ld	hl,#_cursory + 0
+   000C 36 00         [10]   90 	ld	(hl), #0x00
+                             91 ;mailstation.c:51: memset(textmodebuffer, 0, 640);	
+   000E 21r00r00      [10]   92 	ld	hl, #_textmodebuffer
+   0011 36 00         [10]   93 	ld	(hl), #0x00
+   0013 5D            [ 4]   94 	ld	e, l
+   0014 54            [ 4]   95 	ld	d, h
+   0015 13            [ 6]   96 	inc	de
+   0016 01 7F 02      [10]   97 	ld	bc, #0x027f
+   0019 ED B0         [21]   98 	ldir
+                             99 ;mailstation.c:53: ClearLCD();
+                            100 ;mailstation.c:70: }
+   001B C3r00r00      [10]  101 	jp  _ClearLCD
+                            102 ;mailstation.c:89: int getscancode(unsigned char *charbuffer)
+                            103 ;	---------------------------------
+                            104 ; Function getscancode
+                            105 ; ---------------------------------
+   001E                     106 _getscancode::
+                            107 ;mailstation.c:119: __endasm;
+   001E F5            [11]  108 	push	af
+   001F DD E5         [15]  109 	push	ix
+   0021 DD 21 0A 00   [14]  110 	ld	ix, #2 + #6 + #2 ; C-pushed ix + pushed regs + ret address
+   0025 DD 39         [15]  111 	add	ix, sp
+   0027 DD 6E 00      [19]  112 	ld	l, 0x0(ix)
+   002A DD 66 01      [19]  113 	ld	h, 0x1(ix)
+                            114 ;ld	a, h
+                            115 ;ld	(#0xc010), a
+                            116 ;ld	a, l
+                            117 ;ld	(#0xc011), a
+   002D E5            [11]  118 	push	hl
+   002E CDr00r00      [17]  119 	call	ms_getkeycodefrombuffer ;#0x0A9A MS firmware getkeycodefrombuffer
+   0031 E1            [10]  120 	pop	hl
+   0032 23            [ 6]  121 	inc	hl
+   0033 20 03         [12]  122 	jr	nz, endgetscancode
+   0035 3E FF         [ 7]  123 	ld	a, #0d255
+   0037 77            [ 7]  124 	ld	(hl), a
+   0038                     125 	endgetscancode:
+   0038 7E            [ 7]  126 	ld	a, (hl)
+   0039 26 00         [ 7]  127 	ld	h, #0
+   003B 6F            [ 4]  128 	ld	l, a
+   003C DD E1         [14]  129 	pop	ix
+   003E F1            [10]  130 	pop	af
+                            131 ;mailstation.c:122: return charbuffer[1];	
+   003F C1            [10]  132 	pop	bc
+   0040 E1            [10]  133 	pop	hl
+   0041 E5            [11]  134 	push	hl
+   0042 C5            [11]  135 	push	bc
+   0043 23            [ 6]  136 	inc	hl
+   0044 6E            [ 7]  137 	ld	l, (hl)
+   0045 26 00         [ 7]  138 	ld	h, #0x00
+                            139 ;mailstation.c:123: }
+   0047 C9            [10]  140 	ret
+                            141 ;mailstation.c:149: void printfXY(unsigned char x, unsigned char y, char *xystring, ...)
+                            142 ;	---------------------------------
+                            143 ; Function printfXY
+                            144 ; ---------------------------------
+   0048                     145 _printfXY::
+   0048 DD E5         [15]  146 	push	ix
+   004A DD 21 00 00   [14]  147 	ld	ix,#0
+   004E DD 39         [15]  148 	add	ix,sp
+                            149 ;mailstation.c:154: oldx = cursorx;
+   0050 21r00r00      [10]  150 	ld	hl,#_cursorx + 0
+   0053 46            [ 7]  151 	ld	b, (hl)
+                            152 ;mailstation.c:155: oldy = cursory;     
+   0054 21r00r00      [10]  153 	ld	hl,#_cursory + 0
+   0057 4E            [ 7]  154 	ld	c, (hl)
+                            155 ;mailstation.c:156: cursorx = x;
+   0058 DD 7E 04      [19]  156 	ld	a, 4 (ix)
+   005B 32r00r00      [13]  157 	ld	(#_cursorx + 0),a
+                            158 ;mailstation.c:157: cursory = y;
+   005E DD 7E 05      [19]  159 	ld	a, 5 (ix)
+   0061 32r00r00      [13]  160 	ld	(#_cursory + 0),a
+                            161 ;mailstation.c:159: va_start( args, xystring );	
+   0064 21 08 00      [10]  162 	ld	hl,#0x0006+1+1
+   0067 39            [11]  163 	add	hl,sp
+   0068 5D            [ 4]  164 	ld	e, l
+                            165 ;mailstation.c:160: vprintf( xystring, args );
+   0069 C5            [11]  166 	push	bc
+   006A 6B            [ 4]  167 	ld	l, e
+   006B E5            [11]  168 	push	hl
+   006C DD 6E 06      [19]  169 	ld	l, 6 (ix)
+   006F DD 66 07      [19]  170 	ld	h, 7 (ix)
+   0072 E5            [11]  171 	push	hl
+   0073 CDr00r00      [17]  172 	call	_vprintf
+   0076 F1            [10]  173 	pop	af
+   0077 F1            [10]  174 	pop	af
+   0078 C1            [10]  175 	pop	bc
+                            176 ;mailstation.c:163: cursorx = oldx;
+   0079 21r00r00      [10]  177 	ld	hl,#_cursorx + 0
+   007C 70            [ 7]  178 	ld	(hl), b
+                            179 ;mailstation.c:164: cursory = oldy;	
+   007D 21r00r00      [10]  180 	ld	hl,#_cursory + 0
+   0080 71            [ 7]  181 	ld	(hl), c
+                            182 ;mailstation.c:165: }
+   0081 DD E1         [14]  183 	pop	ix
+   0083 C9            [10]  184 	ret
+                            185 ;mailstation.c:174: void printfcenter(char *centerstring, ...)
+                            186 ;	---------------------------------
+                            187 ; Function printfcenter
+                            188 ; ---------------------------------
+   0084                     189 _printfcenter::
+   0084 DD E5         [15]  190 	push	ix
+   0086 DD 21 00 00   [14]  191 	ld	ix,#0
+   008A DD 39         [15]  192 	add	ix,sp
+   008C 21 01 FF      [10]  193 	ld	hl, #-255
+   008F 39            [11]  194 	add	hl, sp
+   0090 F9            [ 6]  195 	ld	sp, hl
+                            196 ;mailstation.c:180: va_start( args, centerstring );	
+   0091 21 05 01      [10]  197 	ld	hl, #0x0103+1+1
+   0094 39            [11]  198 	add	hl, sp
+   0095 EB            [ 4]  199 	ex	de, hl
+                            200 ;mailstation.c:181: vsprintf(tempstring, centerstring, args);
+   0096 21 00 00      [10]  201 	ld	hl, #0x0000
+   0099 39            [11]  202 	add	hl, sp
+   009A E5            [11]  203 	push	hl
+   009B D5            [11]  204 	push	de
+   009C DD 5E 04      [19]  205 	ld	e, 4 (ix)
+   009F DD 56 05      [19]  206 	ld	d, 5 (ix)
+   00A2 D5            [11]  207 	push	de
+   00A3 E5            [11]  208 	push	hl
+   00A4 CDr00r00      [17]  209 	call	_vsprintf
+   00A7 21 06 00      [10]  210 	ld	hl, #6
+   00AA 39            [11]  211 	add	hl, sp
+   00AB F9            [ 6]  212 	ld	sp, hl
+   00AC C1            [10]  213 	pop	bc
+                            214 ;mailstation.c:184: result = strtok(tempstring, "\n");
+   00AD 11rF1r00      [10]  215 	ld	de, #___str_0
+   00B0 D5            [11]  216 	push	de
+   00B1 C5            [11]  217 	push	bc
+   00B2 CDr00r00      [17]  218 	call	_strtok
+   00B5 F1            [10]  219 	pop	af
+   00B6 F1            [10]  220 	pop	af
+   00B7 EB            [ 4]  221 	ex	de,hl
+                            222 ;mailstation.c:185: while (result != NULL) 
+   00B8                     223 00101$:
+   00B8 7A            [ 4]  224 	ld	a, d
+   00B9 B3            [ 4]  225 	or	a, e
+   00BA 28 30         [12]  226 	jr	Z,00104$
+                            227 ;mailstation.c:187: cursorx = (40 - strlen(result)) / 2;
+   00BC D5            [11]  228 	push	de
+   00BD CDr00r00      [17]  229 	call	_strlen
+   00C0 F1            [10]  230 	pop	af
+   00C1 4D            [ 4]  231 	ld	c, l
+   00C2 44            [ 4]  232 	ld	b, h
+   00C3 3E 28         [ 7]  233 	ld	a, #0x28
+   00C5 91            [ 4]  234 	sub	a, c
+   00C6 4F            [ 4]  235 	ld	c, a
+   00C7 3E 00         [ 7]  236 	ld	a, #0x00
+   00C9 98            [ 4]  237 	sbc	a, b
+   00CA 47            [ 4]  238 	ld	b, a
+   00CB CB 38         [ 8]  239 	srl	b
+   00CD CB 19         [ 8]  240 	rr	c
+   00CF 21r00r00      [10]  241 	ld	hl,#_cursorx + 0
+   00D2 71            [ 7]  242 	ld	(hl), c
+                            243 ;mailstation.c:188: printf("%s\n", result);				
+   00D3 D5            [11]  244 	push	de
+   00D4 21rF3r00      [10]  245 	ld	hl, #___str_1
+   00D7 E5            [11]  246 	push	hl
+   00D8 CDr00r00      [17]  247 	call	_printf
+   00DB F1            [10]  248 	pop	af
+                            249 ;mailstation.c:189: result = strtok( NULL, "\n" );
+   00DC 21rF1r00      [10]  250 	ld	hl, #___str_0
+   00DF E3            [19]  251 	ex	(sp),hl
+   00E0 21 00 00      [10]  252 	ld	hl, #0x0000
+   00E3 E5            [11]  253 	push	hl
+   00E4 CDr00r00      [17]  254 	call	_strtok
+   00E7 F1            [10]  255 	pop	af
+   00E8 F1            [10]  256 	pop	af
+   00E9 EB            [ 4]  257 	ex	de,hl
+   00EA 18 CC         [12]  258 	jr	00101$
+   00EC                     259 00104$:
+                            260 ;mailstation.c:191: }
+   00EC DD F9         [10]  261 	ld	sp, ix
+   00EE DD E1         [14]  262 	pop	ix
+   00F0 C9            [10]  263 	ret
+   00F1                     264 ___str_0:
+   00F1 0A                  265 	.db 0x0a
+   00F2 00                  266 	.db 0x00
+   00F3                     267 ___str_1:
+   00F3 25 73               268 	.ascii "%s"
+   00F5 0A                  269 	.db 0x0a
+   00F6 00                  270 	.db 0x00
+                            271 ;mailstation.c:200: int hex_nibble (char x) 
+                            272 ;	---------------------------------
+                            273 ; Function hex_nibble
+                            274 ; ---------------------------------
+   00F7                     275 _hex_nibble::
+   00F7 DD E5         [15]  276 	push	ix
+   00F9 DD 21 00 00   [14]  277 	ld	ix,#0
+   00FD DD 39         [15]  278 	add	ix,sp
+                            279 ;mailstation.c:202: if (x >= '0' && x <= '9') return x - '0'; 
+   00FF DD 4E 04      [19]  280 	ld	c, 4 (ix)
+   0102 06 00         [ 7]  281 	ld	b, #0x00
+   0104 DD 7E 04      [19]  282 	ld	a, 4 (ix)
+   0107 D6 30         [ 7]  283 	sub	a, #0x30
+   0109 38 11         [12]  284 	jr	C,00102$
+   010B 3E 39         [ 7]  285 	ld	a, #0x39
+   010D DD 96 04      [19]  286 	sub	a, 4 (ix)
+   0110 38 0A         [12]  287 	jr	C,00102$
+   0112 79            [ 4]  288 	ld	a, c
+   0113 C6 D0         [ 7]  289 	add	a, #0xd0
+   0115 6F            [ 4]  290 	ld	l, a
+   0116 78            [ 4]  291 	ld	a, b
+   0117 CE FF         [ 7]  292 	adc	a, #0xff
+   0119 67            [ 4]  293 	ld	h, a
+   011A 18 2B         [12]  294 	jr	00110$
+   011C                     295 00102$:
+                            296 ;mailstation.c:203: if (x >= 'a' && x <= 'f') return x - 'a' + 10; 
+   011C DD 7E 04      [19]  297 	ld	a, 4 (ix)
+   011F D6 61         [ 7]  298 	sub	a, #0x61
+   0121 38 0D         [12]  299 	jr	C,00105$
+   0123 3E 66         [ 7]  300 	ld	a, #0x66
+   0125 DD 96 04      [19]  301 	sub	a, 4 (ix)
+   0128 38 06         [12]  302 	jr	C,00105$
+   012A 21 A9 FF      [10]  303 	ld	hl, #0xffa9
+   012D 09            [11]  304 	add	hl, bc
+   012E 18 17         [12]  305 	jr	00110$
+   0130                     306 00105$:
+                            307 ;mailstation.c:204: if (x >= 'A' && x <= 'F') return x - 'A' + 10; 
+   0130 DD 7E 04      [19]  308 	ld	a, 4 (ix)
+   0133 D6 41         [ 7]  309 	sub	a, #0x41
+   0135 38 0D         [12]  310 	jr	C,00108$
+   0137 3E 46         [ 7]  311 	ld	a, #0x46
+   0139 DD 96 04      [19]  312 	sub	a, 4 (ix)
+   013C 38 06         [12]  313 	jr	C,00108$
+   013E 21 C9 FF      [10]  314 	ld	hl, #0xffc9
+   0141 09            [11]  315 	add	hl, bc
+   0142 18 03         [12]  316 	jr	00110$
+   0144                     317 00108$:
+                            318 ;mailstation.c:205: return -1;
+   0144 21 FF FF      [10]  319 	ld	hl, #0xffff
+   0147                     320 00110$:
+                            321 ;mailstation.c:206: }
+   0147 DD E1         [14]  322 	pop	ix
+   0149 C9            [10]  323 	ret
+                            324 ;mailstation.c:215: char hextoint(char *hexstring, unsigned int *hexint)
+                            325 ;	---------------------------------
+                            326 ; Function hextoint
+                            327 ; ---------------------------------
+   014A                     328 _hextoint::
+   014A DD E5         [15]  329 	push	ix
+   014C DD 21 00 00   [14]  330 	ld	ix,#0
+   0150 DD 39         [15]  331 	add	ix,sp
+   0152 3B            [ 6]  332 	dec	sp
+                            333 ;mailstation.c:217: unsigned int tempint = 0;
+   0153 01 00 00      [10]  334 	ld	bc, #0x0000
+                            335 ;mailstation.c:221: for (n = 0; n < strlen(hexstring); n++)
+   0156 11 00 00      [10]  336 	ld	de, #0x0000
+   0159                     337 00105$:
+   0159 C5            [11]  338 	push	bc
+   015A DD 6E 04      [19]  339 	ld	l, 4 (ix)
+   015D DD 66 05      [19]  340 	ld	h, 5 (ix)
+   0160 E5            [11]  341 	push	hl
+   0161 CDr00r00      [17]  342 	call	_strlen
+   0164 F1            [10]  343 	pop	af
+   0165 C1            [10]  344 	pop	bc
+   0166 7B            [ 4]  345 	ld	a, e
+   0167 95            [ 4]  346 	sub	a, l
+   0168 7A            [ 4]  347 	ld	a, d
+   0169 9C            [ 4]  348 	sbc	a, h
+   016A 30 28         [12]  349 	jr	NC,00103$
+                            350 ;mailstation.c:223: tempnibble = hex_nibble(hexstring[n]);
+   016C DD 6E 04      [19]  351 	ld	l, 4 (ix)
+   016F DD 66 05      [19]  352 	ld	h, 5 (ix)
+   0172 19            [11]  353 	add	hl, de
+   0173 66            [ 7]  354 	ld	h, (hl)
+   0174 C5            [11]  355 	push	bc
+   0175 D5            [11]  356 	push	de
+   0176 E5            [11]  357 	push	hl
+   0177 33            [ 6]  358 	inc	sp
+   0178 CDrF7r00      [17]  359 	call	_hex_nibble
+   017B 33            [ 6]  360 	inc	sp
+   017C D1            [10]  361 	pop	de
+   017D C1            [10]  362 	pop	bc
+   017E DD 75 FF      [19]  363 	ld	-1 (ix), l
+                            364 ;mailstation.c:225: tempint <<= 4;
+   0181 69            [ 4]  365 	ld	l, c
+   0182 60            [ 4]  366 	ld	h, b
+   0183 29            [11]  367 	add	hl, hl
+   0184 29            [11]  368 	add	hl, hl
+   0185 29            [11]  369 	add	hl, hl
+   0186 29            [11]  370 	add	hl, hl
+                            371 ;mailstation.c:226: tempint |= tempnibble;
+   0187 DD 7E FF      [19]  372 	ld	a, -1 (ix)
+   018A 06 00         [ 7]  373 	ld	b, #0x00
+   018C B5            [ 4]  374 	or	a, l
+   018D 4F            [ 4]  375 	ld	c, a
+   018E 78            [ 4]  376 	ld	a, b
+   018F B4            [ 4]  377 	or	a, h
+   0190 47            [ 4]  378 	ld	b, a
+                            379 ;mailstation.c:221: for (n = 0; n < strlen(hexstring); n++)
+   0191 13            [ 6]  380 	inc	de
+   0192 18 C5         [12]  381 	jr	00105$
+   0194                     382 00103$:
+                            383 ;mailstation.c:228: *hexint = tempint;
+   0194 DD 6E 06      [19]  384 	ld	l, 6 (ix)
+   0197 DD 66 07      [19]  385 	ld	h, 7 (ix)
+   019A 71            [ 7]  386 	ld	(hl), c
+   019B 23            [ 6]  387 	inc	hl
+   019C 70            [ 7]  388 	ld	(hl), b
+                            389 ;mailstation.c:229: return 1;
+   019D 2E 01         [ 7]  390 	ld	l, #0x01
+                            391 ;mailstation.c:230: }
+   019F 33            [ 6]  392 	inc	sp
+   01A0 DD E1         [14]  393 	pop	ix
+   01A2 C9            [10]  394 	ret
+                            395 ;mailstation.c:239: char hextobyte(char *hexstring, unsigned char *hexbyte)
+                            396 ;	---------------------------------
+                            397 ; Function hextobyte
+                            398 ; ---------------------------------
+   01A3                     399 _hextobyte::
+   01A3 DD E5         [15]  400 	push	ix
+   01A5 DD 21 00 00   [14]  401 	ld	ix,#0
+   01A9 DD 39         [15]  402 	add	ix,sp
+   01AB 3B            [ 6]  403 	dec	sp
+                            404 ;mailstation.c:241: unsigned int tempbyte = 0;
+   01AC 01 00 00      [10]  405 	ld	bc, #0x0000
+                            406 ;mailstation.c:245: for (n = 0; n < strlen(hexstring); n++)
+   01AF 11 00 00      [10]  407 	ld	de, #0x0000
+   01B2                     408 00105$:
+   01B2 C5            [11]  409 	push	bc
+   01B3 DD 6E 04      [19]  410 	ld	l, 4 (ix)
+   01B6 DD 66 05      [19]  411 	ld	h, 5 (ix)
+   01B9 E5            [11]  412 	push	hl
+   01BA CDr00r00      [17]  413 	call	_strlen
+   01BD F1            [10]  414 	pop	af
+   01BE C1            [10]  415 	pop	bc
+   01BF 7B            [ 4]  416 	ld	a, e
+   01C0 95            [ 4]  417 	sub	a, l
+   01C1 7A            [ 4]  418 	ld	a, d
+   01C2 9C            [ 4]  419 	sbc	a, h
+   01C3 30 28         [12]  420 	jr	NC,00103$
+                            421 ;mailstation.c:247: tempnibble = hex_nibble(hexstring[n]);
+   01C5 DD 6E 04      [19]  422 	ld	l, 4 (ix)
+   01C8 DD 66 05      [19]  423 	ld	h, 5 (ix)
+   01CB 19            [11]  424 	add	hl, de
+   01CC 66            [ 7]  425 	ld	h, (hl)
+   01CD C5            [11]  426 	push	bc
+   01CE D5            [11]  427 	push	de
+   01CF E5            [11]  428 	push	hl
+   01D0 33            [ 6]  429 	inc	sp
+   01D1 CDrF7r00      [17]  430 	call	_hex_nibble
+   01D4 33            [ 6]  431 	inc	sp
+   01D5 D1            [10]  432 	pop	de
+   01D6 C1            [10]  433 	pop	bc
+   01D7 DD 75 FF      [19]  434 	ld	-1 (ix), l
+                            435 ;mailstation.c:249: tempbyte = tempbyte << 4;
+   01DA 69            [ 4]  436 	ld	l, c
+   01DB 60            [ 4]  437 	ld	h, b
+   01DC 29            [11]  438 	add	hl, hl
+   01DD 29            [11]  439 	add	hl, hl
+   01DE 29            [11]  440 	add	hl, hl
+   01DF 29            [11]  441 	add	hl, hl
+                            442 ;mailstation.c:250: tempbyte |= tempnibble;
+   01E0 DD 7E FF      [19]  443 	ld	a, -1 (ix)
+   01E3 06 00         [ 7]  444 	ld	b, #0x00
+   01E5 B5            [ 4]  445 	or	a, l
+   01E6 4F            [ 4]  446 	ld	c, a
+   01E7 78            [ 4]  447 	ld	a, b
+   01E8 B4            [ 4]  448 	or	a, h
+   01E9 47            [ 4]  449 	ld	b, a
+                            450 ;mailstation.c:245: for (n = 0; n < strlen(hexstring); n++)
+   01EA 13            [ 6]  451 	inc	de
+   01EB 18 C5         [12]  452 	jr	00105$
+   01ED                     453 00103$:
+                            454 ;mailstation.c:252: *hexbyte = tempbyte;
+   01ED DD 6E 06      [19]  455 	ld	l, 6 (ix)
+   01F0 DD 66 07      [19]  456 	ld	h, 7 (ix)
+   01F3 71            [ 7]  457 	ld	(hl), c
+                            458 ;mailstation.c:253: return 1;
+   01F4 2E 01         [ 7]  459 	ld	l, #0x01
+                            460 ;mailstation.c:254: }
+   01F6 33            [ 6]  461 	inc	sp
+   01F7 DD E1         [14]  462 	pop	ix
+   01F9 C9            [10]  463 	ret
+                            464 ;mailstation.c:265: char *gets(char *s)
+                            465 ;	---------------------------------
+                            466 ; Function gets
+                            467 ; ---------------------------------
+   01FA                     468 _gets::
+   01FA 3B            [ 6]  469 	dec	sp
+                            470 ;mailstation.c:268: unsigned int count=0;
+   01FB 01 00 00      [10]  471 	ld	bc, #0x0000
+                            472 ;mailstation.c:270: while (1)
+   01FE                     473 00112$:
+                            474 ;mailstation.c:272: c=getchar();
+   01FE C5            [11]  475 	push	bc
+   01FF CDr00r00      [17]  476 	call	_getchar
+   0202 C1            [10]  477 	pop	bc
+   0203 FD 21 00 00   [14]  478 	ld	iy, #0
+   0207 FD 39         [15]  479 	add	iy, sp
+   0209 FD 75 00      [19]  480 	ld	0 (iy), l
+                            481 ;mailstation.c:273: switch(c)
+   020C FD 7E 00      [19]  482 	ld	a, 0 (iy)
+   020F B7            [ 4]  483 	or	a, a
+   0210 28 24         [12]  484 	jr	Z,00101$
+   0212 FD 7E 00      [19]  485 	ld	a, 0 (iy)
+   0215 D6 08         [ 7]  486 	sub	a, #0x08
+   0217 28 24         [12]  487 	jr	Z,00102$
+                            488 ;mailstation.c:292: *s=0;
+   0219 21 03 00      [10]  489 	ld	hl, #3
+   021C 39            [11]  490 	add	hl, sp
+   021D 56            [ 7]  491 	ld	d, (hl)
+   021E 23            [ 6]  492 	inc	hl
+   021F 5E            [ 7]  493 	ld	e, (hl)
+                            494 ;mailstation.c:273: switch(c)
+   0220 FD 21 00 00   [14]  495 	ld	iy, #0
+   0224 FD 39         [15]  496 	add	iy, sp
+   0226 FD 7E 00      [19]  497 	ld	a, 0 (iy)
+   0229 D6 0A         [ 7]  498 	sub	a, #0x0a
+   022B 28 3C         [12]  499 	jr	Z,00106$
+   022D FD 7E 00      [19]  500 	ld	a, 0 (iy)
+   0230 D6 0D         [ 7]  501 	sub	a, #0x0d
+   0232 28 35         [12]  502 	jr	Z,00106$
+   0234 18 4C         [12]  503 	jr	00107$
+                            504 ;mailstation.c:275: case 0:	// Filter extended keys
+   0236                     505 00101$:
+                            506 ;mailstation.c:276: getchar(); break;
+   0236 C5            [11]  507 	push	bc
+   0237 CDr00r00      [17]  508 	call	_getchar
+   023A C1            [10]  509 	pop	bc
+   023B 18 C1         [12]  510 	jr	00112$
+                            511 ;mailstation.c:278: case '\b': // backspace
+   023D                     512 00102$:
+                            513 ;mailstation.c:279: if (count)
+   023D 78            [ 4]  514 	ld	a, b
+   023E B1            [ 4]  515 	or	a, c
+   023F 28 BD         [12]  516 	jr	Z,00112$
+                            517 ;mailstation.c:281: putchar ('\b');
+   0241 C5            [11]  518 	push	bc
+   0242 21 08 00      [10]  519 	ld	hl, #0x0008
+   0245 E5            [11]  520 	push	hl
+   0246 CDr00r00      [17]  521 	call	_putchar
+   0249 21 20 00      [10]  522 	ld	hl, #0x0020
+   024C E3            [19]  523 	ex	(sp),hl
+   024D CDr00r00      [17]  524 	call	_putchar
+   0250 21 08 00      [10]  525 	ld	hl, #0x0008
+   0253 E3            [19]  526 	ex	(sp),hl
+   0254 CDr00r00      [17]  527 	call	_putchar
+   0257 F1            [10]  528 	pop	af
+   0258 C1            [10]  529 	pop	bc
+                            530 ;mailstation.c:284: s--;
+   0259 21 03 00      [10]  531 	ld	hl, #3
+   025C 39            [11]  532 	add	hl, sp
+   025D 7E            [ 7]  533 	ld	a, (hl)
+   025E C6 FF         [ 7]  534 	add	a, #0xff
+   0260 77            [ 7]  535 	ld	(hl), a
+   0261 23            [ 6]  536 	inc	hl
+   0262 7E            [ 7]  537 	ld	a, (hl)
+   0263 CE FF         [ 7]  538 	adc	a, #0xff
+   0265 77            [ 7]  539 	ld	(hl), a
+                            540 ;mailstation.c:285: count--;
+   0266 0B            [ 6]  541 	dec	bc
+                            542 ;mailstation.c:287: break;
+   0267 18 95         [12]  543 	jr	00112$
+                            544 ;mailstation.c:289: case '\r': // CR or LF
+   0269                     545 00106$:
+                            546 ;mailstation.c:290: putchar('\r');
+   0269 D5            [11]  547 	push	de
+   026A 21 0D 00      [10]  548 	ld	hl, #0x000d
+   026D E5            [11]  549 	push	hl
+   026E CDr00r00      [17]  550 	call	_putchar
+   0271 21 0A 00      [10]  551 	ld	hl, #0x000a
+   0274 E3            [19]  552 	ex	(sp),hl
+   0275 CDr00r00      [17]  553 	call	_putchar
+   0278 F1            [10]  554 	pop	af
+   0279 D1            [10]  555 	pop	de
+                            556 ;mailstation.c:292: *s=0;
+   027A 6A            [ 4]  557 	ld	l, d
+   027B 63            [ 4]  558 	ld	h, e
+   027C 36 00         [10]  559 	ld	(hl), #0x00
+                            560 ;mailstation.c:293: return s;
+   027E 6A            [ 4]  561 	ld	l, d
+   027F 63            [ 4]  562 	ld	h, e
+   0280 18 32         [12]  563 	jr	00114$
+                            564 ;mailstation.c:294: default:
+   0282                     565 00107$:
+                            566 ;mailstation.c:295: if (count < 255)	// limit string to 255 chars
+   0282 79            [ 4]  567 	ld	a, c
+   0283 D6 FF         [ 7]  568 	sub	a, #0xff
+   0285 78            [ 4]  569 	ld	a, b
+   0286 DE 00         [ 7]  570 	sbc	a, #0x00
+   0288 D2rFEr01      [10]  571 	jp	NC, 00112$
+                            572 ;mailstation.c:297: *s++=c;
+   028B 6A            [ 4]  573 	ld	l, d
+   028C 63            [ 4]  574 	ld	h, e
+   028D FD 21 00 00   [14]  575 	ld	iy, #0
+   0291 FD 39         [15]  576 	add	iy, sp
+   0293 FD 7E 00      [19]  577 	ld	a, 0 (iy)
+   0296 77            [ 7]  578 	ld	(hl), a
+   0297 7A            [ 4]  579 	ld	a, d
+   0298 21 03 00      [10]  580 	ld	hl, #3
+   029B 39            [11]  581 	add	hl, sp
+   029C C6 01         [ 7]  582 	add	a, #0x01
+   029E 77            [ 7]  583 	ld	(hl), a
+   029F 7B            [ 4]  584 	ld	a, e
+   02A0 CE 00         [ 7]  585 	adc	a, #0x00
+   02A2 23            [ 6]  586 	inc	hl
+   02A3 77            [ 7]  587 	ld	(hl), a
+                            588 ;mailstation.c:298: count++;
+   02A4 03            [ 6]  589 	inc	bc
+                            590 ;mailstation.c:299: putchar(c);
+   02A5 FD 5E 00      [19]  591 	ld	e, 0 (iy)
+   02A8 16 00         [ 7]  592 	ld	d, #0x00
+   02AA C5            [11]  593 	push	bc
+   02AB D5            [11]  594 	push	de
+   02AC CDr00r00      [17]  595 	call	_putchar
+   02AF F1            [10]  596 	pop	af
+   02B0 C1            [10]  597 	pop	bc
+                            598 ;mailstation.c:302: }
+   02B1 C3rFEr01      [10]  599 	jp	00112$
+   02B4                     600 00114$:
+                            601 ;mailstation.c:304: }
+   02B4 33            [ 6]  602 	inc	sp
+   02B5 C9            [10]  603 	ret
+                            604 ;mailstation.c:310: char isupper(char upperchar)
+                            605 ;	---------------------------------
+                            606 ; Function isupper
+                            607 ; ---------------------------------
+   02B6                     608 _isupper::
+                            609 ;mailstation.c:312: if (upperchar >= 65 && upperchar <= 90) return 1;
+   02B6 FD 21 02 00   [14]  610 	ld	iy, #2
+   02BA FD 39         [15]  611 	add	iy, sp
+   02BC FD 7E 00      [19]  612 	ld	a, 0 (iy)
+   02BF D6 41         [ 7]  613 	sub	a, #0x41
+   02C1 38 0A         [12]  614 	jr	C,00102$
+   02C3 3E 5A         [ 7]  615 	ld	a, #0x5a
+   02C5 FD 96 00      [19]  616 	sub	a, 0 (iy)
+   02C8 38 03         [12]  617 	jr	C,00102$
+   02CA 2E 01         [ 7]  618 	ld	l, #0x01
+   02CC C9            [10]  619 	ret
+   02CD                     620 00102$:
+                            621 ;mailstation.c:313: return 0;
+   02CD 2E 00         [ 7]  622 	ld	l, #0x00
+                            623 ;mailstation.c:314: }
+   02CF C9            [10]  624 	ret
+                            625 ;mailstation.c:321: char tolower(char upperchar)
+                            626 ;	---------------------------------
+                            627 ; Function tolower
+                            628 ; ---------------------------------
+   02D0                     629 _tolower::
+                            630 ;mailstation.c:323: if (isupper(upperchar)) return upperchar + 32;
+   02D0 21 02 00      [10]  631 	ld	hl, #2+0
+   02D3 39            [11]  632 	add	hl, sp
+   02D4 7E            [ 7]  633 	ld	a, (hl)
+   02D5 F5            [11]  634 	push	af
+   02D6 33            [ 6]  635 	inc	sp
+   02D7 CDrB6r02      [17]  636 	call	_isupper
+   02DA 33            [ 6]  637 	inc	sp
+   02DB 7D            [ 4]  638 	ld	a, l
+   02DC B7            [ 4]  639 	or	a, a
+   02DD 28 09         [12]  640 	jr	Z,00102$
+   02DF 21 02 00      [10]  641 	ld	hl, #2+0
+   02E2 39            [11]  642 	add	hl, sp
+   02E3 7E            [ 7]  643 	ld	a, (hl)
+   02E4 C6 20         [ 7]  644 	add	a, #0x20
+   02E6 6F            [ 4]  645 	ld	l, a
+   02E7 C9            [10]  646 	ret
+   02E8                     647 00102$:
+                            648 ;mailstation.c:324: return upperchar;
+   02E8 FD 21 02 00   [14]  649 	ld	iy, #2
+   02EC FD 39         [15]  650 	add	iy, sp
+   02EE FD 6E 00      [19]  651 	ld	l, 0 (iy)
+                            652 ;mailstation.c:325: }
+   02F1 C9            [10]  653 	ret
+                            654 ;mailstation.c:331: void strtolower(char *upperstring)
+                            655 ;	---------------------------------
+                            656 ; Function strtolower
+                            657 ; ---------------------------------
+   02F2                     658 _strtolower::
+                            659 ;mailstation.c:333: char *stringpointer = upperstring;
+   02F2 D1            [10]  660 	pop	de
+   02F3 C1            [10]  661 	pop	bc
+   02F4 C5            [11]  662 	push	bc
+   02F5 D5            [11]  663 	push	de
+                            664 ;mailstation.c:335: while (*stringpointer != 0)
+   02F6                     665 00101$:
+   02F6 0A            [ 7]  666 	ld	a, (bc)
+   02F7 B7            [ 4]  667 	or	a, a
+   02F8 C8            [11]  668 	ret	Z
+                            669 ;mailstation.c:337: *stringpointer = tolower(*stringpointer);
+   02F9 C5            [11]  670 	push	bc
+   02FA F5            [11]  671 	push	af
+   02FB 33            [ 6]  672 	inc	sp
+   02FC CDrD0r02      [17]  673 	call	_tolower
+   02FF 33            [ 6]  674 	inc	sp
+   0300 7D            [ 4]  675 	ld	a, l
+   0301 C1            [10]  676 	pop	bc
+   0302 02            [ 7]  677 	ld	(bc), a
+                            678 ;mailstation.c:338: stringpointer++;		
+   0303 03            [ 6]  679 	inc	bc
+                            680 ;mailstation.c:340: }
+   0304 18 F0         [12]  681 	jr	00101$
+                            682 	.area _CODE
+                            683 	.area _INITIALIZER
+                            684 	.area _CABS (ABS)

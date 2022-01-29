@@ -1,0 +1,151 @@
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 1.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    .__.$$$.                                                    =  2710 L
+    .__.ABS.                                                    =  0000 G
+    .__.CPU.                                                    =  0000 L
+    .__.H$L.                                                    =  0000 L
+  0 ___str_0                                                       008D R
+  0 ___str_1                                                       008F R
+  0 ___str_11                                                      020B R
+  0 ___str_12                                                      021F R
+  0 ___str_14                                                      022D R
+  0 ___str_15                                                      02EE R
+  0 ___str_16                                                      02F0 R
+  0 ___str_17                                                      02FE R
+  0 ___str_19                                                      0314 R
+  0 ___str_2                                                       009D R
+  0 ___str_21                                                      032C R
+  0 ___str_22                                                      0429 R
+  0 ___str_23                                                      042B R
+  0 ___str_24                                                      0441 R
+  0 ___str_26                                                      0459 R
+  0 ___str_27                                                      046F R
+  0 ___str_29                                                      047D R
+  0 ___str_30                                                      0506 R
+  0 ___str_31                                                      0508 R
+  0 ___str_32                                                      0513 R
+  0 ___str_34                                                      0524 R
+  0 ___str_36                                                      0543 R
+  0 ___str_38                                                      05DB R
+  0 ___str_39                                                      0621 R
+  0 ___str_4                                                       00AE R
+  0 ___str_41                                                      0643 R
+  0 ___str_45                                                      0766 R
+  0 ___str_47                                                      076F R
+  0 ___str_48                                                      079D R
+  0 ___str_50                                                      07A2 R
+  0 ___str_51                                                      07CA R
+  0 ___str_53                                                      07CF R
+  0 ___str_54                                                      07F9 R
+  0 ___str_56                                                      0802 R
+  0 ___str_57                                                      0825 R
+  0 ___str_59                                                      082D R
+  0 ___str_6                                                       00CB R
+  0 ___str_60                                                      0851 R
+  0 ___str_62                                                      0857 R
+  0 ___str_63                                                      087D R
+  0 ___str_65                                                      0884 R
+  0 ___str_66                                                      08AE R
+  0 ___str_68                                                      08B8 R
+  0 ___str_69                                                      08E1 R
+  0 ___str_7                                                       01DB R
+  0 ___str_71                                                      08EB R
+  0 ___str_72                                                      0930 R
+  0 ___str_74                                                      0946 R
+  0 ___str_75                                                      09FA R
+  0 ___str_76                                                      0BCF R
+  0 ___str_77                                                      0BEA R
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 2.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+  0 ___str_78                                                      0C08 R
+  0 ___str_79                                                      0C20 R
+  0 ___str_8                                                       01DD R
+  0 ___str_80                                                      0C25 R
+  0 ___str_81                                                      0C2A R
+  0 ___str_82                                                      0C57 R
+  0 ___str_83                                                      0C59 R
+  0 ___str_84                                                      0C5B R
+  0 ___str_85                                                      0C61 R
+  0 ___str_86                                                      0C6A R
+  0 ___str_87                                                      0C6E R
+  0 ___str_88                                                      0C73 R
+  0 ___str_89                                                      0C78 R
+  0 ___str_9                                                       01F3 R
+  0 ___str_90                                                      0C80 R
+  0 ___str_91                                                      0C89 R
+  0 ___str_92                                                      0C8E R
+  0 ___str_93                                                      0C98 R
+  0 ___str_94                                                      0CA2 R
+  0 ___str_95                                                      0CA9 R
+  0 ___str_96                                                      0CBF R
+  7 __xinit__myglobal                                              0000 R
+  7 __xinit__versionpointer                                        0001 R
+    _cgafont_addr                                                  **** GX
+    _clrscr                                                        **** GX
+  0 _cmd_help                                                      0644 GR
+  0 _cmd_hextoint                                                  047E GR
+  0 _cmd_peek                                                      0000 GR
+  0 _cmd_poke                                                      00CC GR
+  0 _cmd_port_in                                                   022E GR
+  0 _cmd_port_out                                                  032D GR
+  0 _cmd_scancodes                                                 0544 GR
+    _cursorx                                                       **** GX
+    _cursory                                                       **** GX
+    _disable_charbuffer                                            **** GX
+    _enable_charbuffer                                             **** GX
+    _getchar                                                       **** GX
+    _gets                                                          **** GX
+    _getscancode                                                   **** GX
+    _hextobyte                                                     **** GX
+    _hextoint                                                      **** GX
+  1 _inputstring                                                   0000 GR
+    _kbhit                                                         **** GX
+  0 _main                                                          0A02 GR
+    _mem4000                                                    =  4000 G
+  2 _myglobal                                                      0000 GR
+    _p2shadow                                                      **** GX
+    _p3shadow                                                      **** GX
+    _port2                                                      =  0002 
+    _port_printerdata                                           =  002D 
+    _port_printerstatus                                         =  0021 
+    _powerdownmode                                                 **** GX
+  0 _printSP                                                       09DD GR
+    _printf                                                        **** GX
+    _printfcenter                                                  **** GX
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 3.
+Hexadecimal [16-Bits]
+
+Symbol Table
+
+    _putchar                                                       **** GX
+    _puts                                                          **** GX
+    _slot4000device                                             =  0006 
+    _slot4000page                                               =  0005 
+    _slot8000device                                             =  0008 
+    _slot8000page                                               =  0007 
+    _strcmp                                                        **** GX
+    _strtok                                                        **** GX
+    _strtolower                                                    **** GX
+  2 _versionpointer                                                0001 GR
+
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (Zilog Z80 / Hitachi HD64180 / ZX-Next), page 4.
+Hexadecimal [16-Bits]
+
+Area Table
+
+   0 _CODE                                      size  CE7   flags    0
+   1 _DATA                                      size  100   flags    0
+   2 _INITIALIZED                               size    3   flags    0
+   3 _DABS                                      size    0   flags    8
+   4 _HOME                                      size    0   flags    0
+   5 _GSINIT                                    size    0   flags    0
+   6 _GSFINAL                                   size    0   flags    0
+   7 _INITIALIZER                               size    3   flags    0
+   8 _CABS                                      size    0   flags    8
+

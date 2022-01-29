@@ -1,0 +1,77 @@
+XL
+H B areas 37 global symbols
+M crt0b
+S __keyscanstates DefF26B
+S _updatecursor DefE834
+S _textmodebuffer DefEFC1
+S _main Ref0000
+S __interrupt_jump DefFDFD
+S _p2shadow DefEF13
+S _putcharXY DefE6F0
+S __codestart DefE400
+S _p3shadow DefEF15
+S __charbuffer_disable DefF26A
+S ms_clearkeytables DefED1C
+S __getcharbuffer_ptr DefF248
+S printchar DefE771
+S __getcharbuffer_in DefF268
+S __getcharbuffer_out DefF269
+S ms_getkeycodefrombuffer DefECE3
+S __interrupt_table DefFE00
+S _UpdateCharLCD DefE5E7
+S ms_putkeyintobuffer DefECBE
+S __getcharbuffer DefF248
+S _putchar DefE6E2
+S __cgafont_data DefF500
+S _ClearLCD DefE638
+S _bios_start DefE403
+S _interrupt_hook DefE455
+S _fillcharbuffer DefEA06
+S _firmwareversionsafe DefEFBD
+S ms_scan_keymatrix DefEB60
+S _recv_byte DefEE2D
+S ms_init_keyboard DefED57
+S __scancode_table DefEFB7
+S __p2shadow DefEFBB
+S __p3shadow DefEFBC
+S _LCD_CAS DefE815
+S _disable_charbuffer DefE88F
+S _interrupt_counter DefF307
+S _putchar_rr_s DefE6E2
+S handlescancode DefE954
+S ms_keyscan DefEA74
+S _scrollscreen DefE68E
+S _kbhit DefEA5C
+S _putchar_rr_dbs DefE6EB
+S _cursorx DefEFBF
+S _cursory DefEFC0
+S ms_initkeybuffer DefED49
+S handlekeyrepeat DefE8B5
+S ms_fullkeyboardinit DefEDB2
+S _cgafont_addr DefF241
+S _getchar DefEA31
+S _enable_charbuffer DefE8B0
+S mycharbuffer DefF246
+S _send_byte_busy DefEEC9
+A _CODE size 1 flags 0
+S __clock Def0000
+A _HEADER size C00A flags 8
+A _HOME size 0 flags 0
+A _GSINIT size 0 flags 0
+S gsinit Def0000
+A _GSFINAL size 1 flags 0
+A _EXITPROC size 0 flags 0
+S _exit Def0000
+A _EXITPROCFINAL size 0 flags 0
+A _DATA size 0 flags 0
+A _BSS size 0 flags 0
+A _HEAP size 0 flags 0
+A _FILLER size E400 flags 8
+T 00 C0 CD 00 00 FB CD 00 00 C3 00 00
+R 00 00 01 00 00 03 03 00 02 07 03 00 00 0A 05 00
+T FF E3 00
+R 00 00 0A 00
+T 00 00 C9
+R 00 00 00 00
+T 00 00 C9
+R 00 00 04 00
