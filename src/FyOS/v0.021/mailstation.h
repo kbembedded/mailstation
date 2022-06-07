@@ -53,7 +53,7 @@ void printfcenter(char *centerstring, ...);
 int hex_nibble (char x) ;
 char hextoint(char *hexstring, unsigned int *hexint);
 char hextobyte(char *hexstring, unsigned char *hexbyte);
-//char *gets(char *s);
+char *gets(char *s);
 char isupper(char upperchar);
 char tolower(char upperchar);
 void strtolower(char *upperstring);

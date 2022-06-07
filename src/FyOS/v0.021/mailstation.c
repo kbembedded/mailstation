@@ -262,7 +262,7 @@ char hextobyte(char *hexstring, unsigned char *hexbyte)
 //
 //  Modified to filter out extended keys
 /////////////////////////////////////////////////
-/*char *gets(char *s)
+char *gets(char *s)
 {
 	char c;
 	unsigned int count=0;
@@ -301,7 +301,7 @@ char hextobyte(char *hexstring, unsigned char *hexbyte)
       				break;
     		}
 	}
-}*/
+}
 
 
 /////////////////////////////////////////////////
