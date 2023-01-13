@@ -24,9 +24,11 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include <unistd.h>
-#include <windows.h>
+//#include <windows.h>
+#include "vparlib.h"
 
 uint16_t DATA;
 uint16_t STATUS;
@@ -39,11 +41,15 @@ const unsigned char STB_OUT = 0x10;
 const unsigned char TRIBMASK = 0x07;
 const unsigned char DIBMASK = 0x03;
 
-typedef short (_stdcall *inpfuncPtr)(short portaddr);
-typedef void (_stdcall *oupfuncPtr)(short portaddr, short datum);
-
-inpfuncPtr inp32fp;
-oupfuncPtr oup32fp;
+const struct conn_opts opts = {
+	.hostpubsock = "8888",
+	.devpubsock = "9999",
+	.hosturl = "localhost",
+	.devurl = "localhost",
+	.conn_role = DEVICE,
+	.conn_cable = VPAR_MODE_MS_LAPLINK,
+	.blocking = VPAR_DONTWAIT,
+};
 
 enum operation {
 	OP_NONE = 0,
@@ -51,47 +57,18 @@ enum operation {
 	OP_RECV = 2
 };
 
-short  Inp32 (short portaddr)
+uint8_t  Inp32 (void *handle, short portaddr)
 {
-	return (inp32fp)(portaddr);
+	uint8_t rc = vpar_read_reg(handle, portaddr);
+	return rc;
 }
 
-void  Out32 (short portaddr, short datum)
+void  Out32 (void *handle, short portaddr, uint8_t datum)
 {
-	(oup32fp)(portaddr,datum);
+	vpar_update_tx_reg_and_write(handle, portaddr, datum);
+	//usleep(100000);
 }
 
-
-/* TODO: Figure out how to differentiate between 32 and 64bit? */
-int InitIOLibrary()
-{
-	HINSTANCE hLib;
-
-	SetDllDirectory(NULL);
-
-	hLib = LoadLibrary(TEXT("inpout32"));
-
-	if (hLib == NULL) {
-		fprintf(stderr,"LoadLibrary Failed.\n");
-		return 1;
-	}
-
-	inp32fp = (inpfuncPtr) GetProcAddress(hLib, "Inp32");
-
-	if (inp32fp == NULL) {
-		fprintf(stderr,"GetProcAddress for Inp32 Failed.\n");
-		return 1;
-	}
-
-	oup32fp = (oupfuncPtr) GetProcAddress(hLib, "Out32");
-
-	if (oup32fp == NULL) {
-		fprintf(stderr,"GetProcAddress for Oup32 Failed.\n");
-		return 1;
-	}
-
-	return 0;
-}
 
 int errcount = 0;
 void handlerror(int code)
@@ -117,75 +94,80 @@ void handlerror(int code)
 }
 
 
-uint8_t recvtribble()
+uint8_t recvtribble(void *handle)
 {
 	uint8_t trib;
 
 	/* Wait for MS to raise Busy and ACK it*/
-	while (!(Inp32(STATUS) & BSY_IN));
-	Out32(DATA, 0);
+	while (!(Inp32(handle, STATUS) & BSY_IN));
+	Out32(handle, DATA, 0);
 
 	/* XXX: Add timeout? */
 	/* Wait for strobe from MS, grab tribble of data, ACK data received,
 	 * then wait for MS to ACK our ACK? */
-	while ((Inp32(STATUS) & STB_IN) != 0);
-	trib = (Inp32(STATUS) >> 3) & TRIBMASK;
-	Out32(DATA, BSY_OUT);
-	while ((Inp32(STATUS) & STB_IN) == 0);
+	while ((Inp32(handle, STATUS) & STB_IN) != 0);
+	trib = (Inp32(handle, STATUS) >> 3) & TRIBMASK;
+	Out32(handle, DATA, BSY_OUT);
+	while ((Inp32(handle, STATUS) & STB_IN) == 0);
 
 	return trib;
 }
 
-uint8_t recvbyte()
+uint8_t recvbyte(void *handle)
 {
-	return (recvtribble() + (recvtribble() << 3) + ((recvtribble() & DIBMASK) << 6));
+	return (recvtribble(handle) + (recvtribble(handle) << 3) + ((recvtribble(handle) & DIBMASK) << 6));
 }
 
-int sendtribble(uint8_t trib)
+int sendtribble(void *handle, uint8_t trib)
 {
 	unsigned long int timeout = 0;
 
-	/* Set Busy out and wait for Busy in */
-	Out32(DATA, BSY_OUT);
+	//printf("sending trib 0x%02x\n", trib);
 
-	while ((Inp32(STATUS) & BSY_IN) != 0) {
+	/* Set Busy out and wait for Busy in */
+	Out32(handle, DATA, BSY_OUT);
+
+	while ((Inp32(handle, STATUS) & BSY_IN) != 0) {
 		timeout++;
-		if (timeout > 50000) {
+		if (timeout > 5000) {
 			handlerror(1);
 			return 0;
 		}
+		usleep(1);
 
 	}
 
 	/* Set data and strobe output, clear Busy out for some reason? XXX: */
-	Out32(DATA, ((trib & TRIBMASK) | STB_OUT));
+	Out32(handle, DATA, ((trib & TRIBMASK) | STB_OUT));
 	timeout = 0;
 
 	/* Wait for data acknowledge */
-	while ((Inp32(STATUS) & BSY_IN) == 0) {
+	while ((Inp32(handle, STATUS) & BSY_IN) == 0) {
 		timeout++;
-		if (timeout > 50000) {
+		if (timeout > 5000) {
 			handlerror(2);
 			return 0;
 		}
+		usleep(1);
 	}
 
 	/* Set Busy out again? */
 	//Out32(DATA, 0);
-	Out32(DATA, BSY_OUT);
+	Out32(handle, DATA, BSY_OUT);
 
 	return 1;
 }
 
-int sendbyte(uint8_t dat)
+int sendbyte(void *handle, uint8_t dat)
 {
-  if (!sendtribble(dat & TRIBMASK)) return 0;
+  //printf("sending byte 0x%02x\n", dat);
+  if (!sendtribble(handle, dat & TRIBMASK)) return 0;
 
   dat >>= 3;
-  if (!sendtribble(dat & TRIBMASK)) return 0;
+  if (!sendtribble(handle, dat & TRIBMASK)) return 0;
 
   dat >>= 3;
-  if (!sendtribble(dat & TRIBMASK)) return 0;
+  if (!sendtribble(handle, dat & TRIBMASK)) return 0;
 
   return 1;
 }
@@ -219,6 +201,7 @@ int main(int argc, char **argv)
 	unsigned int filesize = 0x100000; // 1 MiB
 	int bytecnt;
 	enum operation opt_operation = OP_NONE;
+	void *handle = NULL;
 
 	static struct option long_options[] = {
 	  { "send",	no_argument,		NULL, 's' },
@@ -266,18 +249,16 @@ int main(int argc, char **argv)
 		}
 	}
 
-	DATA = port + 0;
-	STATUS = port + 1;
-	CONTROL = port + 2;
+	DATA = VPAR_DR;
+	STATUS = VPAR_SR;
+	CONTROL = VPAR_CR;
 
-	if (InitIOLibrary()) {
-		fprintf(stderr, "Failed to initialize port I/O library\n");
-		return 1;
-	}
+	handle = vpar_init(&opts);
+
 
 	/* Clear the data output of the parallel port pins */
 	/* XXX: Do we need to clear CTRL too? */
-	Out32(DATA,0);
+	Out32(handle, DATA, 0);
 
 	/* At least one operation must be specified */
 	if (opt_operation == OP_NONE) {
@@ -313,20 +294,21 @@ int main(int argc, char **argv)
 
 		fprintf(stderr, "%d bytes loaded.\nPrepare Mailstation for transfer, and press enter to continue\n", filesize);
 		getchar();
+		Inp32(handle, DATA);
 
 		/* Send length of file information to MS, LSB first */
-		if (!sendbyte(filesize & 0xFF)) {
+		if (!sendbyte(handle, filesize & 0xFF)) {
 			fprintf(stderr, "FAIL SEND LOWBYTE");
 			return 1;
 		}
-		if (!sendbyte((filesize >> 8) & 0xFF)) {
+		if (!sendbyte(handle, (filesize >> 8) & 0xFF)) {
 			fprintf(stderr, "FAIL SEND HIGHBYTE");
 			return 1;
 		}
 
 		for (i = 0; i < filesize; i++)
 		{
-			if (!sendbyte(fbuf[i])) {
+			if (!sendbyte(handle, fbuf[i])) {
 				printf("FAIL SEND @ byte %d\n", i+1);
 				return 1;
 			}
@@ -358,9 +340,9 @@ int main(int argc, char **argv)
 		 * stage 0 loader. */
 		bytecnt = 0;
 		while (bytecnt < (filesize)) {
-			fbuf[bytecnt] = recvtribble();
-			fbuf[bytecnt] |= ((recvtribble() & TRIBMASK) << 3);
-			fbuf[bytecnt] |= ((recvtribble() & DIBMASK) << 6);
+			fbuf[bytecnt] = recvtribble(handle);
+			fbuf[bytecnt] |= ((recvtribble(handle) & TRIBMASK) << 3);
+			fbuf[bytecnt] |= ((recvtribble(handle) & DIBMASK) << 6);
 			bytecnt++;
 			fprintf(stderr, "\rReceived: %d bytes", bytecnt);
 		}
