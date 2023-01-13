@@ -28,7 +28,7 @@
 #include <math.h>
 #include <unistd.h>
 //#include <windows.h>
-#include "vparlib.h"
+#include "zparlib.h"
 
 uint16_t DATA;
 uint16_t STATUS;
@@ -59,13 +59,13 @@ enum operation {
 
 uint8_t  Inp32 (void *handle, short portaddr)
 {
-	uint8_t rc = vpar_read_reg(handle, portaddr);
+	uint8_t rc = zpar_read_reg(handle, portaddr);
 	return rc;
 }
 
 void  Out32 (void *handle, short portaddr, uint8_t datum)
 {
-	vpar_update_tx_reg_and_write(handle, portaddr, datum);
+	zpar_update_tx_reg_and_write(handle, portaddr, datum);
 	//usleep(100000);
 }
 
@@ -253,7 +253,7 @@ int main(int argc, char **argv)
 	STATUS = VPAR_SR;
 	CONTROL = VPAR_CR;
 
-	handle = vpar_init(&opts);
+	handle = zpar_init(&opts);
 
 
 	/* Clear the data output of the parallel port pins */
