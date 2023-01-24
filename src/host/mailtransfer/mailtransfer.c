@@ -42,13 +42,12 @@ const unsigned char TRIBMASK = 0x07;
 const unsigned char DIBMASK = 0x03;
 
 const struct conn_opts opts = {
-	.hostpubsock = "8888",
-	.devpubsock = "9999",
-	.hosturl = "localhost",
-	.devurl = "localhost",
-	.conn_role = DEVICE,
-	.conn_cable = VPAR_MODE_MS_LAPLINK,
-	.blocking = VPAR_DONTWAIT,
+	.pripubsock = "8888",
+	.secpubsock = "9999",
+	.priurl = "localhost",
+	.securl = "localhost",
+	.conn_role = SECONDARY,
+	.conn_cable = ZPAR_CABLE_LAPLINK,
 };
 
 enum operation {
@@ -59,13 +58,15 @@ enum operation {
 
 uint8_t  Inp32 (void *handle, short portaddr)
 {
-	uint8_t rc = zpar_read_reg(handle, portaddr);
-	return rc;
+	uint8_t val;
+
+	zpar_ior(handle, portaddr, &val, ZPAR_DONTWAIT);
+	return val;
 }
 
 void  Out32 (void *handle, short portaddr, uint8_t datum)
 {
-	zpar_update_tx_reg_and_write(handle, portaddr, datum);
+	zpar_iow(handle, portaddr, datum, ZPAR_DONTWAIT);
 	//usleep(100000);
 }
 
@@ -249,9 +250,9 @@ int main(int argc, char **argv)
 		}
 	}
 
-	DATA = VPAR_DR;
-	STATUS = VPAR_SR;
-	CONTROL = VPAR_CR;
+	DATA = ZPAR_DR;
+	STATUS = ZPAR_SR;
+	CONTROL = ZPAR_CR;
 
 	handle = zpar_init(&opts);
 
