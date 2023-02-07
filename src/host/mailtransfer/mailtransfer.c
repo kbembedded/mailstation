@@ -59,6 +59,7 @@ enum operation {
 uint8_t  Inp32 (void *handle, short portaddr)
 {
 	uint8_t val;
+	int rc;
 
 	zpar_ior(handle, portaddr, &val, ZPAR_DONTWAIT);
 	return val;
@@ -67,7 +68,7 @@ uint8_t  Inp32 (void *handle, short portaddr)
 void  Out32 (void *handle, short portaddr, uint8_t datum)
 {
 	zpar_iow(handle, portaddr, datum, ZPAR_DONTWAIT);
-	//usleep(100000);
+	//usleep(500);
 }
 
 
@@ -100,16 +101,24 @@ uint8_t recvtribble(void *handle)
 	uint8_t trib;
 
 	/* Wait for MS to raise Busy and ACK it*/
-	while (!(Inp32(handle, STATUS) & BSY_IN));
+//	while (!(Inp32(handle, STATUS) & STB_IN));
 	Out32(handle, DATA, 0);
 
 	/* XXX: Add timeout? */
 	/* Wait for strobe from MS, grab tribble of data, ACK data received,
 	 * then wait for MS to ACK our ACK? */
-	while ((Inp32(handle, STATUS) & STB_IN) != 0);
+	usleep(10);
+	while (!(Inp32(handle, STATUS) & STB_IN)) {
+		//Out32(handle, DATA, 0);
+		usleep(1);
+	}
 	trib = (Inp32(handle, STATUS) >> 3) & TRIBMASK;
 	Out32(handle, DATA, BSY_OUT);
-	while ((Inp32(handle, STATUS) & STB_IN) == 0);
+	usleep(10);
+	while ((Inp32(handle, STATUS) & STB_IN)) {
+		//Out32(handle, DATA, BSY_OUT);
+		usleep(1);
+	}
 
 	return trib;
 }
@@ -126,7 +135,7 @@ int sendtribble(void *handle, uint8_t trib)
 	//printf("sending trib 0x%02x\n", trib);
 
 	/* Set Busy out and wait for Busy in */
-	Out32(handle, DATA, BSY_OUT);
+	/*Out32(handle, DATA, BSY_OUT);
 
 	while ((Inp32(handle, STATUS) & BSY_IN) != 0) {
 		timeout++;
@@ -135,26 +144,51 @@ int sendtribble(void *handle, uint8_t trib)
 			return 0;
 		}
 		usleep(1);
+	}*/
 
-	}
-
-	/* Set data and strobe output, clear Busy out for some reason? XXX: */
+	/* Clear BSY_OUT.
+	 * This may not be necessary but when using zpar it eases timing */
+	//Out32(handle, DATA, 0);
+	/* Set data and strobe output */
 	Out32(handle, DATA, ((trib & TRIBMASK) | STB_OUT));
+	usleep(10);
 	timeout = 0;
 
 	/* Wait for data acknowledge */
 	while ((Inp32(handle, STATUS) & BSY_IN) == 0) {
+		/* Repeat messages, may be needed for zpar */
+		//Out32(handle, DATA, ((trib & TRIBMASK) | STB_OUT));
 		timeout++;
-		if (timeout > 5000) {
+		if (timeout > 50000) {
 			handlerror(2);
+			zpar_dump_state(handle);
 			return 0;
 		}
 		usleep(1);
 	}
+	//if (!timeout) printf("instant ACK?\n");
 
-	/* Set Busy out again? */
-	//Out32(DATA, 0);
-	Out32(handle, DATA, BSY_OUT);
+	/* According to some found notes, it looks like this can clear
+	 * STB_OUT and set BSY_OUT and the MailStation is happy with it. For
+	 * sake of correctness, clear STB_OUT and let the next byte set BSY_OUT
+	 * as expected.
+	 */
+	Out32(handle, DATA, 0);
+	usleep(10);
+
+	timeout = 0;
+	while ((Inp32(handle, STATUS) & BSY_IN) != 0) {
+		/* Repeat messages, may be needed for zpar */
+		//Out32(handle, DATA, 0);
+		timeout++;
+		if (timeout > 50000) {
+			handlerror(2);
+			zpar_dump_state(handle);
+			return 0;
+		}
+		usleep(1);
+	}
+	//if (!timeout) printf("instant unACK?\n");
 
 	return 1;
 }
@@ -257,9 +291,16 @@ int main(int argc, char **argv)
 	handle = zpar_init(&opts);
 
 
+	printf("read: 0x%x\n", Inp32(handle, STATUS));
 	/* Clear the data output of the parallel port pins */
 	/* XXX: Do we need to clear CTRL too? */
 	Out32(handle, DATA, 0);
+	usleep(10000);
+	printf("read: 0x%x\n", Inp32(handle, STATUS));
+	Out32(handle, DATA, BSY_OUT);
+	usleep(10000);
+	printf("read: 0x%x\n", Inp32(handle, STATUS));
+	//return;
 
 	/* At least one operation must be specified */
 	if (opt_operation == OP_NONE) {
