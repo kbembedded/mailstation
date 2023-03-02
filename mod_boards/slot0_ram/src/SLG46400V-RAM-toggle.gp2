@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="9" oldestCompatibleVersion="8" GPDVersion="6.19.004" lastChange="2/27/2023 4:53 PM">
+<GPDProject version="9" oldestCompatibleVersion="8" GPDVersion="6.19.004" lastChange="3/1/2023 5:25 PM">
     <generalProjectSettings/>
     <chip family="04" type="02" revision="2" friendlyName="GreenPAK 2">
-        <nvmData registerLenght="832">0 0 FC 0 0 FC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 80 51 0 0 0 FC 3F 0 0 0 0 0 0 0 0 0 0 0 0 14 49 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 10 6B 0 0 0 0 0 0 0 20 43 86 6C 62 2 0 2 0 80 0 0 40 0 0 10 0 64 C0 0 19 19 10 0 0 11 10 0 0 0 0 0 0 40 21 40 80</nvmData>
-        <checksum crc32="0x37621349" version="0"/>
+        <nvmData registerLenght="832">0 0 FC 0 0 FC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 87 51 F4 7D FF FF 3F 0 0 0 0 0 0 0 54 14 0 0 0 14 49 50 24 41 D2 4 0 0 0 0 0 0 0 0 0 0 2 10 EB CB 3 0 0 0 0 0 18 30 91 6C 62 2 0 2 0 80 0 0 40 0 0 10 0 64 C0 C0 C0 0 10 0 0 11 10 0 0 0 0 0 0 40 27 40 80</nvmData>
+        <checksum crc32="0x30EDA8F7" version="0"/>
         <VDDItem id="0" viewMode="0" min="5.0000" max="5.0000">
             <item id="0" caption="VDD (PIN 1)">
                 <graphics pos="(480.00,575.00)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -23,18 +23,22 @@
         </item>
         <item id="4" caption="PIN 5">
             <graphics pos="(480.00,425.00)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
+            <textLabel pos="(-2.50,-28.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">ADR14</textLabel>
         </item>
         <item id="5" caption="PIN 6">
             <graphics pos="(480.00,500.00)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
+            <textLabel pos="(-9.00,-28.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">PoPP_EN</textLabel>
         </item>
         <item id="6" caption="GND (PIN 7)">
             <graphics pos="(1100.00,575.00)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
         </item>
         <item id="7" caption="PIN 8">
             <graphics pos="(1100.00,500.00)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+            <textLabel pos="(-6.50,-28.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">PP_INIT</textLabel>
         </item>
         <item id="8" caption="PIN 9">
             <graphics pos="(1100.00,425.00)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
+            <textLabel pos="(2.00,-28.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">PoPP</textLabel>
         </item>
         <item id="9" caption="PIN 10">
             <graphics pos="(1100.00,350.00)" angle="0" flipping="1" hidden="0" tOrigin="(20.00,10.00)"/>
@@ -47,12 +51,12 @@
         </item>
         <LUT id="12" regularShape="0" mode="0">
             <item id="12" caption="2-bit LUT0">
-                <graphics pos="(675.00,6.00)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(880.11,403.11)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="13" regularShape="0" mode="0">
             <item id="13" caption="2-bit LUT1">
-                <graphics pos="(675.00,57.00)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(785.00,503.67)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
             </item>
         </LUT>
         <LUT id="14" regularShape="0" mode="0">
@@ -67,19 +71,20 @@
         </LUT>
         <LUT id="16" regularShape="0" mode="0">
             <item id="16" caption="3-bit LUT0">
-                <graphics pos="(701.00,237.00)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(697.00,237.00)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-29.00,43.50)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">RAM CSq</textLabel>
             </item>
         </LUT>
         <LUT id="17" regularShape="0" mode="0">
             <item id="17" caption="3-bit LUT1">
-                <graphics pos="(697.00,352.00)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(697.00,337.00)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
                 <textLabel pos="(-29.00,44.00)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">ROM CSq</textLabel>
             </item>
         </LUT>
         <LUT id="18" regularShape="0" mode="0">
             <item id="18" caption="3-bit LUT2">
-                <graphics pos="(765.00,107.00)" angle="90" flipping="0" hidden="1" tOrigin="(20.00,15.00)"/>
+                <graphics pos="(697.00,440.00)" angle="90" flipping="0" hidden="0" tOrigin="(20.00,15.00)"/>
+                <textLabel pos="(-29.00,41.00)" angle="-90.00" textColor="#ffff00ff" backgroundColor="#14141464">ADR14q</textLabel>
             </item>
         </LUT>
         <LUT id="19" regularShape="0" mode="0">
@@ -159,7 +164,7 @@
             <graphics pos="(1170.00,15.00)" angle="0" flipping="0" hidden="1" tOrigin="(17.50,10.00)"/>
         </item>
         <item id="39" caption="Pipe Delay">
-            <graphics pos="(380.00,470.00)" angle="0" flipping="0" hidden="1" tOrigin="(20.00,17.50)"/>
+            <graphics pos="(894.72,478.47)" angle="0" flipping="0" hidden="1" tOrigin="(20.00,17.50)"/>
         </item>
         <item id="40" caption="POR">
             <graphics pos="(1121.00,-6.00)" angle="0" flipping="0" hidden="1" tOrigin="(17.50,10.00)"/>
@@ -174,24 +179,66 @@
             <graphics pos="(1191.00,-6.00)" angle="0" flipping="0" hidden="1" tOrigin="(17.50,10.00)"/>
         </item>
         <wire output="16" input="63" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="0" wireText="NET0" wireState="0">
-            <points>(540.00,211.00); (675.00,211.00); (675.00,266.00); (685.00,266.00)</points>
+            <points>(540.00,211.00); (671.00,211.00); (671.00,266.00); (681.00,266.00)</points>
         </wire>
-        <wire output="17" input="64" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="1" wireText="NET1" wireState="0">
-            <points>(540.00,291.00); (551.00,291.00); (551.00,253.00); (685.00,253.00)</points>
+        <wire output="17" input="64" autoRouting="0" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="1" wireText="NET1" wireState="0">
+            <points>(540.00,291.00); (551.00,291.00); (551.00,253.00); (681.00,253.00)</points>
         </wire>
-        <wire output="18" input="65" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="2" wireText="NET2" wireState="0">
-            <points>(540.00,366.00); (561.00,366.00); (561.00,239.00); (685.00,239.00)</points>
+        <wire output="18" input="65" autoRouting="0" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="2" wireText="NET2" wireState="0">
+            <points>(540.00,366.00); (561.00,365.00); (561.00,239.00); (681.00,239.00)</points>
         </wire>
         <wire output="5" input="36" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="3" wireText="NET3" wireState="0">
-            <points>(756.00,253.00); (1069.00,253.00); (1069.00,206.00); (1079.00,206.00)</points>
+            <points>(752.00,253.00); (750.00,253.00); (750.00,206.00); (1079.00,206.00)</points>
         </wire>
         <wire output="6" input="35" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="4" wireText="NET4" wireState="0">
-            <points>(752.00,368.00); (1069.00,368.00); (1069.00,281.00); (1079.00,281.00)</points>
+            <points>(752.00,353.00); (751.00,353.00); (751.00,281.00); (1079.00,281.00)</points>
         </wire>
         <wire output="63" input="42" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="-1" wireText="VDD" wireState="1">
             <points/>
         </wire>
         <wire output="63" input="41" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="-1" wireText="VDD" wireState="1">
+            <points/>
+        </wire>
+        <wire output="17" input="67" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="1" wireText="NET1" wireState="0">
+            <points>(540.00,291.00); (618.00,291.00); (618.00,353.00); (681.00,353.00)</points>
+        </wire>
+        <wire output="18" input="68" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="2" wireText="NET2" wireState="0">
+            <points>(540.00,366.00); (671.00,366.00); (671.00,339.00); (681.00,339.00)</points>
+        </wire>
+        <wire output="7" input="34" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="5" wireText="NET5" wireState="0">
+            <points>(752.00,456.00); (794.00,456.00); (794.00,356.00); (1079.00,356.00)</points>
+        </wire>
+        <wire output="63" input="40" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="-1" wireText="VDD" wireState="1">
+            <points/>
+        </wire>
+        <wire output="0" input="37" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="-1" wireText="GND" wireState="1">
+            <points/>
+        </wire>
+        <wire output="0" input="38" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="-1" wireText="GND" wireState="1">
+            <points/>
+        </wire>
+        <wire output="16" input="69" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="0" wireText="NET0" wireState="0">
+            <points>(540.00,211.00); (651.00,211.00); (651.00,469.00); (681.00,469.00)</points>
+        </wire>
+        <wire output="18" input="70" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="2" wireText="NET2" wireState="0">
+            <points>(540.00,366.00); (661.00,366.00); (661.00,456.00); (681.00,456.00)</points>
+        </wire>
+        <wire output="19" input="71" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="6" wireText="NET6" wireState="0">
+            <points>(540.00,441.00); (671.00,441.00); (671.00,442.00); (681.00,442.00)</points>
+        </wire>
+        <wire output="16" input="66" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="0" wireText="NET0" wireState="0">
+            <points>(540.00,211.00); (651.00,211.00); (651.00,366.00); (681.00,366.00)</points>
+        </wire>
+        <wire output="20" input="57" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="7" wireText="NET7" wireState="0">
+            <points>(540.00,516.00); (755.00,516.00); (755.00,510.00); (765.00,510.00)</points>
+        </wire>
+        <wire output="2" input="33" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="8" wireText="NET8" wireState="0">
+            <points>(844.00,519.00); (1069.00,519.00); (1069.00,431.00); (1079.00,431.00)</points>
+        </wire>
+        <wire output="21" input="55" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="9" wireText="NET9" wireState="0">
+            <points>(1079.00,516.00); (1081.78,516.00); (1081.78,546.00); (745.00,546.00); (745.00,527.00); (765.00,527.00)</points>
+        </wire>
+        <wire output="0" input="39" autoRouting="1" pen="#00ff00ff;1.00;1;32;128" protected="0" CWLid="-1" wireText="GND" wireState="1">
             <points/>
         </wire>
     </chip>
@@ -201,8 +248,12 @@
         </settings>
         <lastConfiguration>
             <testBoardConfiguration caption="Default">
-                <keys>0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 0; 1</keys>
-                <abstractArea pct="7" areaReactionButton_Code="80"/>
+                <keys>0; 0; 0; 0; 0; 0; 1; 0; 0; 0; 0; 0; 1</keys>
+                <constantVoltageGenerator v="206">
+                    <abstractGenerator isPowerSignal="1" repeat="1" repeatCount="2" shownPeriod="0" startPoint="0" stopPoint="1" offset="2" pauseState="0" prestartState="1" outputState="0" prestartDelay="0" endState="1" link="0">
+                        <abstractArea pct="7" areaReactionButton_Code="80"/>
+                    </abstractGenerator>
+                </constantVoltageGenerator>
                 <abstractArea pct="1" areaReactionButton_Code="-1"/>
                 <abstractArea pct="1" areaReactionButton_Code="-1"/>
                 <abstractArea pct="1" areaReactionButton_Code="-1"/>
