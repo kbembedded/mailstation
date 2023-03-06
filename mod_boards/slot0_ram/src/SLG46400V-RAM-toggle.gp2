@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GPDProject version="9" oldestCompatibleVersion="8" GPDVersion="6.19.004" lastChange="3/1/2023 5:25 PM">
+<GPDProject version="9" oldestCompatibleVersion="8" GPDVersion="6.19.004" lastChange="3/5/23 11:38 PM">
     <generalProjectSettings/>
     <chip family="04" type="02" revision="2" friendlyName="GreenPAK 2">
         <nvmData registerLenght="832">0 0 FC 0 0 FC 0 0 0 0 0 0 0 0 0 0 0 0 0 0 8 87 51 F4 7D FF FF 3F 0 0 0 0 0 0 0 54 14 0 0 0 14 49 50 24 41 D2 4 0 0 0 0 0 0 0 0 0 0 2 10 EB CB 3 0 0 0 0 0 18 30 91 6C 62 2 0 2 0 80 0 0 40 0 0 10 0 64 C0 C0 C0 0 10 0 0 11 10 0 0 0 0 0 0 40 27 40 80</nvmData>
@@ -11,7 +11,8 @@
         </VDDItem>
         <item id="1" caption="PIN 2">
             <graphics pos="(480.00,200.00)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
-            <textLabel pos="(-9.00,-28.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">RAM Tog</textLabel>
+            <textLabel pos="(-57.95,-43.00)" angle="0.00" textColor="#ffff00ff" backgroundColor="#14141464">RAM Tog
+HAS BAD INTERNAL PULL</textLabel>
         </item>
         <item id="2" caption="PIN 3">
             <graphics pos="(480.00,275.00)" angle="0" flipping="0" hidden="0" tOrigin="(20.00,10.00)"/>
