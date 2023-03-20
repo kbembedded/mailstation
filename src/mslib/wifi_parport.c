@@ -72,7 +72,35 @@ uint16_t wifi_parport_read_byte(void)
 /* Looks like this will return 0 in the case of a timeout? */
 uint16_t wifi_parport_write_byte(uint8_t val)
 {
+	uint16_t cnt = 1000;
+
 	wifi_parport_prepare();
 
-	return (uint16_t)val;
+	/* Set strobe out to note we're writing */
+	PAR_CTRL_DR |= PAR_CTRL_STBn;
+
+	/* Set data direction out */
+	PAR_DAT_DDR = 0xff;
+
+	/* Wait for high ACK from WiFiStation */
+	while(!(PAR_STAT_DR & PAR_STAT_ACK)) {
+		msfw_delay(1);
+		cnt--;
+		if(cnt == 0) return 0;
+	}
+
+	/* Set data output and notify WiFiStation */
+	PAR_DAT_DR = val;
+	PAR_CTRL_DR &= ~(PAR_CTRL_STBn);
+
+	/* Wait for WiFiStation to drop ACK after getting data */
+	cnt = 1000;
+	while(PAR_STAT_DR & PAR_STAT_ACK) {
+		msfw_delay(1);
+		cnt--;
+		if (cnt == 0) return 0;
+	}
+
+	/* Indicate no timeout and data sent successfully */
+	return 0xff00;
 }
