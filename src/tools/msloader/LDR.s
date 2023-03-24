@@ -39,6 +39,8 @@ _start:
 	.dw	(caption)
 	.dw	(unknown_value)
 
+; XXX Might be able to drop unknown value and just put caption there directly?
+
 ; Normally, this section would have some values needed for app setup, however
 ; since we're trying to save bytes and we don't use this information anyway,
 ; we don't really care.
@@ -100,6 +102,11 @@ nextcodebyte:
 
 	push	hl		; Save HL to stack
 
+	; Note to myself for later. It might be slightly more compact to move
+	; L in to A, then move A in to (DE), inc DE, dec BC and then check for
+	; overflow. Would remove push, pop, xor, sbc, add, ldi, but would then
+	; add back ld a with 1, out would stay, ld a, l, ld (DE), a, inc de,
+	; dec bc. Might not be a net gain but it could reduce the complexity here?
 	; These three opcodes are smaller than clearing HL, loading it with SP,
 	; and then later loading A with 0x1 to switch the slot8000 device.
 	; PUSH loads high-order byte first. That means after PUSH of HL earlier,
