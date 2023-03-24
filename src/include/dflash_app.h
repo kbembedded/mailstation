@@ -10,6 +10,8 @@ typedef const struct dataflash_name {
 	uint16_t unknown;	// Unknown meaning, should be 0x0001
 	uint16_t name_len;	// Length of name, not including \0!
 	uint16_t name_start;	// Relative to start of struct, likely always 0x0006
+	uint16_t name_len2;	// Length of name, not including \0!
+	uint16_t name_start2;	// Relative to start of struct, likely always 0x0006
 	char name[];		// Unsure of useful effective length
 } dataflash_name;
 

@@ -1,10 +1,15 @@
 #include <CFfuncs.h>
+<<<<<<< Updated upstream
 #include <msfw_menubar.h>
 #include <msfw_widget.h>
 #include <CFstrings.h>
 #include <keyboard.h>
 #include <stdint.h>
+=======
+>>>>>>> Stashed changes
 #include <ms_ports.h>
+#include <stdint.h>
+#include <string.h>
 
 #include <stddef.h>
 
@@ -103,6 +108,7 @@ const struct menubar menudata[] = {
  */
 uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1, uint16_t val2)
 {
+<<<<<<< Updated upstream
 	char buf[21];
 	/* This ends up in RAM not stack space */
 	static char textbuf[256];
@@ -113,6 +119,9 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 	struct menubar hellobar[5];
 	static unsigned int timeout;
 	static int timer;
+=======
+	unsigned char buf[50];
+>>>>>>> Stashed changes
 
 	//msfw_localize((uint16_t)(-20));
 
@@ -120,6 +129,7 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 	  case SIG_INIT: //sig_init
 		//init globals here
 		//msfw_new_timer(appid, 100, 1);
+<<<<<<< Updated upstream
 		//msfw_string_get_resource(STR_IDX_APP00, buf, sizeof(app_name.name));
 		//msfw_draw_string_foldertab(buf);
 
@@ -144,6 +154,11 @@ uint16_t main(uint16_t appid, uint16_t appstate, uint16_t signal, uint16_t val1,
 		msfw_widget_event_handle(textwidget3, sig_setbuff, (uint16_t)textbuff, sizeof(textbuff));
 		msfw_widget_focus_set(textwidget3);
 #endif
+=======
+		msfw_get_string_resource(0x8001, buf, 49);
+		//strcpy(buf, "I wonder how long of");
+		msfw_draw_app_foldertab(buf);
+>>>>>>> Stashed changes
 		appstate = 1;
 		break;
 	  case SIG_TIMER: //sig_timer

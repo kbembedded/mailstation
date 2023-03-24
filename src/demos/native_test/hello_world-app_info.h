@@ -2,13 +2,66 @@
 /* Copyright (c) 2020 KBEmbedded */
 
 #include "dflash_app.h"
+#include <stddef.h>
 
 #if 0
+<<<<<<< Updated upstream
+=======
+struct string_info {
+	uint16_t str_len;
+	uint16_t str_offs;
+};
+
+typedef struct strings {
+	uint16_t str_cnt;
+	struct string_info str_info_list[];
+	char strings[];
+} strings;
+const strings app_name = {
+	2,
+	{
+		{sizeof(app_name.strings[0]), offsetof(struct strings, strings[0])},
+		{sizeof(app_name.strings[1]), offsetof(struct strings, strings[1])},
+	},
+	{
+		"Hello!",
+		"A Longer Hello!",
+	}
+};
+#endif
+
+typedef struct string_list{
+	uint16_t str_cnt;
+	uint16_t str0len;
+	uint16_t str0cnt;
+	uint16_t str1len;
+	uint16_t str1cnt;
+	char string1[10];
+	char string2[20];
+} string_list;
+
+
+const string_list app_name = {
+	2,
+	sizeof(app_name.string1),
+	offsetof(string_list, string1),
+	sizeof(app_name.string2),
+	offsetof(string_list, string2),
+	"Hello!",
+	"A Longer Hello!"
+};
+
+char testwhatever[sizeof(app_name.string2)];
+
+#if 0
+>>>>>>> Stashed changes
 const dataflash_name app_name = {
-	0x0001,
+	0x0002,
 	6,
-	0x0006,
-	"Hello!"
+	0x000a,
+	15,
+	0x0015,
+	"Hello!\0A longer hello!"
 };
 #endif
 
