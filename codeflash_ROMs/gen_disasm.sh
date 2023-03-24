@@ -8,6 +8,8 @@
 # Aside from the first page of CF, which is hardwired to 0x0000 base, all of the
 # other CF pages should only ever be mapped to 0x4000 base, aka slot4000.
 
+# XXX Add check for z80dasm
+
 for DIR in */; do
 (
   cd "${DIR}" || exit
