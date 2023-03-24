@@ -253,6 +253,8 @@ enum MESSAGEBOX_RET {
  *
  * No clue what this does, but is called out by this name in the original RE docs
  * Lets hope it does something useful shal we?
+ *
+ * Return value set in A
  */
 #define msfw_widget_of_woz(widget) ((void (*)(uint16_t widget)) 0x06A4)(widget)
 
