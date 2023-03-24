@@ -75,6 +75,7 @@ static void freetype(void)
 	uint8_t scancode_buf[2];
 	uint8_t scancode_buf_q = 0;
 	uint8_t decode;
+	uint16_t ret;
 
 	g_textmode_init();
 	printf("Free type mode, will just echo back characters.\n");
@@ -82,6 +83,12 @@ static void freetype(void)
 	lcd_update();
 
 	while (1) {
+		ret = (*parport_read_ptr)();
+		if (ret & 0xff00) {
+			putchar(ret & 0xff);
+			lcd_update();
+		}
+
 		while (!msfw_get_scancode(scancode_buf));
 		if ((scancode_buf[1] & 0x1) && (scancode_buf_q != scancode_buf[0])) {
 			scancode_buf_q = scancode_buf[0];
