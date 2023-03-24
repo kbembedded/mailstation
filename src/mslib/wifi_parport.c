@@ -55,6 +55,7 @@ uint16_t wifi_parport_read_byte(void)
 	PAR_CTRL_DR |= PAR_CTRL_AUTFn;
 
 	/* Wait for sender to lower busy when data is ready */
+	/* XXX: Add a timeout here */
 	while(PAR_STAT_DR & PAR_STAT_BUSYn);
 
 	/* Read data from sender */
