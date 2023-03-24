@@ -14,6 +14,7 @@ __sfr __at 0x07 SLOT8_PAGE;
 __sfr __at 0x08 SLOT8_DEV;
 __sfr __at 0x09 PAR_CTRL_DR;	/* Printer ctrl, pwr ok, pwr btn, data reg */
 __sfr __at 0x0A PAR_CTRL_DDR;	/* Printer ctrl, pwr ok, pwr btn, data dir reg */
+__sfr __at 0x0D OSC_CTRL;	/* Controls CPU speed? */
 __sfr __at 0x10 RTC_SEC;	/* BCD, ones place seconds */
 __sfr __at 0x11 RTC_10SEC;	/* BCD, tens place seconds */
 __sfr __at 0x12 RTC_MIN;	/* BCD, ones place minutes */
@@ -29,11 +30,12 @@ __sfr __at 0x1B RTC_YR;		/* BCD, ones place years since 1980 */
 __sfr __at 0x1C RTC_10YR;	/* BCD, tens place years since 1980 */
 __sfr __at 0x1D RTC_CTRL1;	/* Unknown */
 __sfr __at 0x1E RTC_CTRL2;	/* Unknown */
-__sfr __at 0x1F RTC_CTRL3;	/* Unknown */
+__sfr __at 0x1F RTC_CTRL3;	/* Unknown MSFW init sets this to 0xc*/
 
 __sfr __at 0x21 PAR_STAT_DR;	/* Parallel port status reg, input only */
 __sfr __at 0x2C PAR_DAT_DDR;	/* Parallel port data direction reg */
 __sfr __at 0x2D PAR_DAT_DR;	/* Parallel port data reg */
+__sfr __at 0x2F TIMER_CTRL;	/* Maybe? Group notes indicate this affects timer16 */
 
 __sfr __at 0x24 UNKNOWN0x28;
 
