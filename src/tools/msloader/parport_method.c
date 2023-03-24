@@ -27,6 +27,7 @@ const struct opt_tbl parport_opts[] = {
 
 void sel_parport_msfw(void)
 {
+	//XXX: May need to change parport ctrl line states here?
 	parport_read_ptr = &msfw_parport_read_byte;
 	parport_write_ptr = &msfw_parport_write_byte;
 	go_to_main();
