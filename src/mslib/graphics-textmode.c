@@ -126,4 +126,6 @@ void g_textmode_init(void)
 	x_min = y_min = 0;
 	x_max = 79;
 	y_max = 20;
+	/* XXX: Currently, the crt0-baremetal doesn't correctly init globals? */
+	invert = 0;
 }
