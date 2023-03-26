@@ -6,5 +6,8 @@
 
 void lcd_buf_clr(void);
 void lcd_update(void);
+void lcd_enable(void);
+void lcd_disable(void);
+void lcd_init(void);
 
 #endif // __LCD_H__

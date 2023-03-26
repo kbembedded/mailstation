@@ -6,9 +6,25 @@
 
 #include "ms_ports.h"
 
+void lcd_enable(void)
+{
+	MISC2 |= MISC2_LCD_EN;
+}
+
+void lcd_disable(void)
+{
+	MISC2 &= ~(MISC2_LCD_EN);
+}
+
 void lcd_buf_clr(void)
 {
 	memset((uint8_t *)0xC010, 0x00, 0x1400);
+}
+
+void lcd_init(void)
+{
+	lcd_buf_clr();
+	lcd_enable();
 }
 
 /* Update 0xA00 bytes of LCD screen from RAM buffer
