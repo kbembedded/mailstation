@@ -14,6 +14,7 @@ __sfr __at 0x07 SLOT8_PAGE;
 __sfr __at 0x08 SLOT8_DEV;
 __sfr __at 0x09 PAR_CTRL_DR;	/* Printer ctrl, pwr ok, pwr btn, data reg */
 __sfr __at 0x0A PAR_CTRL_DDR;	/* Printer ctrl, pwr ok, pwr btn, data dir reg */
+__sfr __at 0x0B UNKNOWN0xB;	/* Has some implications with LCD, might be DDR for port 2 */
 __sfr __at 0x0D OSC_CTRL;	/* Controls CPU speed? */
 __sfr __at 0x10 RTC_SEC;	/* BCD, ones place seconds */
 __sfr __at 0x11 RTC_10SEC;	/* BCD, tens place seconds */
@@ -33,6 +34,8 @@ __sfr __at 0x1E RTC_CTRL2;	/* Unknown */
 __sfr __at 0x1F RTC_CTRL3;	/* Unknown MSFW init sets this to 0xc*/
 
 __sfr __at 0x21 PAR_STAT_DR;	/* Parallel port status reg, input only */
+__sfr __at 0x28 CID_DR_Maybe;
+__sfr __at 0x29 CID_DDR_Maybe;
 __sfr __at 0x2C PAR_DAT_DDR;	/* Parallel port data direction reg */
 __sfr __at 0x2D PAR_DAT_DR;	/* Parallel port data reg */
 __sfr __at 0x2F TIMER_CTRL;	/* Maybe? Group notes indicate this affects timer16 */
@@ -59,6 +62,22 @@ __sfr __at 0x24 UNKNOWN0x28;
 #define PAR_STAT_ACK	(1 << 6)	// ACK
 #define PAR_STAT_BUSYn	(1 << 7)	// BUSY
 
+#define MISC2_LCD_EN	(1 << 7)	// Enable LCD
+#define MISC2_CID_DAT	(1 << 6)	// Caller ID data
+#define MISC2_MDM_PWRn	(1 << 5)	// MODEM power
+#define MISC2_LED	(1 << 4)
 #define MISC2_LCD_CASn	(1 << 3)
+#define MISC2_CID_RDY	(1 << 2)
+#define MISC2_KBD_ROW9	(1 << 1)
+#define MISC2_KBD_ROW8	(1 << 0)
+
+#define IRQ_CID		(1 << 7)
+#define IRQ_RTC		(1 << 6)
+#define IRQ_MDM		(1 << 5)
+#define IRQ_TIME16	(1 << 4)
+#define IRQ_UKN3	(1 << 3)
+#define IRQ_UKN2	(1 << 2)
+#define IRQ_KBD		(1 << 1)	// Wait, how does this work?
+#define IRQ_UKN0	(1 << 0)
 
 #endif
